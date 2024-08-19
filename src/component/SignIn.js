@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Box, TextField, FormControl, OutlinedInput, InputAdornment, Button, IconButton, Typography, Paper } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import config from '../config'; // Adjust the path as necessary
+import config from '../config'; 
 
-export default function Login() {
+export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -19,9 +19,10 @@ export default function Login() {
   };
 
   const handleSubmit = async () => {
+    setIsSigningIn(true);
     try {
-      const response = await fetch(`${config.API_BASE_URL}/api/v1/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
-        method: 'GET',
+      const response = await fetch(`${config.API_BASE_URL}/api/v1/signin?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -29,26 +30,23 @@ export default function Login() {
       const result = await response.json();
       console.log(result);
       if (result === true) {
-        console.log('Login successful');
+        console.log('Sign in successful');
         navigate('/home');
       } else {
-        setError('Invalid email or password');
+        setError('Sign in failed');
+        setIsSigningIn(false);
       }
     } catch (error) {
       setError('An error occurred. Please try again.');
+      setIsSigningIn(false);
     }
-  };
-
-  const handleSignIn = () => {
-    setIsSigningIn(true);
-    navigate('/signin');
   };
 
   return (
     <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Login
+          Sign In
         </Typography>
         <TextField
           label="Username"
@@ -77,12 +75,7 @@ export default function Login() {
             label="Password"
           />
         </FormControl>
-        {!isSigningIn && (
-          <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ m: 1 }}>
-            Login
-          </Button>
-        )}
-        <Button variant="outlined" color="secondary" onClick={handleSignIn} sx={{ m: 1 }}>
+        <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ m: 1 }}>
           Sign In
         </Button>
         {error && <Typography color="error">{error}</Typography>}
