@@ -1,0 +1,16 @@
+/* Hide the placeholder text when the input is autofilled */
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    -webkit-text-fill-color: #000;
+  }
+  
+  input.autofilled {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    -webkit-text-fill-color: #000;
+  }
+  
+  /* Additional styles to ensure proper display */
+  input:-webkit-autofill::first-line {
+    font-size: 16px;
+    color: #000;
+  }

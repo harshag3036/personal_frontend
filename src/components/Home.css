@@ -1,0 +1,29 @@
+.home-container {
+  margin-top: 20px;
+}
+
+.welcome-text {
+  margin-bottom: 20px;
+}
+
+.profile-paper {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.profile-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-input {
+  margin: 10px;
+  width: 100%;
+}
+
+.profile-submit {
+  margin: 10px;
+  width: 100%;
+}
