@@ -1,4 +1,15 @@
 /**
+ * BACKUP VERSION - Last updated: 25/01/2025
+ * 
+ * Features implemented:
+ * - Emotion-based conversation initialization
+ * - Sequential message flow with branching paths
+ * - 5-second delay for yes/no buttons to give users time to read messages
+ * - WhatsApp-style UI with message bubbles
+ * - Comprehensive documentation
+ */
+
+/**
  * ChatBot Component Documentation
  * 
  * This component implements a conversational interface that guides users through
