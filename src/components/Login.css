@@ -1,16 +1,82 @@
-/* Hide the placeholder text when the input is autofilled */
+.login-container {
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+}
+
+.input-field {
+  margin-bottom: 16px !important;
+}
+
+.input-field .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.input-field .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #1877f2;
+}
+
+.login-button {
+  margin-bottom: 12px !important;
+  padding: 12px !important;
+  background-color: #1877f2 !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.login-button:hover {
+  background-color: #166fe5 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.signin-button {
+  margin-bottom: 12px !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+  font-size: 16px !important;
+  color: #1877f2 !important;
+}
+
+.guest-button {
+  padding: 12px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+  font-size: 16px !important;
+  border-color: #1877f2 !important;
+  color: #1877f2 !important;
+  transition: all 0.3s ease !important;
+}
+
+.guest-button:hover {
+  background-color: rgba(24, 119, 242, 0.04) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes onAutoFillStart {
+  from {/**/}
+  to {/**/}
+}
+
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px white inset;
-    -webkit-text-fill-color: #000;
+  animation-name: onAutoFillStart;
+  animation-fill-mode: both;
+}
+
+.autofilled {
+  background-color: #e8f0fe !important;
+}
+
+@media (max-width: 600px) {
+  .login-container {
+    margin-top: 20px;
+    padding: 16px;
   }
-  
-  input.autofilled {
-    -webkit-box-shadow: 0 0 0 1000px white inset;
-    -webkit-text-fill-color: #000;
-  }
-  
-  /* Additional styles to ensure proper display */
-  input:-webkit-autofill::first-line {
-    font-size: 16px;
-    color: #000;
-  }
+}

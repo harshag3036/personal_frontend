@@ -1,84 +1,133 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { CssBaseline, Container, AppBar, Button, Toolbar, Typography } from '@mui/material';
+import { CssBaseline, Container, AppBar, Button, Toolbar, Typography, Paper } from '@mui/material';
 import Login from './components/Login';
 import SignIn from './components/SignIn';
 import Home from './components/Home';
-import Profile from './components/Profile'; // Import the Profile component
+import Profile from './components/Profile';
+import CreatePost from './components/CreatePost';
+import LandingPage from './components/LandingPage';
+import ChatBot from './components/ChatBot';
+import AddChatData from './components/AddChatData';
 import ProtectedRoute from './components/ProtectedRoute';
 import config from './config';
+import './App.css';
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const isGuest = localStorage.getItem('isGuest') === 'true';
 
   useEffect(() => {
     const checkToken = async () => {
       const token = localStorage.getItem('token');
+      const isGuest = localStorage.getItem('isGuest') === 'true';
+
       if (token) {
         try {
-          console.log('Token found:', token);
           const response = await fetch(`${config.API_BASE_URL}/api/v1/home`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
             },
           });
-          console.log('Token validation response:', response);
+
           if (response.status === 200) {
-            if (location.pathname === '/' || location.pathname === '/signin') {
+            if (location.pathname === '/') {
               navigate('/home');
             }
           } else {
-            console.error('Token validation failed', response.statusText);
-            navigate('/');
+            if (!isGuest) {
+              localStorage.clear();
+              navigate('/');
+            }
           }
         } catch (error) {
-          console.error('Token validation failed', error);
-          navigate('/');
+          if (!isGuest) {
+            localStorage.clear();
+            navigate('/');
+          }
         }
-      } else {
-        console.log('No token found, navigating to login');
-        navigate('/'); // Navigate to login page if no token is found
       }
     };
 
-    if (location.pathname !== '/signin') {
+    if (location.pathname !== '/signin' && location.pathname !== '/login') {
       checkToken();
     }
   }, [navigate, location.pathname]);
 
   const handleLogout = () => {
-    console.log('Logging out');
-    localStorage.removeItem('token');
+    localStorage.clear();
     navigate('/');
   };
+
+  const showNavbar = !['/login', '/signin', '/'].includes(location.pathname);
 
   return (
     <>
       <CssBaseline />
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} onClick={() => navigate('/home')} style={{ cursor: 'pointer' }}>
-            My Application
-          </Typography>
-          {location.pathname !== '/' && location.pathname !== '/signin' && (
-            <>
+      {showNavbar && (
+        <AppBar position="static" className="app-bar">
+          <Toolbar>
+            <Typography 
+              variant="h6" 
+              component="div" 
+              sx={{ flexGrow: 1 }} 
+              className="app-title"
+            >
+              RoastMe
+            </Typography>
+            <div className="nav-buttons">
               <Button color="inherit" onClick={() => navigate('/home')}>Home</Button>
-              <Button color="inherit" onClick={() => navigate('/profile')}>Profile</Button>
-            </>
-          )}
-          <Button color="inherit" onClick={handleLogout}>Logout</Button>
-        </Toolbar>
-      </AppBar>
-      <Container maxWidth="md" sx={{ mt: 4 }}>
+              <Button color="inherit" onClick={() => navigate('/chatbot')}>Chat Bot</Button>
+              {!isGuest && (
+                <Button color="inherit" onClick={() => navigate('/profile')}>Profile</Button>
+              )}
+              <Button color="inherit" onClick={handleLogout}>Logout</Button>
+            </div>
+          </Toolbar>
+        </AppBar>
+      )}
+      <div className="app-container">
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} /> {/* Add the profile route */}
+          <Route path="/chatbot" element={<ChatBot />} />
+          <Route path="/add-chat-data" element={<AddChatData />} />
+          {!isGuest && (
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          )}
+          <Route path="/create-post" element={
+            <ProtectedRoute>
+              {isGuest ? (
+                <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
+                  <Typography variant="h6" gutterBottom>
+                    Create Your First Post
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    You need to be logged in to create posts. Please login or sign up to continue.
+                  </Typography>
+                  <Button 
+                    variant="contained" 
+                    color="primary" 
+                    onClick={() => {
+                      localStorage.clear();
+                      navigate('/login');
+                    }}
+                    style={{ marginTop: '16px' }}
+                  >
+                    Go to Login
+                  </Button>
+                </Paper>
+              ) : (
+                <CreatePost />
+              )}
+            </ProtectedRoute>
+          } />
         </Routes>
-      </Container>
+      </div>
     </>
   );
 }

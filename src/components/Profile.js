@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, Typography, Grid, Container } from '@mui/material';
 import './Profile.css'; // Import the CSS file
+import config from '../config';
 
 export default function Profile() {
   const [profileData, setProfileData] = useState(null);
@@ -13,7 +14,7 @@ export default function Profile() {
         return;
       }
       try {
-        const response = await fetch('http://localhost:8080/api/v1/customerData', {
+        const response = await fetch(`${config.API_BASE_URL}/api/v1/customerData`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
