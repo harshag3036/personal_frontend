@@ -1,22 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Typography, Paper, FormControl, InputLabel, Select, MenuItem, AppBar, Toolbar, Container } from '@mui/material';
+import { Box, TextField, Button, Typography, Paper, FormControl, InputLabel, Select, MenuItem, Container, Tabs, Tab } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { useNavigate } from 'react-router-dom'; // Updated import
+import { useNavigate, useLocation } from 'react-router-dom';
 import config from '../config';
-import './Home.css'; // Import the CSS file
+import './Home.css';
+import PostList from './PostList';
 
 export default function Home() {
   const [firstLogin, setFirstLogin] = useState(false);
   const [name, setName] = useState('');
   const [dob, setDob] = useState(null);
   const [gender, setGender] = useState('');
-  const navigate = useNavigate(); // Updated hook
+  const [tabValue, setTabValue] = useState(0);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isGuest = localStorage.getItem('isGuest') === 'true';
 
   useEffect(() => {
-    const firstLoginStatus = localStorage.getItem('firstLogin') === 'true';
-    setFirstLogin(firstLoginStatus);
-  }, []);
+    if (!isGuest) {
+      const firstLoginStatus = localStorage.getItem('firstLogin') === 'true';
+      setFirstLogin(firstLoginStatus);
+    }
+
+    if (location.state?.showMyPosts) {
+      setTabValue(1);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, isGuest]);
 
   const handleSubmit = async () => {
     if (!name || !dob || !gender) {
@@ -46,28 +58,83 @@ export default function Home() {
     }
   };
 
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
+  const handleCreatePost = () => {
+    if (isGuest) {
+      setShowLoginPrompt(true);
+      return;
+    }
+    navigate('/create-post');
+  };
+
+  const handleChatBot = () => {
+    navigate('/chatbot');
+  };
+
+  const handleLoginRedirect = () => {
+    localStorage.clear(); // Clear all localStorage items
+    navigate('/');
+  };
+
   return (
-    <div className="container">
-      <AppBar position="static">
-        <Toolbar className="header">
-          <Typography variant="h6" onClick={() => navigate('/home')} style={{ cursor: 'pointer' }}>
-            Home
-          </Typography>
-          <div>
-            {/* <Button color="inherit" onClick={() => navigate('/profile')}>Profile</Button> */}
-            <Button className="logout-button" onClick={() => {
-              localStorage.removeItem('token');
-              navigate('/');
-            }}>Logout</Button>
+    <div className="home-container">
+      <Container maxWidth="md" className="main-content">
+        <div className="header">
+          <Typography variant="h4" className="welcome-text">Social Feed</Typography>
+          <div className="header-buttons">
+            <Button 
+              variant="contained" 
+              color="primary" 
+              onClick={handleCreatePost}
+              className="create-post-btn"
+            >
+              Create Post
+            </Button>
+            <Button 
+              variant="contained" 
+              color="secondary" 
+              onClick={handleChatBot}
+              className="chatbot-btn"
+            >
+              Chat Bot
+            </Button>
           </div>
-        </Toolbar>
-      </AppBar>
-      <Container className="home-container">
-        <Typography variant="h4" align="center" className="welcome-text">Welcome to Home Page</Typography>
-        {firstLogin && (
+        </div>
+
+        {showLoginPrompt && isGuest ? (
+          <Paper elevation={3} className="login-prompt-paper">
+            <Typography variant="h6" align="center" gutterBottom>
+              Create Your First Post
+            </Typography>
+            <Typography variant="body1" align="center" gutterBottom>
+              You need to be logged in to create posts. Please login or sign up to continue.
+            </Typography>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              onClick={handleLoginRedirect}
+              fullWidth
+              style={{ marginTop: '16px' }}
+            >
+              Go to Login
+            </Button>
+            <Button 
+              variant="text" 
+              color="primary" 
+              onClick={() => setShowLoginPrompt(false)}
+              fullWidth
+              style={{ marginTop: '8px' }}
+            >
+              Continue Browsing
+            </Button>
+          </Paper>
+        ) : firstLogin && !isGuest ? (
           <Paper elevation={3} className="profile-paper">
             <Typography variant="h6" align="center">Complete Your Profile</Typography>
-            <Box className="profile-box">
+            <Box className="profile-form">
               <TextField
                 label="Name"
                 value={name}
@@ -76,17 +143,15 @@ export default function Home() {
                 required
               />
               <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <Box className="profile-input">
-                  <DatePicker
-                    label="Date of Birth"
-                    value={dob}
-                    onChange={(newValue) => {
-                      console.log('Date of Birth selected:', newValue);
-                      setDob(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} required />}
-                  />
-                </Box>
+                <DatePicker
+                  label="Date of Birth"
+                  value={dob}
+                  onChange={(newValue) => {
+                    console.log('Date of Birth selected:', newValue);
+                    setDob(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} required className="profile-input" />}
+                />
               </LocalizationProvider>
               <FormControl className="profile-input" required>
                 <InputLabel>Gender</InputLabel>
@@ -100,11 +165,25 @@ export default function Home() {
                   <MenuItem value="OTHER">Other</MenuItem>
                 </Select>
               </FormControl>
-              <Button variant="contained" color="primary" onClick={handleSubmit} className="profile-submit">
+              <Button 
+                variant="contained" 
+                color="primary" 
+                onClick={handleSubmit} 
+                className="profile-submit"
+              >
                 Submit
               </Button>
             </Box>
           </Paper>
+        ) : (
+          <Box className="posts-container">
+            <Tabs value={tabValue} onChange={handleTabChange} centered className="post-tabs">
+              <Tab label="All Posts" />
+              <Tab label="My Posts" />
+            </Tabs>
+            {tabValue === 0 && <PostList key="all-posts" />}
+            {tabValue === 1 && <PostList key="my-posts" userPosts />}
+          </Box>
         )}
       </Container>
     </div>
