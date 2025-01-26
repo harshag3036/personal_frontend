@@ -1,43 +1,13 @@
-/**
- * ChatBot Component Documentation
- * 
- * This component implements a conversational interface that guides users through
- * a structured dialogue about unlearning and self-discovery. The conversation
- * flow is personalized based on the user's emotional state.
- * 
- * Key Features:
- * - Emotion-based conversation initialization
- * - Sequential message flow with branching paths
- * - Yes/No responses for guided questions
- * - WhatsApp-style UI with message bubbles
- * - Auto-scrolling to latest messages
- * - Support for API-based responses
- */
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import config from '../config';
 import './ChatBot.css';
 
-/**
- * Available emotion options for initial user selection.
- * These emotions help personalize the conversation path.
- */
 const emotionOptions = [
-    "Anxious",
-    "Stressed",
-    "Confused",
-    "Overwhelmed",
-    "Peaceful"
+    "Anxious", "Stressed", "Confused", "Overwhelmed", "Peaceful"
 ];
 
-/**
- * Mapping of emotions to their corresponding responses and next conversation steps.
- * Each emotion has:
- * - response: Empathetic acknowledgment of the user's emotional state
- * - nextId: Reference to the next message in the conversation flow
- */
 const emotionResponses = {
     "Anxious": {
         response: "I understand that anxiety can be challenging. Let's work on finding some clarity together.",
@@ -61,14 +31,6 @@ const emotionResponses = {
     }
 };
 
-/**
- * Main conversation flow structure.
- * Each message object contains:
- * - text: The message content to display
- * - requiresResponse: Whether user input is needed (true/false)
- * - options: Array of options for emotion selection (only for emotion state)
- * - next: Object mapping yes/no responses to next message IDs
- */
 const systemMessages = {
     "emotion": {
         text: "How are you feeling today?",
@@ -118,51 +80,34 @@ const systemMessages = {
 };
 
 const ChatBot = () => {
-    // State Management
-    const [messages, setMessages] = useState([]); // Chat history
-    const [inputMessage, setInputMessage] = useState(''); // User input
-    const [isLoading, setIsLoading] = useState(false); // API call status
-    const [suggestions, setSuggestions] = useState([]); // API response suggestions
-    const [currentSystemMessageIndex, setCurrentSystemMessageIndex] = useState('emotion'); // Current message ID
-    const [showSystemMessage, setShowSystemMessage] = useState(true); // Control system message flow
-    const [showButtons, setShowButtons] = useState(true); // Control yes/no buttons visibility
+    const [messages, setMessages] = useState([]);
+    const [inputMessage, setInputMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [suggestions, setSuggestions] = useState([]);
+    const [currentSystemMessageIndex, setCurrentSystemMessageIndex] = useState('emotion');
+    const [showSystemMessage, setShowSystemMessage] = useState(true);
+    const [showButtons, setShowButtons] = useState(true);
     const navigate = useNavigate();
-    const messagesEndRef = useRef(null); // Reference for auto-scrolling
+    const messagesEndRef = useRef(null);
 
-    /**
-     * Scrolls the chat window to the latest message
-     */
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    // Auto-scroll when new messages are added
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
 
-    /**
-     * Handles user's emotion selection
-     * 1. Adds user's emotion choice to chat
-     * 2. Responds with emotion-specific message
-     * 3. Transitions to main conversation flow
-     */
     const handleEmotionSelect = (emotion) => {
-        // Add user's emotion response
-        const userResponse = {
-            text: emotion,
-            isUser: true
-        };
+        const userResponse = { text: emotion, isUser: true };
         setMessages(prev => [...prev, userResponse]);
 
-        // Add emotion response
         const emotionResponse = emotionResponses[emotion];
         setMessages(prev => [...prev, {
             text: emotionResponse.response,
             isUser: false
         }]);
         
-        // Set next message and hide buttons initially
         setCurrentSystemMessageIndex(emotionResponse.nextId);
         setShowButtons(false);
         setMessages(prev => [...prev, {
@@ -170,40 +115,30 @@ const ChatBot = () => {
             isUser: false
         }]);
 
-        // Show buttons after 5 seconds for main1 message
         setTimeout(() => {
             setShowButtons(true);
         }, 5000);
     };
 
-    /**
-     * Handles yes/no responses in the main conversation flow
-     * 1. Adds user's response to chat
-     * 2. Determines next message based on response
-     * 3. Shows next message or ends conversation
-     */
     const handleSystemResponse = async (response) => {
         const currentMessage = systemMessages[currentSystemMessageIndex];
         if (!currentMessage) return;
 
-        // Add user's yes/no response
         const userResponse = {
             text: response ? "Yes" : "No",
             isUser: true
         };
         setMessages(prev => [...prev, userResponse]);
 
-        // Get next message ID based on response
         const nextMessageId = currentMessage.next?.[response ? 'yes' : 'no'];
         
         if (nextMessageId && systemMessages[nextMessageId]) {
             setCurrentSystemMessageIndex(nextMessageId);
-            setShowButtons(false); // Hide buttons immediately
+            setShowButtons(false);
             setMessages(prev => [...prev, {
                 text: systemMessages[nextMessageId].text,
                 isUser: false
             }]);
-            // Show buttons after 5 seconds
             setTimeout(() => {
                 setShowButtons(true);
             }, 5000);
@@ -212,12 +147,6 @@ const ChatBot = () => {
         }
     };
 
-    /**
-     * Handles sending messages to the API
-     * 1. Makes API call with user's message
-     * 2. Handles API response
-     * 3. Updates chat with response or suggestions
-     */
     const sendMessage = async (message, isUserMessage = true) => {
         try {
             setIsLoading(true);
@@ -259,9 +188,6 @@ const ChatBot = () => {
         }
     };
 
-    /**
-     * Handles form submission for user messages
-     */
     const handleSubmit = (e) => {
         e.preventDefault();
         if (inputMessage.trim()) {
@@ -271,16 +197,12 @@ const ChatBot = () => {
         }
     };
 
-    /**
-     * Handles clicking on suggestion buttons
-     */
     const handleSuggestionClick = (suggestion) => {
         setMessages(prev => [...prev, { text: suggestion, isUser: false }]);
         setSuggestions([]);
         setInputMessage('');
     };
 
-    // Initialize chat with first system message
     useEffect(() => {
         if (messages.length === 0) {
             setMessages([{
@@ -301,20 +223,27 @@ const ChatBot = () => {
                 >
                     Add Data
                 </Button>
+                <Button 
+                    variant="contained" 
+                    color="primary"
+                    onClick={() => navigate('/chatbot-update')}
+                    className="update-data-button"
+                    style={{ marginLeft: '10px' }}
+                >
+                    Update Data
+                </Button>
             </div>
+
             <div className="chatbot-container">
-                {/* Chat Messages Area */}
                 <div className="chat-messages">
                     {messages.map((message, index) => (
                         <div key={index} className={`message ${message.isUser ? 'user' : 'bot'}`}>
                             <div className="message-content">
                                 {message.text}
                             </div>
-                            {/* Response Buttons (Emotions or Yes/No) */}
                             {!message.isUser && showSystemMessage && index === messages.length - 1 && (
                                 <div className="system-response-buttons">
                                     {systemMessages[currentSystemMessageIndex]?.options ? (
-                                        // Show emotion options
                                         systemMessages[currentSystemMessageIndex].options.map((option, i) => (
                                             <button 
                                                 key={i}
@@ -325,7 +254,6 @@ const ChatBot = () => {
                                             </button>
                                         ))
                                     ) : systemMessages[currentSystemMessageIndex]?.requiresResponse && showButtons && (
-                                        // Show yes/no buttons after delay
                                         <>
                                             <button 
                                                 className="response-button yes"
@@ -348,7 +276,6 @@ const ChatBot = () => {
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* API Suggestions */}
                 {suggestions.length > 0 && (
                     <div className="suggestions">
                         {suggestions.map((suggestion, index) => (
@@ -363,7 +290,6 @@ const ChatBot = () => {
                     </div>
                 )}
 
-                {/* Message Input Form */}
                 <form onSubmit={handleSubmit} className="input-form">
                     <input
                         type="text"

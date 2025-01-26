@@ -11,9 +11,30 @@
     justify-content: flex-end;
 }
 
-.add-data-button {
+.add-data-button, .update-data-button {
     text-transform: none !important;
     padding: 8px 20px !important;
+}
+
+.update-section {
+    max-width: 800px;
+    margin: 0 auto 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-results {
+    margin-top: 20px;
+}
+
+.search-results > div {
+    transition: all 0.2s ease;
+}
+
+.search-results > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .chatbot-container {
@@ -227,5 +248,13 @@
     .response-button {
         font-size: 12px;
         padding: 5px 12px;
+    }
+
+    .update-section {
+        padding: 10px !important;
+    }
+
+    .search-results > div {
+        padding: 8px !important;
     }
 }
