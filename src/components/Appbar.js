@@ -1,30 +1,94 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import React from 'react';
+import { AppBar, Box, Toolbar, Typography, Button, IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import '../styles/shared.css';
+import './Appbar.css';
 
 export default function Appbar() {
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem('token');
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/');
+  };
+
+  const handleLogin = () => {
+    navigate('/');
+  };
+
+  const handleHome = () => {
+    navigate('/home');
+  };
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
+    <Box className="appbar-wrapper">
+      <AppBar position="static" className="appbar">
+        <Toolbar className="toolbar">
+          <Typography 
+            variant="h6" 
+            component="div" 
+            className="logo"
+            onClick={handleHome}
           >
-            {/* <MenuIcon /> */}
-          </IconButton>
-          <Typography variant="h1" component="div" sx={{ flexGrow: 1 }}>
-            SpeakUp
+            Contemplative Space
           </Typography>
-          <Button color="inherit">Login</Button>
+          <div className="nav-buttons">
+            {isLoggedIn ? (
+              <>
+                <Button 
+                  color="inherit" 
+                  onClick={handleHome}
+                  className="nav-button"
+                >
+                  Insights
+                </Button>
+                <Button 
+                  color="inherit" 
+                  onClick={() => navigate('/forums')}
+                  className="nav-button"
+                >
+                  Forums
+                </Button>
+                <Button 
+                  color="inherit" 
+                  onClick={() => navigate('/articles')}
+                  className="nav-button"
+                >
+                  Articles
+                </Button>
+                <Button 
+                  color="inherit" 
+                  onClick={() => navigate('/chatbot')}
+                  className="nav-button"
+                >
+                  ChatBot
+                </Button>
+                <Button 
+                  color="inherit" 
+                  onClick={() => navigate('/profile')}
+                  className="nav-button"
+                >
+                  Profile
+                </Button>
+                <Button 
+                  color="inherit" 
+                  onClick={handleLogout}
+                  className="nav-button"
+                >
+                  End Journey
+                </Button>
+              </>
+            ) : (
+              <Button 
+                color="inherit" 
+                onClick={handleLogin}
+                className="nav-button"
+              >
+                Begin Journey
+              </Button>
+            )}
+          </div>
         </Toolbar>
       </AppBar>
     </Box>

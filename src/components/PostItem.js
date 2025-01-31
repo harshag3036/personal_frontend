@@ -4,6 +4,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import config from '../config';
+import '../styles/shared.css';
 import './PostItem.css';
 
 const Comment = ({ comment, onLike, isLiked }) => (
@@ -12,24 +13,24 @@ const Comment = ({ comment, onLike, isLiked }) => (
       primary={comment.content}
       secondary={
         <React.Fragment>
-          <Typography component="span" variant="body2" color="text.primary">
+          <Typography component="span" variant="body2" className="comment-author">
             {comment.author}
           </Typography>
           {' — '}
-          <Typography component="span" variant="body2" color="text.secondary">
-            Likes: {comment.likes}
+          <Typography component="span" variant="body2" className="comment-likes">
+            {comment.likes} resonated with this
           </Typography>
         </React.Fragment>
       }
     />
     <IconButton
       edge="end"
-      aria-label="like"
+      aria-label="resonate"
       onClick={() => onLike(comment.id)}
       disabled={isLiked}
-      className="like-button"
+      className="resonate-button"
     >
-      {isLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOffAltIcon />}
+      {isLiked ? <ThumbUpIcon className="resonated" /> : <ThumbUpOffAltIcon />}
     </IconButton>
   </ListItem>
 );
@@ -60,10 +61,10 @@ const PostItem = ({ post, expanded, onExpand, onClose }) => {
         const data = await response.json();
         setComments(data.content);
       } else {
-        console.error('Failed to fetch comments');
+        console.error('Unable to fetch reflections');
       }
     } catch (error) {
-      console.error('Error fetching comments:', error);
+      console.error('Error fetching reflections:', error);
     } finally {
       setLoading(false);
     }
@@ -81,10 +82,10 @@ const PostItem = ({ post, expanded, onExpand, onClose }) => {
         const likedCommentIds = await response.json();
         setLikedComments(new Set(likedCommentIds));
       } else {
-        console.error('Failed to fetch liked comments');
+        console.error('Unable to fetch resonated reflections');
       }
     } catch (error) {
-      console.error('Error fetching liked comments:', error);
+      console.error('Error fetching resonated reflections:', error);
     }
   };
 
@@ -111,10 +112,10 @@ const PostItem = ({ post, expanded, onExpand, onClose }) => {
         setComments(prevComments => [createdComment, ...prevComments]);
         setNewComment('');
       } else {
-        console.error('Failed to create comment');
+        console.error('Unable to share reflection');
       }
     } catch (error) {
-      console.error('Error creating comment:', error);
+      console.error('Error sharing reflection:', error);
     }
   };
 
@@ -139,7 +140,7 @@ const PostItem = ({ post, expanded, onExpand, onClose }) => {
         },
       });
       if (!response.ok) {
-        console.error('Failed to update like');
+        console.error('Unable to resonate with reflection');
         setComments(prevComments =>
           prevComments.map(comment =>
             comment.id === commentId ? { ...comment, likes: comment.likes - 1 } : comment
@@ -152,7 +153,7 @@ const PostItem = ({ post, expanded, onExpand, onClose }) => {
         });
       }
     } catch (error) {
-      console.error('Error updating like:', error);
+      console.error('Error resonating with reflection:', error);
       setComments(prevComments =>
         prevComments.map(comment =>
           comment.id === commentId ? { ...comment, likes: comment.likes - 1 } : comment
@@ -175,36 +176,42 @@ const PostItem = ({ post, expanded, onExpand, onClose }) => {
       >
         <CloseIcon />
       </IconButton>
-      <Typography variant="h5" component="div" className="post-title">
+      <Typography variant="h5" component="div" className="insight-title">
         {post.title}
       </Typography>
-      <Typography variant="body1" color="text.secondary" className="post-content">
+      <Typography variant="body1" className="insight-content">
         {post.content}
       </Typography>
-      <Box className="post-author">
-        <Avatar className="author-avatar">{post.customerUserName ? post.customerUserName[0].toUpperCase() : 'A'}</Avatar>
-        <Typography variant="subtitle2" color="text.secondary">
-          Posted by: {post.customerUserName || 'Anonymous'}
+      <Box className="insight-author">
+        <Avatar className="author-avatar">
+          {post.customerUserName ? post.customerUserName[0].toUpperCase() : 'S'}
+        </Avatar>
+        <Typography variant="subtitle2" className="author-name">
+          Shared by: {post.customerUserName || 'Seeker'}
         </Typography>
       </Box>
       <TextField
         fullWidth
         variant="outlined"
-        placeholder="Add a comment"
+        placeholder="Share your reflection..."
         value={newComment}
         onChange={(e) => setNewComment(e.target.value)}
-        className="comment-input"
+        className="reflection-input"
       />
-      <Button variant="contained" onClick={handleCreateComment} className="post-comment-button">
-        Post Comment
+      <Button 
+        variant="contained" 
+        onClick={handleCreateComment} 
+        className="share-reflection-button"
+      >
+        Share Reflection
       </Button>
-      <Box className="comments-container">
+      <Box className="reflections-container">
         {loading ? (
           <Box className="loading-indicator">
             <CircularProgress size={24} />
           </Box>
         ) : comments.length > 0 ? (
-          <List className="comments-list">
+          <List className="reflections-list">
             {comments.map((comment, index) => (
               <React.Fragment key={comment.id}>
                 <Comment
@@ -217,7 +224,9 @@ const PostItem = ({ post, expanded, onExpand, onClose }) => {
             ))}
           </List>
         ) : (
-          <Typography className="no-comments">No comments yet.</Typography>
+          <Typography className="no-reflections">
+            Be the first to share your reflection on this insight.
+          </Typography>
         )}
       </Box>
     </Box>
@@ -225,12 +234,12 @@ const PostItem = ({ post, expanded, onExpand, onClose }) => {
 
   return (
     <React.Fragment>
-      <Card onClick={onExpand} className="post-card">
+      <Card onClick={onExpand} className="insight-card">
         <CardContent>
-          <Typography variant="h6" component="div" className="post-title">
+          <Typography variant="h6" component="div" className="insight-title">
             {post.title.length > 100 ? `${post.title.substring(0, 100)}...` : post.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary" className="post-content">
+          <Typography variant="body2" className="insight-preview">
             {post.content.length > 50 ? `${post.content.substring(0, 50)}...` : post.content}
           </Typography>
         </CardContent>

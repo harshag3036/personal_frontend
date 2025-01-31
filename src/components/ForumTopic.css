@@ -1,0 +1,154 @@
+.forum-topic-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.topic-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.topic-header h1 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+}
+
+.create-thread-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.create-thread-btn:hover {
+  background-color: #2980b9;
+}
+
+.thread-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-controls select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.threads-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.thread-item {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.thread-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.thread-item.pinned {
+  background-color: #f8f9fa;
+  border-left: 4px solid #3498db;
+}
+
+.pin-indicator {
+  position: absolute;
+  top: 10px;
+  left: -20px;
+  font-size: 1.2rem;
+}
+
+.thread-main {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.thread-title {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.thread-author {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.thread-stats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.thread-stats .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 70px;
+}
+
+.stat-number {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #3498db;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.last-activity {
+  font-size: 0.9rem;
+  color: #666;
+  min-width: 150px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .thread-stats {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .thread-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .thread-main {
+    margin-bottom: 15px;
+  }
+  
+  .last-activity {
+    text-align: left;
+  }
+}

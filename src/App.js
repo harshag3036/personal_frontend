@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { CssBaseline, Container, AppBar, Button, Toolbar, Typography, Paper } from '@mui/material';
+import { CssBaseline, Container, Paper, Typography, Button } from '@mui/material';
 import Login from './components/Login';
 import SignIn from './components/SignIn';
 import Home from './components/Home';
@@ -9,8 +9,17 @@ import CreatePost from './components/CreatePost';
 import LandingPage from './components/LandingPage';
 import ChatBot from './components/ChatBot';
 import AddChatData from './components/AddChatData';
+import Articles from './components/Articles';
+import PostView from './components/PostView';
+import BookmarkManager from './components/BookmarkManager';
+import ForumList from './components/ForumList';
+import ForumTopic from './components/ForumTopic';
+import ThreadView from './components/ThreadView';
+import CreateThread from './components/CreateThread';
 import ProtectedRoute from './components/ProtectedRoute';
+import Appbar from './components/Appbar';
 import config from './config';
+import './styles/shared.css';
 import './App.css';
 
 function App() {
@@ -56,38 +65,12 @@ function App() {
     }
   }, [navigate, location.pathname]);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/');
-  };
-
   const showNavbar = !['/login', '/signin', '/'].includes(location.pathname);
 
   return (
-    <>
+    <div className="app">
       <CssBaseline />
-      {showNavbar && (
-        <AppBar position="static" className="app-bar">
-          <Toolbar>
-            <Typography 
-              variant="h6" 
-              component="div" 
-              sx={{ flexGrow: 1 }} 
-              className="app-title"
-            >
-              RoastMe
-            </Typography>
-            <div className="nav-buttons">
-              <Button color="inherit" onClick={() => navigate('/home')}>Home</Button>
-              <Button color="inherit" onClick={() => navigate('/chatbot')}>Chat Bot</Button>
-              {!isGuest && (
-                <Button color="inherit" onClick={() => navigate('/profile')}>Profile</Button>
-              )}
-              <Button color="inherit" onClick={handleLogout}>Logout</Button>
-            </div>
-          </Toolbar>
-        </AppBar>
-      )}
+      {showNavbar && <Appbar />}
       <div className="app-container">
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -96,29 +79,36 @@ function App() {
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/chatbot" element={<ChatBot />} />
           <Route path="/add-chat-data" element={<AddChatData />} />
+          <Route path="/articles" element={<Articles />} />
+          <Route path="/posts/:postId" element={<PostView />} />
+          <Route path="/articles/bookmarks" element={<BookmarkManager />} />
           {!isGuest && (
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           )}
+          <Route path="/forums" element={<ProtectedRoute><ForumList /></ProtectedRoute>} />
+          <Route path="/forums/:categoryId" element={<ProtectedRoute><ForumTopic /></ProtectedRoute>} />
+          <Route path="/forums/:categoryId/thread/:threadId" element={<ProtectedRoute><ThreadView /></ProtectedRoute>} />
+          <Route path="/forums/:categoryId/create" element={<ProtectedRoute><CreateThread /></ProtectedRoute>} />
           <Route path="/create-post" element={
             <ProtectedRoute>
               {isGuest ? (
-                <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
-                  <Typography variant="h6" gutterBottom>
-                    Create Your First Post
+                <Paper elevation={3} className="guest-prompt">
+                  <Typography variant="h6" gutterBottom className="guest-prompt-title">
+                    Begin Your Journey of Sharing
                   </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    You need to be logged in to create posts. Please login or sign up to continue.
+                  <Typography variant="body1" gutterBottom className="guest-prompt-text">
+                    To share your insights and contribute to our collective understanding, 
+                    please join our community of seekers and explorers.
                   </Typography>
                   <Button 
                     variant="contained" 
-                    color="primary" 
                     onClick={() => {
                       localStorage.clear();
                       navigate('/login');
                     }}
-                    style={{ marginTop: '16px' }}
+                    className="start-button"
                   >
-                    Go to Login
+                    Begin Journey
                   </Button>
                 </Paper>
               ) : (
@@ -128,7 +118,7 @@ function App() {
           } />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }
 
