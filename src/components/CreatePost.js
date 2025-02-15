@@ -21,11 +21,19 @@ const CreatePost = ({ onPostCreated }) => {
     }
 
     try {
+      console.log('Creating post with:', {
+        url: `${config.API_BASE_URL}/api/v1/createPost`,
+        token: token ? 'Token exists' : 'No token',
+        customerId: customerId || 'No customerId'
+      });
+
       const response = await fetch(`${config.API_BASE_URL}/api/v1/createPost`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           title,
@@ -34,7 +42,12 @@ const CreatePost = ({ onPostCreated }) => {
         }),
       });
 
+      console.log('Create post response status:', response.status);
+      const result = await response.json();
+      console.log('Create post response:', result);
+
       if (response.ok) {
+        console.log('Post created successfully');
         if (onPostCreated) {
           onPostCreated();
         }

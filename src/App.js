@@ -1,11 +1,22 @@
+/**
+ * App Component
+ * 
+ * Purpose:
+ * This is the main application component that:
+ * 1. Manages routing and navigation
+ * 2. Handles authentication state
+ * 3. Provides the core application structure
+ * 4. Supports the journey of understanding
+ */
+
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { CssBaseline, Container, Paper, Typography, Button } from '@mui/material';
+import { CssBaseline, Paper, Typography, Button } from '@mui/material';
 import Login from './components/Login';
 import SignIn from './components/SignIn';
 import Home from './components/Home';
 import Profile from './components/Profile';
-import CreatePost from './components/CreatePost';
+import ShareInsight from './components/ShareInsight';
 import LandingPage from './components/LandingPage';
 import ChatBot from './components/ChatBot';
 import AddChatData from './components/AddChatData';
@@ -89,12 +100,12 @@ function App() {
           <Route path="/forums/:categoryId" element={<ProtectedRoute><ForumTopic /></ProtectedRoute>} />
           <Route path="/forums/:categoryId/thread/:threadId" element={<ProtectedRoute><ThreadView /></ProtectedRoute>} />
           <Route path="/forums/:categoryId/create" element={<ProtectedRoute><CreateThread /></ProtectedRoute>} />
-          <Route path="/create-post" element={
+          <Route path="/share-insight" element={
             <ProtectedRoute>
               {isGuest ? (
                 <Paper elevation={3} className="guest-prompt">
                   <Typography variant="h6" gutterBottom className="guest-prompt-title">
-                    Begin Your Journey of Sharing
+                    Begin Your Journey of Understanding
                   </Typography>
                   <Typography variant="body1" gutterBottom className="guest-prompt-text">
                     To share your insights and contribute to our collective understanding, 
@@ -112,7 +123,7 @@ function App() {
                   </Button>
                 </Paper>
               ) : (
-                <CreatePost />
+                <ShareInsight />
               )}
             </ProtectedRoute>
           } />

@@ -1,12 +1,36 @@
+/**
+ * Home Component
+ * 
+ * Purpose:
+ * This component serves as the main interface for users to:
+ * 1. Begin their journey of self-discovery
+ * 2. Share and explore insights mindfully
+ * 3. Engage with content in a way that promotes understanding
+ * 4. Track their progress in understanding
+ */
+
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Typography, Paper, FormControl, InputLabel, Select, MenuItem, Container, Tabs, Tab } from '@mui/material';
+import { 
+    Box, 
+    TextField, 
+    Button, 
+    Typography, 
+    Paper, 
+    FormControl, 
+    InputLabel, 
+    Select, 
+    MenuItem, 
+    Container, 
+    Tabs, 
+    Tab 
+} from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useNavigate, useLocation } from 'react-router-dom';
 import config from '../config';
 import '../styles/shared.css';
 import './Home.css';
-import PostList from './PostList';
+import InsightCollection from './mindful/InsightCollection.tsx';
 
 export default function Home() {
   const [firstLogin, setFirstLogin] = useState(false);
@@ -62,12 +86,12 @@ export default function Home() {
     setTabValue(newValue);
   };
 
-  const handleCreatePost = () => {
+  const handleCreateInsight = () => {
     if (isGuest) {
       setShowLoginPrompt(true);
       return;
     }
-    navigate('/create-post');
+    navigate('/share-insight');
   };
 
   const handleChatBot = () => {
@@ -84,15 +108,15 @@ export default function Home() {
       <Container maxWidth="md" className="main-content">
         <div className="header">
           <Typography variant="h4" className="welcome-text">
-            Shared Insights
+            Journey of Understanding
           </Typography>
           <div className="header-buttons">
             <Button 
               variant="contained" 
-              onClick={handleCreatePost}
-              className="create-post-btn"
+              onClick={handleCreateInsight}
+              className="create-insight-btn"
             >
-              Share Your Insight
+              Share Your Understanding
             </Button>
             <Button 
               variant="contained" 
@@ -107,7 +131,7 @@ export default function Home() {
         {showLoginPrompt && isGuest ? (
           <Paper elevation={3} className="login-prompt-paper">
             <Typography variant="h6" align="center" gutterBottom>
-              Begin Your Journey of Sharing
+              Begin Your Journey of Understanding
             </Typography>
             <Typography variant="body1" align="center" gutterBottom>
               To share your insights and contribute to our collective understanding, 
@@ -176,13 +200,13 @@ export default function Home() {
             </Box>
           </Paper>
         ) : (
-          <Box className="posts-container">
-            <Tabs value={tabValue} onChange={handleTabChange} centered className="post-tabs">
+          <Box className="insights-container">
+            <Tabs value={tabValue} onChange={handleTabChange} centered className="insight-tabs">
               <Tab label="All Insights" />
-              <Tab label="My Reflections" />
+              <Tab label="My Journey" />
             </Tabs>
-            {tabValue === 0 && <PostList key="all-posts" />}
-            {tabValue === 1 && <PostList key="my-posts" userPosts />}
+            {tabValue === 0 && <InsightCollection key="all-insights" />}
+            {tabValue === 1 && <InsightCollection key="my-insights" userInsights />}
           </Box>
         )}
       </Container>

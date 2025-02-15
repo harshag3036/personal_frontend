@@ -23,17 +23,27 @@ export default function SignIn() {
   const handleSubmit = async () => {
     setIsSigningIn(true);
     try {
+      console.log('Attempting signin with:', {
+        url: `${config.API_BASE_URL}/api/v1/signin`,
+        username
+      });
+      
       const response = await fetch(`${config.API_BASE_URL}/api/v1/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           username: username,
           password: password
         })
       });
+      
+      console.log('Signin response status:', response.status);
       const result = await response.json();
+      console.log('Signin response:', result);
       
       if (response.status === 200 && result.token) {
         localStorage.setItem('token', result.token);

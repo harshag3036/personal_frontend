@@ -30,13 +30,25 @@ const PostList = ({ userPosts = false }) => {
       : `${config.API_BASE_URL}/api/v1/getAllPosts?page=${page}&size=10`;
 
     try {
+      console.log('Fetching posts with:', {
+        url,
+        token: token ? 'Token exists' : 'No token',
+        customerId: customerId || 'No customerId'
+      });
+      
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
       });
+      console.log('Posts response status:', response.status);
+      const data = await response.json();
+      console.log('Posts response data:', data);
+      
       if (response.ok) {
-        const data = await response.json();
         setPosts(prevPosts => [...prevPosts, ...data.content]);
         setHasMore(data.content.length === 10);
         setPage(prevPage => prevPage + 1);

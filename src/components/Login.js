@@ -67,17 +67,30 @@ const Login = () => {
 
   const handleLogin = async (credentials) => {
     try {
+      console.log('Attempting login with:', {
+        url: `${config.API_BASE_URL}/api/v1/login`,
+        credentials: {
+          username: credentials.username,
+          isGuest: credentials.isGuest
+        }
+      });
+      
       const response = await fetch(`${config.API_BASE_URL}/api/v1/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           username: credentials.username,
           password: credentials.password
         })
       });
+      
+      console.log('Login response status:', response.status);
       const result = await response.json();
+      console.log('Login response:', result);
       
       if (response.status === 200 && result.token) {
         localStorage.setItem('token', result.token);
@@ -120,6 +133,8 @@ const Login = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           username: guestCredentials.username,
