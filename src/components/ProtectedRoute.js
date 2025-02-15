@@ -3,7 +3,8 @@ import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/" />;
+  const isGuest = localStorage.getItem('isGuest') === 'true';
+  return token || isGuest ? children : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;
