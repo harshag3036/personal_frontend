@@ -23,17 +23,11 @@ import AddChatData from './components/AddChatData';
 import UpdateChatData from './components/UpdateChatData';
 import Feedback from './components/Feedback';
 import NoteBook from './components/NoteBook';
-import Articles from './components/Articles';
-import PostView from './components/PostView';
-import BookmarkManager from './components/BookmarkManager';
-import ForumList from './components/ForumList';
-import ForumTopic from './components/ForumTopic';
-import ThreadView from './components/ThreadView';
-import CreateThread from './components/CreateThread';
 import ProtectedRoute from './components/ProtectedRoute';
 import Appbar from './components/Appbar';
+import Articles from './components/Articles';
+import ForumList from './components/ForumList';
 import config from './config';
-import './styles/shared.css';
 import './App.css';
 
 function App() {
@@ -94,42 +88,10 @@ function App() {
           <Route path="/chatbot" element={<ChatBot />} />
           <Route path="/add-chat-data" element={<AddChatData />} />
           <Route path="/articles" element={<Articles />} />
-          <Route path="/posts/:postId" element={<PostView />} />
-          <Route path="/articles/bookmarks" element={<BookmarkManager />} />
+          <Route path="/forums" element={<ForumList />} />
           {!isGuest && (
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           )}
-          <Route path="/forums" element={<ProtectedRoute><ForumList /></ProtectedRoute>} />
-          <Route path="/forums/:categoryId" element={<ProtectedRoute><ForumTopic /></ProtectedRoute>} />
-          <Route path="/forums/:categoryId/thread/:threadId" element={<ProtectedRoute><ThreadView /></ProtectedRoute>} />
-          <Route path="/forums/:categoryId/create" element={<ProtectedRoute><CreateThread /></ProtectedRoute>} />
-          <Route path="/share-insight" element={
-            <ProtectedRoute>
-              {isGuest ? (
-                <Paper elevation={3} className="guest-prompt">
-                  <Typography variant="h6" gutterBottom className="guest-prompt-title">
-                    Begin Your Journey of Understanding
-                  </Typography>
-                  <Typography variant="body1" gutterBottom className="guest-prompt-text">
-                    To share your insights and contribute to our collective understanding, 
-                    please join our community of seekers and explorers.
-                  </Typography>
-                  <Button 
-                    variant="contained" 
-                    onClick={() => {
-                      localStorage.clear();
-                      navigate('/login');
-                    }}
-                    className="start-button"
-                  >
-                    Begin Journey
-                  </Button>
-                </Paper>
-              ) : (
-                <ShareInsight />
-              )}
-            </ProtectedRoute>
-          } />
           <Route path="/notebook" element={<NoteBook />} />
           <Route path="/activities" element={<Activities />} />
           <Route path="/chatbot-update" element={<UpdateChatData />} />
