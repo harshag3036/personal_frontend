@@ -13,13 +13,16 @@ import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { CssBaseline, Paper, Typography, Button } from '@mui/material';
 import Login from './components/Login';
+import Activities from './components/Activities';
 import SignIn from './components/SignIn';
 import Home from './components/Home';
 import Profile from './components/Profile';
-import ShareInsight from './components/ShareInsight';
 import LandingPage from './components/LandingPage';
 import ChatBot from './components/ChatBot';
 import AddChatData from './components/AddChatData';
+import UpdateChatData from './components/UpdateChatData';
+import Feedback from './components/Feedback';
+import NoteBook from './components/NoteBook';
 import Articles from './components/Articles';
 import PostView from './components/PostView';
 import BookmarkManager from './components/BookmarkManager';
@@ -127,7 +130,11 @@ function App() {
               )}
             </ProtectedRoute>
           } />
+          <Route path="/notebook" element={<NoteBook />} />
+          <Route path="/activities" element={<Activities />} />
+          <Route path="/chatbot-update" element={<UpdateChatData />} />
         </Routes>
+        <Feedback />
       </div>
     </div>
   );
