@@ -1,0 +1,193 @@
+/**
+ * ShareInsight Styles
+ *
+ * Purpose:
+ * These styles support mindful content creation by:
+ * 1. Creating a calm, focused environment for reflection
+ * 2. Using visual cues to encourage thoughtful progression
+ * 3. Implementing mindful spacing and typography
+ * 4. Supporting the journey from preparation to sharing
+ */
+
+.share-insight-container {
+    padding: 2rem 0;
+    min-height: 100vh;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.95),
+        rgba(250, 250, 250, 0.95)
+    );
+}
+
+.share-insight-paper {
+    padding: 3rem 2rem;
+    /* Subtle shadow for depth */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.page-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem !important;
+    font-weight: 500 !important;
+    /* Slightly larger letter spacing for contemplative feel */
+    letter-spacing: 0.02em !important;
+}
+
+/* Stepper Styles */
+.stepper {
+    margin: 2rem 0 3rem !important;
+}
+
+.step-description {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem !important;
+    /* Slightly larger line height for readability */
+    line-height: 1.6 !important;
+}
+
+/* Step Content Styles */
+.step-content {
+    margin: 2rem 0;
+    min-height: 300px;
+}
+
+/* Preparation Step */
+.preparation-step {
+    text-align: center;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.ready-button {
+    min-width: 200px !important;
+    /* Softer button color when disabled */
+    opacity: 0.7;
+    transition: opacity 0.3s ease !important;
+}
+
+.ready-button:not(:disabled) {
+    opacity: 1;
+    /* Calming color when ready */
+    background-color: #4a6fa5 !important;
+}
+
+/* Core Understanding Step */
+.core-understanding-step {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.input-field {
+    margin-bottom: 1rem !important;
+}
+
+/* Context Step */
+.context-step {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Review Step */
+.review-step {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.review-section {
+    padding: 2rem;
+    background-color: #f8f9fa !important;
+    margin: 1rem 0;
+    border-radius: 8px;
+}
+
+.insight-type-chip {
+    margin: 1rem 0 !important;
+    background-color: #4a6fa5 !important;
+    color: white !important;
+}
+
+.content-preview {
+    color: #444;
+    line-height: 1.8 !important;
+    /* Slightly larger font for better readability */
+    font-size: 1.1rem !important;
+    /* Optimal line length for reading */
+    max-width: 70ch;
+    margin: 1rem 0 !important;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    /* Subtle separator */
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+    min-width: 120px !important;
+}
+
+.next-button {
+    min-width: 120px !important;
+    background-color: #4a6fa5 !important;
+}
+
+/* Form Fields Enhancement */
+.MuiInputBase-root {
+    background-color: white !important;
+}
+
+.MuiInputLabel-root {
+    color: #666 !important;
+}
+
+.MuiOutlinedInput-root {
+    /* Softer border color */
+    & fieldset {
+        border-color: rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    &:hover fieldset {
+        border-color: rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    &.Mui-focused fieldset {
+        border-color: #4a6fa5 !important;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .share-insight-container {
+        padding: 1rem;
+    }
+
+    .share-insight-paper {
+        padding: 1.5rem 1rem;
+    }
+
+    .step-content {
+        min-height: 400px;
+    }
+
+    .action-buttons {
+        flex-direction: column-reverse;
+        gap: 1rem;
+    }
+
+    .back-button,
+    .next-button {
+        width: 100%;
+    }
+}

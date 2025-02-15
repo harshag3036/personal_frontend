@@ -1,0 +1,7 @@
+
+/* Hide print button when actually printing */
+@media print {
+    .print-button {
+        display: none;
+    }
+}

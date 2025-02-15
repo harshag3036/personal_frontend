@@ -3,29 +3,28 @@ import { TextField, Button, IconButton, InputAdornment, Container, Typography, D
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import config from '../config';
+import '../styles/shared.css';
 import './Login.css';
 
-const funnyPrefixes = [
-  'ninja_potato',
-  'dancing_taco',
-  'sleepy_unicorn',
-  'cosmic_waffle',
-  'lazy_panda',
-  'confused_penguin',
-  'happy_pickle',
-  'silly_noodle',
-  'funky_banana',
-  'dizzy_donut'
+const wisdomPrefixes = [
+  'seeker',
+  'observer',
+  'wanderer',
+  'explorer',
+  'questioner',
+  'contemplator',
+  'listener',
+  'wonderer',
+  'thinker',
+  'learner'
 ];
 
 const generateGuestCredentials = () => {
-  const randomPrefix = funnyPrefixes[Math.floor(Math.random() * funnyPrefixes.length)];
-  // Generate a longer random suffix using timestamp and random string
+  const randomPrefix = wisdomPrefixes[Math.floor(Math.random() * wisdomPrefixes.length)];
   const timestamp = Date.now().toString(36);
   const randomStr = Math.random().toString(36).substring(2, 8);
   const username = `${randomPrefix}_${timestamp}${randomStr}`;
   
-  // Generate a strong random password
   const password = Math.random().toString(36).substring(2, 10) + 
                   Math.random().toString(36).substring(2, 10) +
                   Math.floor(Math.random() * 10000);
@@ -68,17 +67,30 @@ const Login = () => {
 
   const handleLogin = async (credentials) => {
     try {
+      console.log('Attempting login with:', {
+        url: `${config.API_BASE_URL}/api/v1/login`,
+        credentials: {
+          username: credentials.username,
+          isGuest: credentials.isGuest
+        }
+      });
+      
       const response = await fetch(`${config.API_BASE_URL}/api/v1/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           username: credentials.username,
           password: credentials.password
         })
       });
+      
+      console.log('Login response status:', response.status);
       const result = await response.json();
+      console.log('Login response:', result);
       
       if (response.status === 200 && result.token) {
         localStorage.setItem('token', result.token);
@@ -89,7 +101,7 @@ const Login = () => {
         }
         navigate('/home');
       } else {
-        throw new Error(result.message || 'Login failed');
+        throw new Error(result.message || 'Unable to begin journey');
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -103,7 +115,7 @@ const Login = () => {
     try {
       await handleLogin({ username, password, isGuest: false });
     } catch (error) {
-      setError('Invalid username or password');
+      setError('The path seems unclear. Please verify your credentials.');
     } finally {
       setIsLoading(false);
     }
@@ -115,13 +127,14 @@ const Login = () => {
     
     try {
       const guestCredentials = generateGuestCredentials();
-      console.log('Creating guest account with username:', guestCredentials.username);
+      console.log('Creating guest path with username:', guestCredentials.username);
       
-      // First create the guest account
       const signUpResponse = await fetch(`${config.API_BASE_URL}/api/v1/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           username: guestCredentials.username,
@@ -130,15 +143,14 @@ const Login = () => {
       });
 
       if (!signUpResponse.ok) {
-        throw new Error('Failed to create guest account');
+        throw new Error('Unable to create guest path');
       }
 
-      // Then log in with the created account
       await handleLogin({ ...guestCredentials, isGuest: true });
       
     } catch (error) {
       console.error('Guest login error:', error);
-      setError('Failed to create guest account. Please try again.');
+      setError('A moment of pause. Please try again when ready.');
     } finally {
       setIsLoading(false);
     }
@@ -149,35 +161,39 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="sm" className="login-container">
-      <Typography variant="h4" align="center" gutterBottom>
-        Login
+    <div className="login-container">
+      <Typography variant="h4" className="login-title">
+        Welcome Back
       </Typography>
+      <Typography variant="body1" className="login-subtitle">
+        Continue your journey of exploration and understanding
+      </Typography>
+      
       {error && (
-        <Typography variant="body1" color="error" align="center" gutterBottom>
+        <Typography className="error-message">
           {error}
         </Typography>
       )}
+      
       <TextField
-        label="Username"
+        label="Path Name"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        fullWidth
-        margin="normal"
-        autoComplete="username"
         className="input-field"
+        autoComplete="username"
         disabled={isLoading}
+        placeholder="Your journey's name"
       />
+      
       <TextField
-        label="Password"
+        label="Key"
         type={showPassword ? 'text' : 'password'}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        fullWidth
-        margin="normal"
-        autoComplete="current-password"
         className="input-field"
+        autoComplete="current-password"
         disabled={isLoading}
+        placeholder="Your path's key"
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -193,39 +209,35 @@ const Login = () => {
           ),
         }}
       />
+      
       <Button 
         variant="contained" 
-        color="primary" 
-        fullWidth 
         onClick={handleRegularLogin}
-        className="login-button"
+        className="start-button"
         disabled={isLoading}
       >
-        {isLoading ? 'Logging in...' : 'Login'}
-      </Button>
-      <Button 
-        color="secondary" 
-        fullWidth 
-        onClick={handleSignIn}
-        className="signin-button"
-        disabled={isLoading}
-      >
-        Sign Up
+        {isLoading ? 'Opening Path...' : 'Continue Journey'}
       </Button>
       
-      <Divider style={{ margin: '20px 0' }}>or</Divider>
+      <Button 
+        onClick={handleSignIn}
+        className="create-button"
+        disabled={isLoading}
+      >
+        Begin New Journey
+      </Button>
+      
+      <Divider className="divider">or</Divider>
       
       <Button 
         variant="outlined" 
-        color="primary" 
-        fullWidth 
         onClick={handleGuestLogin}
         className="guest-button"
         disabled={isLoading}
       >
-        {isLoading ? 'Creating Guest Account...' : 'Login as Guest'}
+        {isLoading ? 'Creating Guest Path...' : 'Explore as Guest'}
       </Button>
-    </Container>
+    </div>
   );
 };
 

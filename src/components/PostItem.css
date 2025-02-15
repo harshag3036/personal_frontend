@@ -1,12 +1,28 @@
-.post-card {
-  margin-bottom: 16px;
+.insight-card {
+  margin-bottom: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px !important;
+  border: 1px solid var(--border-color) !important;
+  background: white !important;
+  overflow: hidden;
 }
 
-.post-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+.insight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+.insight-title {
+  color: var(--primary-dark) !important;
+  font-weight: 600 !important;
+  margin-bottom: 12px !important;
+  line-height: 1.4 !important;
+}
+
+.insight-preview {
+  color: var(--text-secondary) !important;
+  line-height: 1.6 !important;
 }
 
 .modal-content {
@@ -16,82 +32,149 @@
   transform: translate(-50%, -50%);
   width: 90%;
   height: 90%;
-  max-width: 1200px;
+  max-width: 800px;
   max-height: 90vh;
-  background-color: #fff;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-  padding: 32px;
-  border-radius: 8px;
+  background-color: white;
+  box-shadow: var(--shadow-lg);
+  padding: 40px;
+  border-radius: 20px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--border-color);
+}
+
+.modal-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  opacity: 0.8;
 }
 
 .close-button {
   position: absolute;
-  right: 8px;
-  top: 8px;
+  right: 16px;
+  top: 16px;
+  color: var(--text-secondary) !important;
+  transition: all 0.3s ease !important;
 }
 
-.post-title {
-  margin-bottom: 16px;
+.close-button:hover {
+  color: var(--primary) !important;
+  transform: scale(1.1);
 }
 
-.post-content {
-  margin-bottom: 16px;
+.insight-content {
+  margin: 24px 0;
+  color: var(--text-primary) !important;
+  line-height: 1.8 !important;
+  font-size: 1.1rem !important;
   max-height: 200px;
   overflow-y: auto;
+  padding-right: 16px;
 }
 
-.post-author {
+.insight-author {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  padding: 12px;
+  background: var(--gradient-light);
+  border-radius: 12px;
 }
 
 .author-avatar {
-  margin-right: 8px;
+  margin-right: 12px;
+  background: var(--gradient-primary) !important;
 }
 
-.comment-input {
-  margin-bottom: 16px;
+.author-name {
+  color: var(--text-secondary) !important;
+  font-weight: 500 !important;
 }
 
-.post-comment-button {
-  margin-bottom: 16px;
+.reflection-input {
+  margin-bottom: 16px !important;
 }
 
-.comments-container {
+.reflection-input .MuiOutlinedInput-root {
+  border-radius: 12px;
+  background: var(--background);
+  transition: all 0.3s ease;
+}
+
+.reflection-input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--primary);
+}
+
+.share-reflection-button {
+  margin-bottom: 24px !important;
+  padding: 12px 24px !important;
+  background: var(--gradient-primary) !important;
+  border-radius: 30px !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  transition: all 0.3s ease !important;
+}
+
+.share-reflection-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+.reflections-container {
   flex-grow: 1;
   overflow-y: auto;
   padding-right: 16px;
 }
 
-.comments-list {
+.reflections-list {
   padding: 0;
 }
 
 .comment-item {
-  padding: 8px 0;
+  padding: 16px 0 !important;
 }
 
-.like-button {
-  transition: transform 0.2s ease;
+.comment-author {
+  color: var(--primary-dark) !important;
+  font-weight: 500 !important;
 }
 
-.like-button:hover {
+.comment-likes {
+  color: var(--text-secondary) !important;
+}
+
+.resonate-button {
+  transition: all 0.3s ease !important;
+  color: var(--text-secondary) !important;
+}
+
+.resonate-button:hover {
   transform: scale(1.1);
+  color: var(--primary) !important;
+}
+
+.resonated {
+  color: var(--primary) !important;
 }
 
 .loading-indicator {
   display: flex;
   justify-content: center;
-  margin: 16px 0;
+  margin: 24px 0;
 }
 
-.no-comments {
+.no-reflections {
   text-align: center;
-  margin-top: 16px;
+  margin-top: 24px;
+  color: var(--text-secondary) !important;
+  font-style: italic;
 }
 
 @media (max-width: 600px) {
@@ -99,5 +182,15 @@
     width: 100%;
     height: 100%;
     border-radius: 0;
+    padding: 30px 20px;
+  }
+
+  .insight-content {
+    font-size: 1rem !important;
+  }
+
+  .close-button {
+    right: 12px;
+    top: 12px;
   }
 }

@@ -8,66 +8,66 @@ import './LandingPage.css';
 
 const features = [
   {
-    title: "Share Your Quirks",
-    description: "Turn your insecurities into comedy gold. Because if you're gonna be roasted, might as well start the fire yourself! 🔥",
-    emoji: "🤣"
+    title: "Learning Together",
+    description: "Every day brings a chance to see life with fresh eyes. Let's explore what it means to learn - not just from books, but from watching life unfold around and within us. 🌱",
+    emoji: "👥"
   },
   {
-    title: "Join the Roast Party",
-    description: "Where every insecurity gets its moment in the spotlight. It's like a support group, but with better jokes! 😂",
-    emoji: "🎭"
+    title: "Looking Deeply",
+    description: "Can we pause and really look at our thoughts, our reactions, our certainties? In this looking, we might discover something extraordinary about ourselves and life. 👁️",
+    emoji: "🔍"
   },
   {
-    title: "Self-Roast Master",
-    description: "Because nobody can roast you better than yourself. Think of it as emotional stand-up comedy! 🎯",
-    emoji: "🎪"
+    title: "Growing Through Questions",
+    description: "The most beautiful questions don't need immediate answers. They open doors to new ways of seeing, thinking, and being in this world. 💫",
+    emoji: "❓"
   }
 ];
 
-const roastCategories = [
+const wisdomCategories = [
   {
-    title: "Developer Roasts",
-    emoji: "💻",
-    roasts: [
-      { text: "I'm such a bad programmer, my code has more bugs than features.", author: "Stack Overflow Survivor" },
-      { text: "My code is so messy, even the garbage collector refused to clean it up.", author: "Clean Code Dropout" },
-      { text: "I spend so much time debugging, I should add 'Professional Bug Creator' to my LinkedIn.", author: "Debug Life Crisis" }
+    title: "Understanding Our Struggles",
+    emoji: "🌊",
+    insights: [
+      { text: "The greatest act of love is to face truth, even when it challenges everything we believe. This takes immense courage, but it's how we grow.", author: "Truth Seeker" },
+      { text: "Our difficulties aren't obstacles to understanding - they're the very path to it. Each challenge invites us to look deeper, understand more.", author: "Life Observer" },
+      { text: "Real freedom comes when we love truth more than our own comfort, when we're willing to question everything we think we know.", author: "Path Walker" }
     ]
   },
   {
-    title: "Scientist Roasts",
-    emoji: "🔬",
-    roasts: [
-      { text: "I'm so bad at experiments, even my control group got bored and left.", author: "Lab Rat Rookie" },
-      { text: "My research is so slow, evolution happens faster than my progress.", author: "PhD Procrastinator" },
-      { text: "I've failed so many experiments, my lab coat turned into a defeat blanket.", author: "Failed Hypothesis Hero" }
+    title: "Living and Learning",
+    emoji: "🌿",
+    insights: [
+      { text: "To learn is to be vulnerable, to admit we don't know. This openness, this humility before life's mysteries - this is where real understanding begins.", author: "Everyday Explorer" },
+      { text: "The love of truth demands that we stay with our questions, even when they make us uncomfortable. It's in this discomfort that we often find our deepest insights.", author: "Deep Questioner" },
+      { text: "True learning isn't about accumulating knowledge, but about seeing life with fresh eyes, moment by moment, without the burden of the known.", author: "Clear Seer" }
     ]
   },
   {
-    title: "Common Folk Roasts",
-    emoji: "🤷",
-    roasts: [
-      { text: "I'm so indecisive, I spent 3 hours choosing which self-roast to write.", author: "Decision Dodger" },
-      { text: "My cooking is so bad, even my smoke alarm cheers when I order takeout.", author: "Kitchen Disaster" },
-      { text: "I'm so bad at directions, my GPS asked for a therapist.", author: "Lost Cause" }
+    title: "Finding Our Way",
+    emoji: "🗺️",
+    insights: [
+      { text: "The greatest journey isn't to some distant truth, but to the reality of what is right here, right now. This takes tremendous attention and love.", author: "Present Explorer" },
+      { text: "When we truly love truth, we question not just our answers, but our questions too. Every assumption becomes an invitation to look deeper.", author: "Deep Diver" },
+      { text: "Understanding ourselves isn't a destination - it's a constant unfolding that requires endless patience, curiosity, and compassion.", author: "Self Observer" }
     ]
   },
   {
-    title: "Politician Roasts",
-    emoji: "🎭",
-    roasts: [
-      { text: "I make so many empty promises, even my mirror doesn't believe me anymore.", author: "Promise Breaker" },
-      { text: "My speeches are so long, even time asks for a coffee break.", author: "Filibuster Fan" },
-      { text: "I flip-flop so much, my stance is basically a gymnastics routine.", author: "Policy Acrobat" }
+    title: "Seeing Clearly",
+    emoji: "🌅",
+    insights: [
+      { text: "Can we look at ourselves, our world, our beliefs with eyes of love? Not seeking to change or judge, but simply to understand what is?", author: "Gentle Observer" },
+      { text: "The more deeply we look at life, the more we realize how little we know. This not-knowing, embraced with love, becomes a gateway to wisdom.", author: "Wonder Keeper" },
+      { text: "In the silence of real observation, when we're not trying to change what we see, truth reveals itself naturally, effortlessly.", author: "Quiet Listener" }
     ]
   },
   {
-    title: "Athlete Roasts",
-    emoji: "🏃",
-    roasts: [
-      { text: "I'm so slow, snails ask me for a head start.", author: "Tortoise Trainee" },
-      { text: "My coordination is so bad, I can trip over wireless signals.", author: "Balance Beginner" },
-      { text: "I drop the ball so often, gravity claims me as its best friend.", author: "Fumble Master" }
+    title: "Growing Together",
+    emoji: "🌱",
+    insights: [
+      { text: "When we come together with a shared love for truth, something extraordinary happens - we create a space where real understanding can flower.", author: "Fellow Traveler" },
+      { text: "The beauty of exploring together is that each person's insight enriches everyone's understanding. We learn not just from our own looking, but from each other's.", author: "Learning Friend" },
+      { text: "True dialogue begins when we're willing to question our deepest beliefs together, with kindness and genuine curiosity about what is true.", author: "Truth Companion" }
     ]
   }
 ];
@@ -119,15 +119,16 @@ const LandingPage = () => {
       <Container maxWidth="lg">
         <Box className="hero-section">
           <Typography variant="h1" className="hero-title">
-            Roast Yourself First!
+            Let's Look at Life Together
           </Typography>
           <Typography variant="h2" className="hero-subtitle">
-            Where self-deprecation meets celebration 🎉
+            A space for exploring, questioning, and understanding 🌱
           </Typography>
           <Typography variant="body1" className="hero-description">
-            Welcome to the world's first platform where your insecurities become your superpowers! 
-            Join our community of self-aware comedians who've mastered the art of laughing at themselves 
-            before anyone else gets the chance.
+            Welcome to a place where we can explore life's deepest questions together. 
+            Not to find quick answers, but to look with fresh eyes at ourselves and our world. 
+            Here, every question is an opening to new understanding, and every struggle 
+            is an invitation to grow.
           </Typography>
           <div className="hero-buttons">
             <Button 
@@ -135,14 +136,14 @@ const LandingPage = () => {
               onClick={() => navigate('/login')}
               className="start-button"
             >
-              START ROASTING 🎭
+              JOIN THE EXPLORATION 🌟
             </Button>
             <Button 
               variant="contained" 
               onClick={() => navigate('/chatbot')}
               className="chatbot-button"
             >
-              CHAT BOT 🤖
+              LET'S TALK 🤝
             </Button>
           </div>
         </Box>
@@ -151,7 +152,7 @@ const LandingPage = () => {
       <div className="section-header">
         <Container maxWidth="lg">
           <Typography variant="h3" className="section-title">
-            Why Join Our Roast Revolution? 🎭
+            Walking Together 🌿
           </Typography>
         </Container>
       </div>
@@ -183,13 +184,13 @@ const LandingPage = () => {
       <div className="section-header">
         <Container maxWidth="lg">
           <Typography variant="h3" className="section-title">
-            Self Roasts 🎯
+            Shared Insights 💫
           </Typography>
         </Container>
       </div>
 
       <Container maxWidth="lg">
-        <div className="roast-categories-wrapper">
+        <div className="categories-wrapper">
           <IconButton 
             className="scroll-button left"
             onClick={() => handleScroll('left')}
@@ -201,35 +202,35 @@ const LandingPage = () => {
           <IconButton 
             className="scroll-button right"
             onClick={() => handleScroll('right')}
-            disabled={activeCategory === roastCategories.length - 1}
+            disabled={activeCategory === wisdomCategories.length - 1}
           >
             <ChevronRightIcon className="scroll-button-icon" />
           </IconButton>
 
           {activeCategory === 0 && (
             <div className="scroll-hint">
-              <SwipeIcon /> Swipe for more
+              <SwipeIcon /> Discover more
             </div>
           )}
 
-          <div className="roast-categories" ref={categoriesRef}>
-            {roastCategories.map((category, index) => (
-              <div key={index} className="roast-category">
+          <div className="categories" ref={categoriesRef}>
+            {wisdomCategories.map((category, index) => (
+              <div key={index} className="category">
                 <div className="category-header">
                   <span className="category-emoji">{category.emoji}</span>
                   <Typography variant="h5" className="category-title">
                     {category.title}
                   </Typography>
                 </div>
-                <div className="roast-cards">
-                  {category.roasts.map((roast, roastIndex) => (
-                    <Card key={roastIndex} className="roast-card">
+                <div className="insight-cards">
+                  {category.insights.map((insight, insightIndex) => (
+                    <Card key={insightIndex} className="insight-card">
                       <CardContent>
-                        <Typography variant="body1" className="roast-text">
-                          "{roast.text}"
+                        <Typography variant="body1" className="insight-text">
+                          "{insight.text}"
                         </Typography>
-                        <Typography variant="subtitle2" className="roast-author">
-                          - {roast.author}
+                        <Typography variant="subtitle2" className="insight-author">
+                          - {insight.author}
                         </Typography>
                       </CardContent>
                     </Card>
@@ -240,7 +241,7 @@ const LandingPage = () => {
           </div>
 
           <div className="scroll-progress">
-            {roastCategories.map((_, index) => (
+            {wisdomCategories.map((_, index) => (
               <div 
                 key={index} 
                 className={`scroll-dot ${index === activeCategory ? 'active' : ''}`}
@@ -254,9 +255,9 @@ const LandingPage = () => {
       <Box className="footer">
         <Container maxWidth="md">
           <Typography variant="body2" className="footer-text">
-            © {new Date().getFullYear()} RoastMe. All rights reserved. 
-            By using this site, you agree to turn your insecurities into entertainment.
-            Use at your own risk of becoming too self-aware! 😉
+            © {new Date().getFullYear()} ThinkWise. All rights reserved. 
+            Let's explore the beauty and mystery of life together, 
+            one question at a time. 🌱
           </Typography>
         </Container>
       </Box>

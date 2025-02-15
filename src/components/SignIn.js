@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Box, TextField, FormControl, OutlinedInput, InputAdornment, Button, IconButton, Typography, Paper } from '@mui/material';
+import { Box, TextField, FormControl, OutlinedInput, InputAdornment, Button, IconButton, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import config from '../config';
+import '../styles/shared.css';
+import './SignIn.css';
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,21 +21,30 @@ export default function SignIn() {
   };
 
   const handleSubmit = async () => {
-    console.log('SignIn handleSubmit called');
     setIsSigningIn(true);
     try {
+      console.log('Attempting signin with:', {
+        url: `${config.API_BASE_URL}/api/v1/signin`,
+        username
+      });
+      
       const response = await fetch(`${config.API_BASE_URL}/api/v1/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           username: username,
           password: password
         })
       });
+      
+      console.log('Signin response status:', response.status);
       const result = await response.json();
-      console.log('SignIn response:', response);
+      console.log('Signin response:', result);
+      
       if (response.status === 200 && result.token) {
         localStorage.setItem('token', result.token);
         localStorage.setItem('firstLogin', result.firstLogin);
@@ -42,75 +53,80 @@ export default function SignIn() {
         }
         navigate('/home');
       } else {
-        setError(result.message || 'Sign in failed');
+        setError(result.message || 'Unable to begin journey. Please try again.');
         setIsSigningIn(false);
       }
     } catch (error) {
       console.error('SignIn error:', error);
-      setError('An error occurred. Please try again.');
+      setError('A moment of pause. Please try again when ready.');
       setIsSigningIn(false);
     }
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 4, mt: 4, maxWidth: 400, mx: 'auto' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Sign In
-        </Typography>
-        <TextField
-          label="Username"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          sx={{ m: 1, width: '100%' }}
+    <div className="signin-container">
+      <Typography variant="h4" className="signin-title">
+        Begin Your Journey
+      </Typography>
+      <Typography variant="body1" className="signin-subtitle">
+        Every journey of understanding begins with a single step. 
+        Create your space for exploration, questioning, and growth.
+      </Typography>
+      
+      <TextField
+        label="Choose Your Path Name"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        className="input-field"
+        disabled={isSigningIn}
+        placeholder="A name for your journey"
+      />
+      
+      <FormControl className="input-field">
+        <OutlinedInput
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           disabled={isSigningIn}
+          placeholder="Create a key for your path"
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+                disabled={isSigningIn}
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
         />
-        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-          <OutlinedInput
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={isSigningIn}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                  disabled={isSigningIn}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            placeholder="Password"
-          />
-        </FormControl>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={handleSubmit} 
-          sx={{ m: 1, width: '100%' }}
-          disabled={isSigningIn || !username || !password}
-        >
-          {isSigningIn ? 'Signing In...' : 'Sign In'}
-        </Button>
-        {error && (
-          <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
-            {error}
-          </Typography>
-        )}
-        <Button 
-          color="secondary" 
-          onClick={() => navigate('/login')} 
-          sx={{ mt: 2 }}
-          disabled={isSigningIn}
-        >
-          Back to Login
-        </Button>
-      </Box>
-    </Paper>
+      </FormControl>
+
+      <Button 
+        variant="contained" 
+        onClick={handleSubmit} 
+        className="start-button"
+        disabled={isSigningIn || !username || !password}
+      >
+        {isSigningIn ? 'Creating Your Path...' : 'Begin Journey'}
+      </Button>
+
+      {error && (
+        <Typography className="error-message">
+          {error}
+        </Typography>
+      )}
+
+      <Button 
+        onClick={() => navigate('/login')} 
+        className="return-button"
+        disabled={isSigningIn}
+      >
+        Return to Path
+      </Button>
+    </div>
   );
 }

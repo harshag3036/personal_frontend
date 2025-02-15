@@ -1,22 +1,79 @@
 .post-list-container {
-  padding: 20px;
+  padding: 40px;
   margin-top: 20px;
-  background-color: #f9f9f9;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.post-list-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  opacity: 0.8;
 }
 
 .post-list-title {
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: 600;
+  color: var(--primary-dark) !important;
+  font-weight: 700 !important;
+  margin-bottom: 30px !important;
+  font-size: 2rem !important;
+  letter-spacing: -0.3px !important;
   text-align: center;
+}
+
+.empty-message {
+  color: var(--text-secondary) !important;
+  text-align: center;
+  font-size: 1.1rem !important;
+  line-height: 1.6 !important;
+  max-width: 500px;
+  margin: 0 auto 24px !important;
+}
+
+.end-message {
+  color: var(--text-secondary) !important;
+  font-size: 0.95rem !important;
+  font-style: italic;
+  opacity: 0.8;
 }
 
 /* Add a subtle animation to new posts as they load */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
 }
 
 .post-card {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 600px) {
+  .post-list-container {
+    padding: 30px;
+    margin-top: 10px;
+  }
+
+  .post-list-title {
+    font-size: 1.75rem !important;
+    margin-bottom: 24px !important;
+  }
+
+  .empty-message {
+    font-size: 1rem !important;
+    padding: 0 20px;
+  }
 }

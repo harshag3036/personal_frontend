@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+# Journey of Understanding
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This application is designed to facilitate genuine self-discovery and understanding through mindful interaction and reflection. Unlike traditional social media or content platforms, this space is crafted to help users:
 
-## Available Scripts
+1. Observe and understand their thoughts, emotions, and patterns
+2. Share insights that emerge from genuine understanding
+3. Engage with others' experiences in a way that promotes clarity
+4. Reduce suffering through clear seeing and understanding
 
-In the project directory, you can run:
+## Core Philosophy
 
-### `npm start`
+### Mindful Engagement
+- Content is presented in a way that encourages thoughtful consumption
+- Built-in reflection moments prevent mindless scrolling
+- Focus on quality of understanding over quantity of interaction
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Genuine Understanding
+- Users are guided through a structured process of sharing insights
+- Emphasis on recognizing patterns and assumptions
+- Support for deep observation over quick reactions
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Community of Understanding
+- Interactions designed to promote clarity rather than validation
+- Focus on shared understanding rather than personal achievement
+- Safe space for exploring challenging perspectives
 
-### `npm test`
+## Key Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Mindful Content Consumption
+- Limited batch loading to prevent overwhelming
+- Reflection prompts between content
+- Context provided for mental preparation
 
-### `npm run build`
+### Structured Insight Sharing
+1. Preparation Phase
+   - Centering moment
+   - Clear mind preparation
+   - Setting intention
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Core Understanding
+   - Articulating the insight
+   - Identifying the type of understanding
+   - Capturing the essence
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Context & Patterns
+   - Recognizing conditions
+   - Identifying assumptions
+   - Understanding implications
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Review & Integration
+   - Reviewing for clarity
+   - Considering impact
+   - Mindful sharing
 
-### `npm run eject`
+### Personal Journey Tracking
+- Track patterns in understanding
+- Observe growth over time
+- Identify areas for deeper exploration
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Technical Notes
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Backend Integration
+The frontend is designed to work with the existing API while adding new fields for mindful interaction:
+- Maintains compatibility with current endpoints
+- Adds frontend-only fields for enhanced interaction
+- Prepared for future backend enhancements
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Future Enhancements
+1. Enhanced pattern recognition
+2. Deeper integration of mindfulness features
+3. Advanced journey tracking capabilities
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Contributing
 
-## Learn More
+When contributing to this project, please keep in mind:
+1. Features should promote genuine understanding
+2. Avoid adding elements that encourage mindless engagement
+3. Maintain focus on reducing suffering through clarity
+4. Support the journey of understanding over achievement metrics
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Getting Started
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+# Install dependencies
+npm install
 
-### Code Splitting
+# Start development server
+npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# Build for production
+npm run build
+```
 
-### Analyzing the Bundle Size
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License - see the LICENSE file for details.
