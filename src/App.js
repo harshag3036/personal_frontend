@@ -17,7 +17,6 @@ import Activities from './components/Activities';
 import SignIn from './components/SignIn';
 import Home from './components/Home';
 import Profile from './components/Profile';
-import ShareInsight from './components/ShareInsight';
 import LandingPage from './components/LandingPage';
 import ChatBot from './components/ChatBot';
 import AddChatData from './components/AddChatData';
