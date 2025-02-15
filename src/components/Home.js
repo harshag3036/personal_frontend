@@ -30,7 +30,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import config from '../config';
 import '../styles/shared.css';
 import './Home.css';
-import InsightCollection from './mindful/InsightCollection.tsx';
+import InsightCollection from './mindful/InsightCollection';
 
 export default function Home() {
   const [firstLogin, setFirstLogin] = useState(false);

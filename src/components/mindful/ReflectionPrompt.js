@@ -2,16 +2,6 @@
  * ReflectionPrompt Component
  * 
  * Purpose:
- * This component creates intentional pauses for reflection by:
- * 1. Providing structured prompts for self-observation
- * 2. Enforcing minimum reflection time
- * 3. Supporting deeper engagement with content
- * 4. Breaking patterns of mindless consumption
- */
-/**
- * ReflectionPrompt Component
- * 
- * Purpose:
  * This component creates intentional pauses in content consumption to:
  * 1. Break the habit of mindless scrolling
  * 2. Encourage genuine self-observation
@@ -29,17 +19,9 @@ import {
     CircularProgress,
     Fade
 } from '@mui/material';
-import { ReflectionPrompt as PromptType } from 'types/insight';
 import './ReflectionPrompt.css';
 
-interface Props {
-    prompt: PromptType;
-    onComplete: () => void;
-    onSkip?: () => void;
-    showSkip?: boolean;
-}
-
-export const ReflectionPrompt: React.FC<Props> = ({
+const ReflectionPrompt = ({
     prompt,
     onComplete,
     onSkip,
@@ -59,7 +41,7 @@ export const ReflectionPrompt: React.FC<Props> = ({
         const rotationInterval = setInterval(() => {
             if (prompt.subPrompts) {
                 setCurrentSubPrompt(prev => 
-                    (prev + 1) % prompt.subPrompts!.length
+                    (prev + 1) % prompt.subPrompts.length
                 );
             }
         }, 8000);

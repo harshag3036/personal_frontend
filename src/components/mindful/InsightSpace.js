@@ -21,15 +21,10 @@ import {
     Button,
     Fade
 } from '@mui/material';
-import { Insight } from 'types/insight';
-import { ENGAGEMENT_PROMPTS } from 'constants/observationPrompts';
+import { ENGAGEMENT_PROMPTS } from '../../constants/observationPrompts.js';
 import './InsightSpace.css';
 
-interface Props {
-    insight: Insight;
-}
-
-export const InsightSpace: React.FC<Props> = ({ insight }) => {
+const InsightSpace = ({ insight }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showPreparation, setShowPreparation] = useState(true);
     const [readyToEngage, setReadyToEngage] = useState(false);

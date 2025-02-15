@@ -20,21 +20,16 @@ import {
     CircularProgress 
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import config from 'config';
-import { Insight } from 'types/insight';
-import { MINDFUL_LOADING_PROMPTS } from 'constants/observationPrompts';
+import config from '../../config';
+import { MINDFUL_LOADING_PROMPTS } from '../../constants/observationPrompts.js';
 import ReflectionPrompt from './ReflectionPrompt';
 import InsightSpace from './InsightSpace';
 import './InsightCollection.css';
 
-interface Props {
-    userInsights?: boolean;
-}
-
 const INSIGHTS_PER_PAGE = 3; // Limiting to 3 insights at a time for mindful consumption
 
-const InsightCollection: React.FC<Props> = ({ userInsights = false }) => {
-    const [insights, setInsights] = useState<Insight[]>([]);
+const InsightCollection = ({ userInsights = false }) => {
+    const [insights, setInsights] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -66,7 +61,7 @@ const InsightCollection: React.FC<Props> = ({ userInsights = false }) => {
             if (response.ok) {
                 const data = await response.json();
                 // Transform API response to include frontend-specific fields
-                const enhancedInsights = data.content.map((insight: any) => ({
+                const enhancedInsights = data.content.map((insight) => ({
                     ...insight,
                     // Add frontend-only fields for mindful interaction
                     observationType: determineObservationType(insight),
@@ -94,17 +89,17 @@ const InsightCollection: React.FC<Props> = ({ userInsights = false }) => {
     };
 
     // Helper functions to enhance insights with mindfulness metadata
-    const determineObservationType = (insight: any): Insight['observationType'] => {
+    const determineObservationType = (insight) => {
         // TODO: Implement logic to determine observation type based on content
         return 'self-reflection';
     };
 
-    const calculatePreparationTime = (insight: any): number => {
+    const calculatePreparationTime = (insight) => {
         // TODO: Implement logic to suggest preparation time based on content depth
         return 5;
     };
 
-    const identifyChallengingConcepts = (insight: any): string[] => {
+    const identifyChallengingConcepts = (insight) => {
         // TODO: Implement logic to identify challenging concepts
         return ['assumption about happiness', 'belief about control'];
     };
@@ -175,7 +170,7 @@ const InsightCollection: React.FC<Props> = ({ userInsights = false }) => {
             {showReflection ? (
                 <ReflectionPrompt
                     prompt={{
-                        type: MINDFUL_LOADING_PROMPTS[currentPromptIndex].type as "awareness" | "pattern" | "resistance" | "integration",
+                        type: MINDFUL_LOADING_PROMPTS[currentPromptIndex].type,
                         text: MINDFUL_LOADING_PROMPTS[currentPromptIndex].text,
                         subPrompts: MINDFUL_LOADING_PROMPTS[currentPromptIndex].subPrompts,
                         minimumReflectionTime: MINDFUL_LOADING_PROMPTS[currentPromptIndex].minimumReflectionTime
