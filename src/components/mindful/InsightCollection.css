@@ -81,6 +81,46 @@
     background-color: #4a6fa5 !important;
 }
 
+/* Create Post Dialog Styles */
+.create-post-container {
+    padding: 2rem;
+    background: #fff;
+}
+
+.create-post-title {
+    color: #333;
+    text-align: center;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+}
+
+.create-post-subtitle {
+    color: #666;
+    text-align: center;
+    margin-bottom: 2rem !important;
+}
+
+.create-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-field {
+    background: #f8f9fa;
+}
+
+.share-button {
+    margin-top: 1rem !important;
+    background-color: #4a6fa5 !important;
+    color: white !important;
+    padding: 0.8rem !important;
+}
+
+.share-button:disabled {
+    background-color: #cccccc !important;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 600px) {
     .insight-collection {
