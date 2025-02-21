@@ -1,0 +1,171 @@
+/* Activity Manager Container */
+.activity-manager {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Activity Types Selection */
+.activity-types h3 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.type-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.type-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.type-card.selected {
+  border-color: #2196f3;
+  background: #e3f2fd;
+}
+
+.type-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.type-card h4 {
+  margin: 0 0 0.5rem;
+  color: #333;
+}
+
+.type-card p {
+  margin: 0;
+  text-align: center;
+  color: #666;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* Activity Form */
+.activity-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #666;
+  padding: 0;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: #333;
+}
+
+.activity-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #2196f3;
+  outline: none;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Form Actions */
+.form-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.create-button {
+  padding: 0.75rem 1.5rem;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.create-button:hover {
+  background: #1976d2;
+}
+
+/* Activity Type Specific Styles */
+.activity-type.event { background: #e3f2fd; color: #1976d2; }
+.activity-type.project { background: #e8f5e9; color: #2e7d32; }
+.activity-type.skill-share { background: #fff3e0; color: #f57c00; }
+.activity-type.resource { background: #f3e5f5; color: #7b1fa2; }
+.activity-type.challenge { background: #fbe9e7; color: #d84315; }
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .activity-manager {
+    padding: 1rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .type-grid {
+    grid-template-columns: 1fr;
+  }
+}

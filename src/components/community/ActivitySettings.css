@@ -1,0 +1,219 @@
+/* Container */
+.activity-settings {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header */
+.settings-header {
+  margin-bottom: 2rem;
+}
+
+.settings-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.75rem;
+}
+
+/* Settings Form */
+.settings-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.settings-section:last-child {
+  margin-bottom: 0;
+}
+
+.settings-section h3 {
+  margin: 0 0 1rem;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+  background-color: white;
+  transition: border-color 0.2s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1em;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+.form-group select option {
+  padding: 0.5rem;
+}
+
+/* Settings Info */
+.settings-info {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.info-section h3 {
+  margin: 0 0 1.5rem;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.info-label {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.info-value {
+  color: #333;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.submit-button:hover {
+  background: #1976d2;
+}
+
+/* Error Message */
+.error-message {
+  color: #f44336;
+  background: #ffebee;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .activity-settings {
+    padding: 1rem;
+  }
+
+  .settings-form,
+  .settings-info {
+    padding: 1.5rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .settings-form,
+  .settings-info {
+    background: #1e1e1e;
+  }
+
+  .settings-header h2,
+  .settings-section h3,
+  .form-group label,
+  .info-section h3 {
+    color: #e0e0e0;
+  }
+
+  .form-group select {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+  }
+
+  .form-group select:focus {
+    border-color: #2196f3;
+  }
+
+  .info-item {
+    background: #2d2d2d;
+  }
+
+  .info-label {
+    color: #999;
+  }
+
+  .info-value {
+    color: #e0e0e0;
+  }
+
+  .error-message {
+    background: #391515;
+  }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error Message Test</title>
+    <style>
+        :root {
+            --error: #DC2626;
+            --error-light: #FEF2F2;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .container {
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            max-width: 500px;
+            margin: 60px auto;
+        }
+
+        /* Test with dark background */
+        .error-message-dark {
+            color: var(--error);
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.95rem;
+            padding: 12px;
+            border-radius: 8px;
+            background: var(--error-light);
+        }
+
+        /* Test with transparent background */
+        .error-message-transparent {
+            color: var(--error);
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.95rem;
+            padding: 12px;
+            border-radius: 8px;
+            background: transparent;
+        }
+    </style>
+</head>
+<body style="background: #FAFBFF; margin: 0; font-family: Arial, sans-serif;">
+    <div class="container">
+        <h2 style="text-align: center; color: #0A2647;">Error Message Test</h2>
+        
+        <div style="margin-bottom: 40px;">
+            <h3>With Dark Background (Before):</h3>
+            <div class="error-message-dark">
+                Password must be at least 8 characters and include uppercase, lowercase, numbers, and special characters.
+            </div>
+        </div>
+
+        <div>
+            <h3>With Transparent Background (After):</h3>
+            <div class="error-message-transparent">
+                Password must be at least 8 characters and include uppercase, lowercase, numbers, and special characters.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
