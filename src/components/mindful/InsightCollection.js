@@ -22,6 +22,7 @@ import {
     TextField
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../contexts/UserContext';
 import config from '../../config';
 import { MINDFUL_LOADING_PROMPTS } from '../../constants/observationPrompts.js';
 import ReflectionPrompt from './ReflectionPrompt';
@@ -41,6 +42,7 @@ const InsightCollection = ({ userInsights = false }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const navigate = useNavigate();
+    const { isAuthenticated } = useUser();
 
     useEffect(() => {
         fetchInsights();
@@ -50,17 +52,16 @@ const InsightCollection = ({ userInsights = false }) => {
         if (!hasMore) return;
 
         setLoading(true);
-        const token = localStorage.getItem('token');
-        const customerId = localStorage.getItem('customerId');
         const url = userInsights
-            ? `${config.API_BASE_URL}/api/v1/getAllPosts/${customerId}?page=${page}&size=${INSIGHTS_PER_PAGE}`
+            ? `${config.API_BASE_URL}/api/v1/getAllPosts/me?page=${page}&size=${INSIGHTS_PER_PAGE}`
             : `${config.API_BASE_URL}/api/v1/getAllPosts?page=${page}&size=${INSIGHTS_PER_PAGE}`;
 
         try {
             const response = await fetch(url, {
+                credentials: 'include',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
+                    'Accept': 'application/json'
+                }
             });
             
             if (response.ok) {
@@ -130,10 +131,7 @@ const InsightCollection = ({ userInsights = false }) => {
     };
 
     const handleSubmitInsight = async () => {
-        const token = localStorage.getItem('token');
-        const customerId = localStorage.getItem('customerId');
-
-        if (!customerId) {
+        if (!isAuthenticated) {
             console.error('Unable to identify seeker');
             return;
         }
@@ -142,15 +140,13 @@ const InsightCollection = ({ userInsights = false }) => {
             const response = await fetch(`${config.API_BASE_URL}/api/v1/createPost`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Accept': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     title,
-                    content,
-                    customerId,
+                    content
                 }),
             });
 
