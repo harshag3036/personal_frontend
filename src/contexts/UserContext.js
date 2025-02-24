@@ -7,64 +7,59 @@ export const UserProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isGuest, setIsGuest] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  const setAuth = (token, isGuestUser) => {
+    setIsAuthenticated(!!token);
+    setIsGuest(isGuestUser);
+  };
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Check session storage first for guest status
-        const guestStatus = sessionStorage.getItem('isGuest');
-        if (guestStatus === 'true') {
-          setIsGuest(true);
-          setIsAuthenticated(true);
-          setIsLoading(false);
-          return;
-        }
-
-        // Verify authentication with backend
-        const response = await fetch(`${config.API_BASE_URL}/api/v1/verify`, {
-          method: 'GET',
-          credentials: 'include', // Send cookies
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-
-        setIsAuthenticated(response.ok);
-      } catch (error) {
-        console.error('Auth verification failed:', error);
-        setIsAuthenticated(false);
-      } finally {
+    const checkAuth = () => {
+      // Check session storage first for guest status
+      const guestStatus = sessionStorage.getItem('isGuest');
+      if (guestStatus === 'true') {
+        setIsGuest(true);
+        setIsAuthenticated(true);
         setIsLoading(false);
+        setAuthChecked(true);
+        return;
       }
+
+      // Check local storage for token
+      const token = localStorage.getItem('token');
+      const isGuestUser = localStorage.getItem('isGuest') === 'true';
+      
+      setIsAuthenticated(!!token);
+      setIsGuest(isGuestUser);
+      setIsLoading(false);
+      setAuthChecked(true);
     };
 
     checkAuth();
   }, []);
 
-  const logout = async () => {
-    try {
-      await fetch(`${config.API_BASE_URL}/api/v1/logout`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-    } catch (error) {
-      console.error('Logout failed:', error);
-    } finally {
-      // Clear session storage
-      sessionStorage.clear();
-      setIsAuthenticated(false);
-      setIsGuest(false);
-    }
+  if (!authChecked) {
+    return null; // Don't render anything until auth is checked
+  }
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('isGuest');
+    localStorage.removeItem('firstLogin');
+    localStorage.removeItem('customerId');
+    sessionStorage.clear();
+    setIsAuthenticated(false);
+    setIsGuest(false);
   };
 
   const value = {
     isAuthenticated,
     isLoading,
     isGuest,
-    logout
+    logout,
+    authChecked,
+    setAuth
   };
 
   return (

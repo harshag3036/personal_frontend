@@ -8,12 +8,13 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../contexts/UserContext';
 import '../styles/shared.css';
 import './Appbar.css';
 
 export default function Appbar() {
   const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem('token');
+  const { isAuthenticated, isGuest, logout } = useUser();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleProfileClick = (event) => {
@@ -29,9 +30,9 @@ export default function Appbar() {
     navigate('/profile');
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     handleMenuClose();
-    localStorage.clear();
+    await logout();
     navigate('/');
   };
 
@@ -98,7 +99,7 @@ export default function Appbar() {
             </Button>
           </div>
           <div className="profile-section">
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               <>
                 <IconButton
                   color="inherit"
@@ -125,7 +126,7 @@ export default function Appbar() {
                     horizontal: 'right',
                   }}
                 >
-                  <MenuItem onClick={handleProfileNav}>Profile</MenuItem>
+                  {!isGuest && <MenuItem onClick={handleProfileNav}>Profile</MenuItem>}
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
               </>

@@ -24,6 +24,7 @@ import {
     Tabs, 
     Tab 
 } from '@mui/material';
+import { useUser } from '../contexts/UserContext';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -41,19 +42,30 @@ export default function Home() {
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const isGuest = localStorage.getItem('isGuest') === 'true';
+  const { isGuest, isAuthenticated, authChecked } = useUser();
 
   useEffect(() => {
-    if (!isGuest) {
-      const firstLoginStatus = localStorage.getItem('firstLogin') === 'true';
-      setFirstLogin(firstLoginStatus);
-    }
+    if (authChecked) {
+      if (!isAuthenticated) {
+        navigate('/');
+        return;
+      }
 
-    if (location.state?.showMyPosts) {
-      setTabValue(1);
-      window.history.replaceState({}, document.title);
+      if (!isGuest) {
+        const firstLoginStatus = localStorage.getItem('firstLogin') === 'true';
+        setFirstLogin(firstLoginStatus);
+      }
+
+      if (location.state?.showMyPosts) {
+        setTabValue(1);
+        window.history.replaceState({}, document.title);
+      }
     }
-  }, [location.state, isGuest]);
+  }, [location.state, isGuest, isAuthenticated, authChecked, navigate]);
+
+  if (!authChecked) {
+    return null; // Don't render anything until auth is checked
+  }
 
   const handleSubmit = async () => {
     if (!name || !dob || !gender) {
@@ -99,8 +111,7 @@ export default function Home() {
   };
 
   const handleLoginRedirect = () => {
-    localStorage.clear();
-    navigate('/');
+    navigate('/login');
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Container, Typography, Box, Grid, Card, CardContent, IconButton } from '@mui/material';
+import { useUser } from '../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -76,6 +77,13 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState(0);
   const categoriesRef = useRef(null);
+  const { isAuthenticated, authChecked } = useUser();
+
+  useEffect(() => {
+    if (authChecked && isAuthenticated) {
+      navigate('/home');
+    }
+  }, [authChecked, isAuthenticated, navigate]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,7 +91,9 @@ const LandingPage = () => {
         const scrollPosition = categoriesRef.current.scrollLeft;
         const categoryWidth = categoriesRef.current.offsetWidth;
         const newActiveCategory = Math.round(scrollPosition / categoryWidth);
-        setActiveCategory(newActiveCategory);
+        if (newActiveCategory !== activeCategory) {
+          setActiveCategory(newActiveCategory);
+        }
       }
     };
 
@@ -92,25 +102,40 @@ const LandingPage = () => {
       categoriesElement.addEventListener('scroll', handleScroll);
       return () => categoriesElement.removeEventListener('scroll', handleScroll);
     }
-  }, []);
+  }, [activeCategory]);
 
   const handleScroll = (direction) => {
     if (categoriesRef.current) {
-      const scrollAmount = categoriesRef.current.offsetWidth;
-      categoriesRef.current.scrollBy({
-        left: direction === 'right' ? scrollAmount : -scrollAmount,
+      const container = categoriesRef.current;
+      const scrollAmount = container.offsetWidth;
+      const targetScroll = direction === 'right' 
+        ? container.scrollLeft + scrollAmount 
+        : container.scrollLeft - scrollAmount;
+
+      container.scrollTo({
+        left: targetScroll,
         behavior: 'smooth'
       });
+
+      // Update active category after scroll animation
+      const newCategory = direction === 'right' 
+        ? activeCategory + 1 
+        : activeCategory - 1;
+      setActiveCategory(Math.max(0, Math.min(newCategory, wisdomCategories.length - 1)));
     }
   };
 
   const scrollToCategory = (index) => {
-    if (categoriesRef.current) {
-      const scrollAmount = categoriesRef.current.offsetWidth * index;
-      categoriesRef.current.scrollTo({
+    if (categoriesRef.current && index !== activeCategory) {
+      const container = categoriesRef.current;
+      const scrollAmount = container.offsetWidth * index;
+      
+      container.scrollTo({
         left: scrollAmount,
         behavior: 'smooth'
       });
+      
+      setActiveCategory(index);
     }
   };
 
