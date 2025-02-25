@@ -13,6 +13,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { UserProvider, useUser } from './contexts/UserContext';
+import { ActivityProvider } from './contexts/ActivityContext';
 import Login from './components/Login';
 import Activities from './components/Activities';
 import SignIn from './components/SignIn';
@@ -28,6 +29,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Appbar from './components/Appbar';
 import Articles from './components/Articles';
 import ForumList from './components/ForumList';
+import Communities from './components/community/Communities';
+import CreateCommunity from './components/community/CreateCommunity';
+import CircleView from './components/community/CircleView';
 import config from './config';
 import './App.css';
 
@@ -40,7 +44,9 @@ function App() {
 
   return (
     <UserProvider>
-      <AppContent location={location} navigate={navigate} showNavbar={showNavbar} publicRoutes={publicRoutes} />
+      <ActivityProvider>
+        <AppContent location={location} navigate={navigate} showNavbar={showNavbar} publicRoutes={publicRoutes} />
+      </ActivityProvider>
     </UserProvider>
   );
 }
@@ -86,6 +92,21 @@ const AppContent = ({ location, navigate, showNavbar, publicRoutes }) => {
           <Route path="/forums" element={
             <ProtectedRoute>
               <ForumList />
+            </ProtectedRoute>
+          } />
+          <Route path="/community" element={
+            <ProtectedRoute>
+              <Communities />
+            </ProtectedRoute>
+          } />
+          <Route path="/community/new" element={
+            <ProtectedRoute>
+              <CreateCommunity />
+            </ProtectedRoute>
+          } />
+          <Route path="/community/:id" element={
+            <ProtectedRoute>
+              <CircleView />
             </ProtectedRoute>
           } />
           {!isGuest && (

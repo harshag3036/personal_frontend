@@ -165,6 +165,9 @@ const ParticipantManager = ({ activity, onUpdateActivity }) => {
   };
 
   const getParticipantsByRole = () => {
+    if (!activity?.participants) {
+      return {};
+    }
     const grouped = {};
     Object.keys(roles).forEach(role => {
       grouped[role] = activity.participants.filter(p => p.role === role);
@@ -237,7 +240,7 @@ const ParticipantManager = ({ activity, onUpdateActivity }) => {
                 {participants.map(participant => (
                   <div key={participant.id} className="participant-card">
                     <div className="participant-info">
-                      <span className="participant-email">{participant.email}</span>
+                      <span className="participant-email">{participant.name || participant.email}</span>
                       <span className={`status-badge ${participant.status}`}>
                         {participant.status}
                       </span>

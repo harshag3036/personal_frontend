@@ -7,6 +7,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import GroupsIcon from '@mui/icons-material/Groups';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import '../styles/shared.css';
@@ -96,6 +97,14 @@ export default function Appbar() {
               startIcon={<SportsEsportsIcon />}
             >
               Activities
+            </Button>
+            <Button 
+              color="inherit" 
+              onClick={() => navigate('/community')}
+              className="nav-button"
+              startIcon={<GroupsIcon />}
+            >
+              Communities
             </Button>
           </div>
           <div className="profile-section">

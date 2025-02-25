@@ -1,293 +1,365 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useActivity } from '../../contexts/ActivityContext';
+import StatusOverview from './StatusOverview';
+import MilestoneList from './MilestoneList';
 import './ProgressTracker.css';
 
-/**
- * ProgressTracker Component
- * Manages progress tracking across different activity types
- * Supports milestones, goals, and achievement tracking
- */
-const ProgressTracker = ({ activity, onUpdateActivity }) => {
-  const [showAddGoal, setShowAddGoal] = useState(false);
-  const [newGoal, setNewGoal] = useState({
-    title: '',
-    description: '',
-    targetDate: '',
-    criteria: []
-  });
-  const [error, setError] = useState(null);
+const ProgressTracker = ({ activity }) => {
+  const { updateStatus, updateProgress, addMilestone, toggleMilestone, addFile, fileState } = useActivity();
+  const [newMilestone, setNewMilestone] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [showStatusReason, setShowStatusReason] = useState(false);
+  const [statusReason, setStatusReason] = useState('');
+  const [selectedMilestone, setSelectedMilestone] = useState(null);
+  const [expandedMilestones, setExpandedMilestones] = useState({});
+  const [milestoneReason, setMilestoneReason] = useState('');
+  const [showMilestoneReason, setShowMilestoneReason] = useState(false);
+  const [currentMilestone, setCurrentMilestone] = useState(null);
 
-  const handleAddGoal = async (e) => {
-    e.preventDefault();
-    setError(null);
-
-    if (!newGoal.title.trim()) {
-      setError('Please enter a goal title');
-      return;
-    }
-
-    try {
-      const goal = {
-        ...newGoal,
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
-        progress: 0,
-        status: 'in_progress'
-      };
-
-      const updatedActivity = {
-        ...activity,
-        goals: [...(activity.goals || []), goal]
-      };
-
-      await onUpdateActivity(updatedActivity);
-      setShowAddGoal(false);
-      setNewGoal({
-        title: '',
-        description: '',
-        targetDate: '',
-        criteria: []
-      });
-    } catch (err) {
-      setError(err.message);
-    }
+  const progress = activity?.progress || {
+    status: 'not-started',
+    milestones: [],
+    statusHistory: []
   };
+  
+  // Calculate suggested status based on milestone completion
+  const suggestedStatus = useMemo(() => {
+    if (!progress?.milestones || progress.milestones.length === 0) {
+      return 'not-started';
+    }
+    
+    const completedCount = progress.milestones.filter(m => m.completed).length;
+    const totalCount = progress.milestones.length;
+    
+    if (completedCount === 0) {
+      return 'not-started';
+    } else if (completedCount === totalCount) {
+      return 'completed';
+    } else {
+      return 'in-progress';
+    }
+  }, [progress?.milestones]);
+  
+  // Update status if it doesn't match suggested status
+  useEffect(() => {
+    if (progress.status !== suggestedStatus && !showStatusReason && !isUpdating && activity?.id) {
+      // Only suggest status change, don't force it
+      console.log(`Suggested status change: ${progress.status} → ${suggestedStatus}`);
+    }
+  }, [suggestedStatus, progress.status, showStatusReason, isUpdating, activity?.id]);
 
-  const handleUpdateProgress = async (goalId, progress) => {
+  // State to force re-render when files are uploaded
+  const [refreshKey, setRefreshKey] = useState(0);
+  
+  // Force refresh when activity changes
+  useEffect(() => {
+    setRefreshKey(prev => prev + 1);
+  }, [activity]);
+
+  const handleFileUpload = async (file, milestoneId) => {
     try {
-      const updatedActivity = {
-        ...activity,
-        goals: activity.goals.map(goal =>
-          goal.id === goalId
-            ? {
-                ...goal,
-                progress: Math.min(100, Math.max(0, progress)),
-                status: progress >= 100 ? 'completed' : 'in_progress'
-              }
-            : goal
+      const fileResource = await addFile(activity.id, file);
+      
+      // Update milestone with file reference
+      await updateProgress(activity.id, {
+        milestones: progress.milestones.map(m => 
+          m.id === milestoneId ? {
+            ...m,
+            files: [...(m.files || []), fileResource.id]
+          } : m
         )
-      };
-      await onUpdateActivity(updatedActivity);
-    } catch (err) {
-      setError(err.message);
+      });
+      
+      // Force refresh to show the new file
+      setRefreshKey(prev => prev + 1);
+    } catch (error) {
+      console.error('Error uploading file:', error);
     }
   };
 
-  const addCriterion = (criterion) => {
-    if (criterion.trim()) {
-      setNewGoal(prev => ({
+  // Store the status we're changing to
+  const [pendingStatus, setPendingStatus] = useState(null);
+
+  const handleStatusChange = async (newStatus) => {
+    if (isUpdating || newStatus === progress.status) return;
+    
+    // Store the new status to use when confirming
+    setIsUpdating(true);
+    try {
+      // Store the status we're changing to
+      setPendingStatus(newStatus);
+      // Show the reason dialog
+      setShowStatusReason(true);
+      // Clear any previous reason
+      setStatusReason(''); 
+    } catch (error) {
+      console.error('Error preparing status change:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const confirmStatusChange = async () => {
+    if (isUpdating || !pendingStatus) return;
+    setIsUpdating(true);
+    try {
+      // Actually update the status with the provided reason
+      await updateStatus(activity.id, pendingStatus, statusReason);
+      setShowStatusReason(false);
+      setStatusReason('');
+      setPendingStatus(null);
+      
+      // Force refresh to show the updated status
+      setRefreshKey(prev => prev + 1);
+    } catch (error) {
+      console.error('Error updating status:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleAddMilestone = async (e) => {
+    e.preventDefault();
+    if (!newMilestone.trim() || isUpdating) return;
+    
+    setIsUpdating(true);
+    try {
+      await addMilestone(activity.id, {
+        title: newMilestone.trim(),
+        description: '',
+        files: []
+      });
+      setNewMilestone('');
+      
+      // Force refresh to show the new milestone
+      setRefreshKey(prev => prev + 1);
+    } catch (error) {
+      console.error('Error adding milestone:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleToggleMilestone = async (milestoneId, completed) => {
+    if (isUpdating) return;
+    
+    if (completed) {
+      // When completing a milestone, show reason input
+      setCurrentMilestone(milestoneId);
+      setShowMilestoneReason(true);
+      setMilestoneReason('');
+    } else {
+      // When unchecking, just update without reason
+      setIsUpdating(true);
+      try {
+        await toggleMilestone(activity.id, milestoneId, false, '');
+        // Force refresh to show the updated milestone
+        setRefreshKey(prev => prev + 1);
+      } catch (error) {
+        console.error('Error toggling milestone:', error);
+      } finally {
+        setIsUpdating(false);
+      }
+    }
+  };
+  
+  const confirmMilestoneCompletion = async () => {
+    if (isUpdating || !currentMilestone) return;
+    setIsUpdating(true);
+    
+    try {
+      await toggleMilestone(activity.id, currentMilestone, true, milestoneReason);
+      setSelectedMilestone(currentMilestone);
+      setExpandedMilestones(prev => ({
         ...prev,
-        criteria: [...prev.criteria, criterion.trim()]
+        [currentMilestone]: true
       }));
+      setShowMilestoneReason(false);
+      setMilestoneReason('');
+      setCurrentMilestone(null);
+      
+      // Force refresh to show the completed milestone
+      setRefreshKey(prev => prev + 1);
+    } catch (error) {
+      console.error('Error completing milestone:', error);
+    } finally {
+      setIsUpdating(false);
     }
   };
+  
+  const cancelMilestoneCompletion = () => {
+    setShowMilestoneReason(false);
+    setMilestoneReason('');
+    setCurrentMilestone(null);
+  };
 
-  const removeCriterion = (index) => {
-    setNewGoal(prev => ({
+  const toggleMilestoneExpansion = (milestoneId) => {
+    setExpandedMilestones(prev => ({
       ...prev,
-      criteria: prev.criteria.filter((_, i) => i !== index)
+      [milestoneId]: !prev[milestoneId]
     }));
   };
 
-  const calculateOverallProgress = () => {
-    if (!activity.goals?.length) return 0;
-    const totalProgress = activity.goals.reduce((sum, goal) => sum + goal.progress, 0);
-    return Math.round(totalProgress / activity.goals.length);
+  const calculateProgress = () => {
+    if (!progress?.milestones || !progress.milestones.length) return 0;
+    const completed = progress.milestones.filter(m => m.completed).length;
+    return Math.round((completed / progress.milestones.length) * 100);
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'completed': return '#4caf50';
-      case 'in_progress': return '#2196f3';
-      case 'overdue': return '#f44336';
-      default: return '#666';
-    }
-  };
-
-  const isOverdue = (targetDate) => {
-    return new Date(targetDate) < new Date() && targetDate;
+  const cancelStatusChange = () => {
+    setShowStatusReason(false);
+    setStatusReason('');
+    setPendingStatus(null);
   };
 
   return (
     <div className="progress-tracker">
       <div className="progress-header">
-        <div className="progress-info">
-          <h2>Progress Tracking</h2>
-          <div className="overall-progress">
-            <div className="progress-bar">
-              <div
-                className="progress-fill"
-                style={{ width: `${calculateOverallProgress()}%` }}
-              />
-            </div>
-            <span className="progress-text">{calculateOverallProgress()}% Complete</span>
+        <div className="header-title">
+          <h3>Activity Progress</h3>
+          <div className="help-text">
+            Track the overall status of this activity and its individual milestones
           </div>
         </div>
-        <button
-          className="add-goal-button"
-          onClick={() => setShowAddGoal(true)}
-        >
-          Add Goal
-        </button>
       </div>
 
-      {showAddGoal && (
-        <form onSubmit={handleAddGoal} className="goal-form">
-          <div className="form-group">
-            <label>Goal Title</label>
-            <input
-              type="text"
-              value={newGoal.title}
-              onChange={e => setNewGoal(prev => ({ ...prev, title: e.target.value }))}
-              placeholder="Enter goal title"
-              required
-            />
+      <StatusOverview 
+        progress={progress}
+        suggestedStatus={suggestedStatus}
+        handleStatusChange={handleStatusChange}
+        isUpdating={isUpdating}
+        showStatusReason={showStatusReason}
+        statusReason={statusReason}
+        setStatusReason={setStatusReason}
+        confirmStatusChange={confirmStatusChange}
+        cancelStatusChange={cancelStatusChange}
+        calculateProgress={calculateProgress}
+      />
+
+      <div className="milestones-section">
+        <div className="section-title">
+          <h4>Milestones</h4>
+          <div className="help-text">
+            Individual tasks that contribute to the overall activity progress
           </div>
-
-          <div className="form-group">
-            <label>Description</label>
-            <textarea
-              value={newGoal.description}
-              onChange={e => setNewGoal(prev => ({ ...prev, description: e.target.value }))}
-              placeholder="Describe your goal"
-              rows={3}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Target Date</label>
-            <input
-              type="date"
-              value={newGoal.targetDate}
-              onChange={e => setNewGoal(prev => ({ ...prev, targetDate: e.target.value }))}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Success Criteria</label>
-            <div className="criteria-input">
-              <input
-                type="text"
-                placeholder="Add criterion"
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (e.target.value.trim()) {
-                      addCriterion(e.target.value);
-                      e.target.value = '';
-                    }
-                  }
-                }}
-              />
-            </div>
-            {newGoal.criteria.length > 0 && (
-              <div className="criteria-list">
-                {newGoal.criteria.map((criterion, index) => (
-                  <div key={index} className="criterion-item">
-                    <span>{criterion}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeCriterion(index)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {error && <div className="error-message">{error}</div>}
-
-          <div className="form-actions">
-            <button
-              type="button"
-              className="cancel-button"
-              onClick={() => setShowAddGoal(false)}
-            >
-              Cancel
-            </button>
-            <button type="submit" className="submit-button">
-              Add Goal
-            </button>
-          </div>
-        </form>
-      )}
-
-      <div className="goals-list">
-        {activity.goals?.length > 0 ? (
-          activity.goals.map(goal => (
-            <div
-              key={goal.id}
-              className={`goal-card ${goal.status}`}
-            >
-              <div className="goal-header">
-                <h3>{goal.title}</h3>
-                <span
-                  className="status-badge"
-                  style={{ backgroundColor: getStatusColor(goal.status) }}
-                >
-                  {goal.status.replace('_', ' ')}
-                </span>
-              </div>
-
-              <p className="goal-description">{goal.description}</p>
-
-              {goal.criteria?.length > 0 && (
-                <div className="goal-criteria">
-                  <h4>Success Criteria</h4>
-                  <ul>
-                    {goal.criteria.map((criterion, index) => (
-                      <li key={index}>{criterion}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              <div className="goal-meta">
-                <div className="meta-item">
-                  <span className="meta-label">Target Date</span>
-                  <span className={isOverdue(goal.targetDate) ? 'overdue' : ''}>
-                    {new Date(goal.targetDate).toLocaleDateString()}
-                  </span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-label">Created</span>
-                  <span>{new Date(goal.createdAt).toLocaleDateString()}</span>
-                </div>
-              </div>
-
-              <div className="goal-progress">
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${goal.progress}%` }}
-                  />
-                </div>
+        </div>
+        
+        <div className="milestones-workflow">
+          <div className="workflow-step">
+            <div className="step-number">1</div>
+            <div className="step-content">
+              <h5>Create Milestones</h5>
+              <form onSubmit={handleAddMilestone} className="add-milestone">
                 <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={goal.progress}
-                  onChange={e => handleUpdateProgress(goal.id, parseInt(e.target.value))}
-                  className="progress-slider"
+                  type="text"
+                  placeholder="Add new milestone..."
+                  value={newMilestone}
+                  onChange={(e) => setNewMilestone(e.target.value)}
+                  disabled={isUpdating}
                 />
-                <span className="progress-text">{goal.progress}%</span>
-              </div>
+                <button type="submit" disabled={isUpdating || !newMilestone.trim()}>
+                  Add
+                </button>
+              </form>
             </div>
-          ))
-        ) : (
-          <div className="empty-state">
-            <p>No goals set yet</p>
-            <button
-              className="add-goal-button"
-              onClick={() => setShowAddGoal(true)}
-            >
-              Set Your First Goal
-            </button>
+          </div>
+          
+          <div className="workflow-step">
+            <div className="step-number">2</div>
+            <div className="step-content">
+              <h5>Upload Evidence</h5>
+              <p className="step-instruction">Click the + button next to a milestone to upload files</p>
+            </div>
+          </div>
+          
+          <div className="workflow-step">
+            <div className="step-number">3</div>
+            <div className="step-content">
+              <h5>Mark as Complete</h5>
+              <p className="step-instruction">Check the box or click "Mark as Complete" after uploading</p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Milestone completion dialog - now shows which milestone is being completed */}
+        {showMilestoneReason && currentMilestone && (
+          <div className="milestone-reason-dialog">
+            <div className="milestone-completion-header">
+              <div className="milestone-workflow-indicator">
+                <div className="workflow-step-indicator">
+                  <div className="step-number">3</div>
+                  <h5>Complete Milestone</h5>
+                </div>
+              </div>
+              <h5>
+                Completing: {progress.milestones.find(m => m.id === currentMilestone)?.title}
+              </h5>
+            </div>
+            <p>Add details about this milestone completion:</p>
+            <textarea
+              placeholder="What was accomplished? Any challenges or learnings?"
+              value={milestoneReason}
+              onChange={(e) => setMilestoneReason(e.target.value)}
+              rows={3}
+              autoFocus
+            />
+            <div className="reason-actions">
+              <button 
+                onClick={confirmMilestoneCompletion}
+                disabled={isUpdating}
+                className="confirm-button"
+              >
+                Complete Milestone
+              </button>
+              <button 
+                onClick={cancelMilestoneCompletion}
+                className="cancel-button"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         )}
+
+        <MilestoneList 
+          activity={activity}
+          progress={progress}
+          handleToggleMilestone={handleToggleMilestone}
+          handleFileUpload={handleFileUpload}
+          fileState={fileState}
+          isUpdating={isUpdating}
+          showMilestoneReason={showMilestoneReason}
+        />
       </div>
+
+      {progress?.statusHistory && progress.statusHistory.length > 0 && (
+        <div className="status-history">
+          <h4>Status History</h4>
+          <div className="history-list">
+            {progress.statusHistory.map((entry, index) => {
+              const statusColors = {
+                'not-started': '#6c757d',
+                'in-progress': '#007bff',
+                'completed': '#28a745',
+                'on-hold': '#ffc107',
+                'cancelled': '#dc3545'
+              };
+              
+              return (
+                <div key={index} className="history-item">
+                  <div className="history-status" style={{ color: statusColors[entry.status] }}>
+                    {entry.status}
+                  </div>
+                  {entry.reason && <div className="history-reason">{entry.reason}</div>}
+                  <div className="history-date">
+                    {new Date(entry.timestamp).toLocaleString()}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
