@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { SectionHeader } from './shared';
 import { useTemplate } from '../../contexts/TemplateContext';
 import TemplateConfiguration from './TemplateConfiguration';
 import StructuredDiscussionForm from './StructuredDiscussionForm';
+import DiscussionFilters from './DiscussionFilters';
 import './DiscussionBoard.css';
 
 /**
@@ -26,6 +27,15 @@ const DiscussionBoard = ({
   const [sortBy, setSortBy] = useState('recent');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showTemplateConfig, setShowTemplateConfig] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    dateFrom: '',
+    dateTo: '',
+    author: '',
+    tags: [],
+    templateType: 'all',
+    templateId: ''
+  });
   const [newDiscussion, setNewDiscussion] = useState({
     title: '',
     content: '',
@@ -37,28 +47,110 @@ const DiscussionBoard = ({
   const { getTemplatesByType, getTemplate } = useTemplate();
   const [tagInput, setTagInput] = useState('');
 
-  // Filter discussions based on search term
-  const filteredDiscussions = discussions.filter(discussion => 
-    discussion.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (discussion.content && discussion.content.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (discussion.tags && discussion.tags.some(tag => 
-      tag.toLowerCase().includes(searchTerm.toLowerCase())
-    ))
-  );
+  // Extract unique tags and authors from discussions for filters
+  const uniqueTags = useMemo(() => {
+    const allTags = discussions
+      .filter(d => d.tags && d.tags.length > 0)
+      .flatMap(d => d.tags);
+    return [...new Set(allTags)];
+  }, [discussions]);
+  
+  const uniqueAuthors = useMemo(() => {
+    return [...new Set(discussions.map(d => d.author.id))]
+      .map(authorId => {
+        const author = discussions.find(d => d.author.id === authorId)?.author;
+        return author ? { id: author.id, name: author.name } : null;
+      })
+      .filter(Boolean);
+  }, [discussions]);
+  
+  // Get available templates
+  const availableTemplates = useMemo(() => {
+    return getTemplatesByType('discussion') || [];
+  }, [getTemplatesByType]);
+
+  // Apply filters to discussions
+  const filteredDiscussions = useMemo(() => {
+    return discussions.filter(discussion => {
+      // Search term filter
+      const matchesSearch = 
+        discussion.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (discussion.content && discussion.content.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (discussion.tags && discussion.tags.some(tag => 
+          tag.toLowerCase().includes(searchTerm.toLowerCase())
+        ));
+      
+      if (!matchesSearch) return false;
+      
+      // Date range filter
+      if (filters.dateFrom) {
+        const discussionDate = new Date(discussion.createdAt);
+        const fromDate = new Date(filters.dateFrom);
+        if (discussionDate < fromDate) return false;
+      }
+      
+      if (filters.dateTo) {
+        const discussionDate = new Date(discussion.createdAt);
+        const toDate = new Date(filters.dateTo);
+        // Set time to end of day
+        toDate.setHours(23, 59, 59, 999);
+        if (discussionDate > toDate) return false;
+      }
+      
+      // Author filter
+      if (filters.author && discussion.author.id !== filters.author) {
+        return false;
+      }
+      
+      // Template type filter
+      if (filters.templateType === 'structured' && !discussion.templateId) {
+        return false;
+      }
+      
+      if (filters.templateType === 'regular' && discussion.templateId) {
+        return false;
+      }
+      
+      // Specific template filter
+      if (filters.templateId && discussion.templateId !== filters.templateId) {
+        return false;
+      }
+      
+      // Tags filter
+      if (filters.tags.length > 0) {
+        if (!discussion.tags) return false;
+        
+        // Check if discussion has all selected tags
+        const hasAllTags = filters.tags.every(tag => 
+          discussion.tags.includes(tag)
+        );
+        
+        if (!hasAllTags) return false;
+      }
+      
+      return true;
+    });
+  }, [discussions, searchTerm, filters]);
 
   // Sort discussions based on sort option
-  const sortedDiscussions = [...filteredDiscussions].sort((a, b) => {
-    switch (sortBy) {
-      case 'recent':
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      case 'popular':
-        return (b.commentCount || 0) - (a.commentCount || 0);
-      case 'activity':
-        return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt);
-      default:
-        return 0;
-    }
-  });
+  const sortedDiscussions = useMemo(() => {
+    return [...filteredDiscussions].sort((a, b) => {
+      switch (sortBy) {
+        case 'recent':
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        case 'popular':
+          return (b.commentCount || 0) - (a.commentCount || 0);
+        case 'activity':
+          return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt);
+        case 'alphabetical':
+          return a.title.localeCompare(b.title);
+        case 'alphabetical-reverse':
+          return b.title.localeCompare(a.title);
+        default:
+          return 0;
+      }
+    });
+  }, [filteredDiscussions, sortBy]);
 
   const handleCreateSubmit = (data) => {
     // If data is an event (from the regular form), handle it differently
@@ -176,10 +268,22 @@ const DiscussionBoard = ({
               <option value="recent">Most Recent</option>
               <option value="popular">Most Popular</option>
               <option value="activity">Recent Activity</option>
+              <option value="alphabetical">Alphabetical (A-Z)</option>
+              <option value="alphabetical-reverse">Alphabetical (Z-A)</option>
             </select>
           </div>
         </div>
       </div>
+      
+      <DiscussionFilters
+        filters={filters}
+        onFilterChange={setFilters}
+        authors={uniqueAuthors}
+        tags={uniqueTags}
+        templates={availableTemplates}
+        expanded={showFilters}
+        onToggleExpand={() => setShowFilters(!showFilters)}
+      />
 
       {showCreateForm && !showTemplateConfig && (
         <>
@@ -197,7 +301,15 @@ const DiscussionBoard = ({
               title={newDiscussion.title}
               onTitleChange={(e) => setNewDiscussion({...newDiscussion, title: e.target.value})}
               onSubmit={handleCreateSubmit}
-              onCancel={() => setShowCreateForm(false)}
+              onCancel={(changeTemplate) => {
+                if (changeTemplate) {
+                  // If we want to change the template, show the template config
+                  setShowTemplateConfig(true);
+                } else {
+                  // Otherwise just close the form
+                  setShowCreateForm(false);
+                }
+              }}
             />
           ) : (
             <div className="create-discussion-form">

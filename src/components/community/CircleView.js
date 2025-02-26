@@ -6,6 +6,7 @@ import ActivityDetailView from './ActivityDetailView';
 import ActivityManager from './ActivityManager';
 import InviteManager from './InviteManager';
 import ParticipantManager from './ParticipantManager';
+import MemberDirectory from './MemberDirectory';
 import CommunityOverview from './CommunityOverview';
 import DiscussionBoard from './DiscussionBoard';
 import { CommentSection } from './comments';
@@ -93,6 +94,19 @@ const CircleView = () => {
       setDiscussions(circle.discussions);
     }
   }, [circle, discussionRefreshKey]);
+  
+  // Listen for the custom event to show the invite modal
+  useEffect(() => {
+    const handleShowInviteModal = () => {
+      setShowInviteModal(true);
+    };
+    
+    window.addEventListener('show-invite-modal', handleShowInviteModal);
+    
+    return () => {
+      window.removeEventListener('show-invite-modal', handleShowInviteModal);
+    };
+  }, []);
 
   // Mock data - replace with actual data fetching
   useEffect(() => {
@@ -506,29 +520,50 @@ const CircleView = () => {
   };
 
   const renderMembers = () => {
+    // Prepare member data with additional information
+    const enhancedMembers = circle.members.map(member => {
+      // Add activity level based on activity count
+      let activityLevel = 'none';
+      if (member.activityCount > 15) {
+        activityLevel = 'high';
+      } else if (member.activityCount > 8) {
+        activityLevel = 'medium';
+      } else if (member.activityCount > 0) {
+        activityLevel = 'low';
+      }
+      
+      // Add email if not present
+      const email = member.email || `${member.name.toLowerCase().replace(/\s+/g, '.')}@example.com`;
+      
+      // Add last active date if not present (using a fixed offset instead of random)
+      const lastActive = member.lastActive || 
+        new Date(Date.now() - (member.id * 24 * 60 * 60 * 1000)).toISOString(); // Use member.id to create a stable offset
+      
+      return {
+        ...member,
+        activityLevel,
+        email,
+        lastActive
+      };
+    });
+    
     return (
       <div className="members-section">
-        <SectionHeader 
-          title="Members" 
-          subtitle={`${circle.members.length} people in this community`}
-          actions={
-            <button 
-              className="invite-button"
-              onClick={() => setShowInviteModal(true)}
-            >
-              Invite Member
-            </button>
-          }
-        />
-        
-        <ParticipantManager
-          activity={{
-            ...circle,
-            participants: circle.members,
-            currentUserRole: 'admin', // TODO: Get from auth context
-            currentUserId: '1' // TODO: Get from auth context
+        <MemberDirectory
+          members={enhancedMembers}
+          communityId={id}
+          onUpdateMember={(memberId, updates) => {
+            // Update the member in the circle
+            const updatedMembers = circle.members.map(member => 
+              member.id === memberId ? { ...member, ...updates } : member
+            );
+            
+            // Update the circle state
+            setCircle(prev => ({
+              ...prev,
+              members: updatedMembers
+            }));
           }}
-          onUpdateActivity={handleParticipantUpdate}
         />
       </div>
     );

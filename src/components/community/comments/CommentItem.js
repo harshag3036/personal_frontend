@@ -3,7 +3,7 @@ import { useUser } from '../../../contexts/UserContext';
 import { useActivity } from '../../../contexts/ActivityContext';
 import { EmojiPicker, CommentForm } from './';
 import StructuredCommentForm from '../StructuredCommentForm';
-import '../CommentSection.css';
+import '../CommentItem.css';
 
 /**
  * CommentItem Component
@@ -173,6 +173,9 @@ const CommentItem = ({
   const isModerator = user.role === 'moderator' || user.role === 'admin';
   const isAuthor = comment.userId === user.id;
 
+  // Display the "At what cost" section if it exists
+  const hasAtWhatCost = comment.atWhatCost && comment.atWhatCost.trim().length > 0;
+
   return (
     <div className={`comment-item depth-${depth} ${isLastInThread ? 'last-in-thread' : ''}`}>
       <div className="comment-header">
@@ -292,10 +295,22 @@ const CommentItem = ({
               })}
           </div>
         ) : (
-          <div 
-            className="comment-content"
-            dangerouslySetInnerHTML={{ __html: formatContent(comment.content) }}
-          />
+          <div>
+            <div 
+              className="comment-content"
+              dangerouslySetInnerHTML={{ __html: formatContent(comment.content) }}
+            />
+            
+            {hasAtWhatCost && (
+              <div className="comment-at-what-cost">
+                <div className="at-what-cost-label">At what cost?</div>
+                <div 
+                  className="at-what-cost-content"
+                  dangerouslySetInnerHTML={{ __html: formatContent(comment.atWhatCost) }}
+                />
+              </div>
+            )}
+          </div>
         )
       )}
 

@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useUser } from '../../../contexts/UserContext';
 import { TextFormatToolbar } from './';
-import '../CommentSection.css';
+import { applyFormatting } from './CommentFormUtils';
+import '../CommentForm.css';
 
 /**
  * CommentForm Component
@@ -25,10 +26,12 @@ const CommentForm = ({
   initialContent = '' 
 }) => {
   const [content, setContent] = useState(initialContent);
+  const [atWhatCost, setAtWhatCost] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showFormatting, setShowFormatting] = useState(false);
   const { user } = useUser();
   const textareaRef = useRef(null);
+  const costTextareaRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +41,7 @@ const CommentForm = ({
     try {
       await onSubmit({
         content: content.trim(),
+        atWhatCost: atWhatCost.trim(),
         userId: user.id,
         userName: user.name,
         parentId,
@@ -45,6 +49,7 @@ const CommentForm = ({
         createdAt: new Date().toISOString()
       });
       setContent('');
+      setAtWhatCost('');
     } catch (error) {
       console.error('Error submitting comment:', error);
     } finally {
@@ -53,69 +58,13 @@ const CommentForm = ({
   };
 
   const handleFormat = (formatType) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = content.substring(start, end);
-    let formattedText = '';
-    let cursorPosition = 0;
-
-    switch (formatType) {
-      case 'bold':
-        formattedText = `**${selectedText}**`;
-        cursorPosition = 2;
-        break;
-      case 'italic':
-        formattedText = `*${selectedText}*`;
-        cursorPosition = 1;
-        break;
-      case 'underline':
-        formattedText = `__${selectedText}__`;
-        cursorPosition = 2;
-        break;
-      case 'strikethrough':
-        formattedText = `~~${selectedText}~~`;
-        cursorPosition = 2;
-        break;
-      case 'quote':
-        formattedText = `> ${selectedText}`;
-        cursorPosition = 2;
-        break;
-      case 'list':
-        formattedText = `\n- ${selectedText}`;
-        cursorPosition = 3;
-        break;
-      case 'numbered-list':
-        formattedText = `\n1. ${selectedText}`;
-        cursorPosition = 4;
-        break;
-      case 'link':
-        formattedText = `[${selectedText}](url)`;
-        cursorPosition = selectedText.length + 3;
-        break;
-      case 'mention':
-        formattedText = `@${selectedText}`;
-        cursorPosition = 1;
-        break;
-      default:
-        return;
-    }
-
-    const newContent = 
-      content.substring(0, start) + 
-      formattedText + 
-      content.substring(end);
+    const newContent = applyFormatting({
+      textarea: textareaRef.current,
+      content,
+      formatType
+    });
     
     setContent(newContent);
-    
-    // Set focus back to textarea and position cursor
-    setTimeout(() => {
-      textarea.focus();
-      const newCursorPos = selectedText ? start + formattedText.length : start + cursorPosition;
-      textarea.setSelectionRange(newCursorPos, newCursorPos);
-    }, 0);
   };
 
   return (
@@ -142,6 +91,21 @@ const CommentForm = ({
         autoFocus={autoFocus}
         disabled={isSubmitting}
       />
+      
+      <div className="form-section">
+        <label htmlFor="at-what-cost" className="cost-label">At what cost?</label>
+        <textarea
+          id="at-what-cost"
+          ref={costTextareaRef}
+          value={atWhatCost}
+          onChange={(e) => setAtWhatCost(e.target.value)}
+          placeholder="What might be the costs, trade-offs, or consequences to consider?"
+          disabled={isSubmitting}
+          className="cost-textarea"
+          rows={3}
+        />
+        <small className="cost-description">Reflect on potential downsides or considerations others should be aware of</small>
+      </div>
       
       <div className="comment-form-footer">
         <div className="comment-form-info">

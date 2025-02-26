@@ -59,6 +59,14 @@ export const defaultTemplates = [
         description: 'Cite any sources or references that support your perspective',
         defaultRequired: false,
         order: 6
+      },
+      {
+        id: 'at_what_cost',
+        label: 'At what cost?',
+        placeholder: 'What might be the costs or trade-offs of adopting this perspective?',
+        description: 'Reflect on the potential downsides, sacrifices, or unintended consequences',
+        defaultRequired: false,
+        order: 7
       }
     ],
     defaultRequiredSections: ['statement']
@@ -117,6 +125,14 @@ export const defaultTemplates = [
         description: 'Share visual examples to help others understand',
         defaultRequired: false,
         order: 6
+      },
+      {
+        id: 'at_what_cost',
+        label: 'At what cost?',
+        placeholder: 'What are the physical, mental, or time costs of implementing this technique?',
+        description: 'Reflect on the potential downsides, risks, or trade-offs involved',
+        defaultRequired: false,
+        order: 7
       }
     ],
     defaultRequiredSections: ['technique', 'skill_level']
@@ -175,6 +191,14 @@ export const defaultTemplates = [
         description: 'Credit sources or inspirations for this technique',
         defaultRequired: false,
         order: 6
+      },
+      {
+        id: 'at_what_cost',
+        label: 'At what cost?',
+        placeholder: 'What are the creative, emotional, or resource costs of this technique?',
+        description: 'Reflect on the potential challenges, limitations, or sacrifices required',
+        defaultRequired: false,
+        order: 7
       }
     ],
     defaultRequiredSections: ['technique', 'process']
@@ -233,6 +257,14 @@ export const defaultTemplates = [
         description: 'Share your personal experience related to this insight',
         defaultRequired: false,
         order: 6
+      },
+      {
+        id: 'at_what_cost',
+        label: 'At what cost?',
+        placeholder: 'What are the professional, ethical, or organizational costs of this insight?',
+        description: 'Reflect on potential downsides, ethical considerations, or organizational challenges',
+        defaultRequired: false,
+        order: 7
       }
     ],
     defaultRequiredSections: ['insight', 'context']
@@ -251,6 +283,14 @@ export const defaultTemplates = [
         description: 'Express yourself freely',
         defaultRequired: true,
         order: 1
+      },
+      {
+        id: 'at_what_cost',
+        label: 'At what cost?',
+        placeholder: 'What might be the costs, trade-offs, or consequences to consider?',
+        description: 'Reflect on potential downsides or considerations others should be aware of',
+        defaultRequired: false,
+        order: 2
       }
     ],
     defaultRequiredSections: ['content']

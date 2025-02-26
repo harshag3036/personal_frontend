@@ -188,6 +188,15 @@ const StructuredDiscussionForm = ({
       <div className="template-info">
         <div className="template-header">
           <h4>{template.name}</h4>
+          <div className="template-actions">
+            <button 
+              type="button"
+              className="change-template-button"
+              onClick={() => onCancel(true)} // Pass true to indicate we want to change template
+            >
+              Change Template
+            </button>
+          </div>
           <div className="rigour-level">
             <span>Rigour Level: </span>
             <span className="rigour-indicator">

@@ -5,6 +5,8 @@ import { SectionHeader } from '../shared';
 import StructuredCommentForm from '../StructuredCommentForm';
 import { CommentForm, CommentThread } from './';
 import '../CommentSection.css';
+import '../CommentForm.css';
+import '../CommentItem.css';
 
 /**
  * CommentSection Component
