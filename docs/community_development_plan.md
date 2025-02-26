@@ -174,23 +174,21 @@ Status: Not Started 🔴
 
 ## Tracking Progress
 
-### Daily Updates
-- Update component status in this document
-- Mark completed items
-- Note any issues or blockers
-- Update priority flags as needed
+> **Note:** Detailed progress tracking has been moved to [community_progress_tracker.md](./community_progress_tracker.md)
 
-### Weekly Review
-- Review all in-progress items
-- Update phase status
-- Adjust priorities if needed
-- Document lessons learned
+The progress tracker document provides:
+- Comprehensive status of all phases and tasks
+- Weekly updates on development progress
+- Detailed task tracking with priorities and assignments
+- Implementation notes and dependencies
 
-### Phase Completion
-- Verify all success criteria
-- Document any technical debt
-- Update integration points
-- Plan next phase details
+Please refer to the progress tracker for the most up-to-date status of the community development effort.
+
+### Review Process
+- Daily: Update task status in the progress tracker
+- Weekly: Review overall progress and update the weekly summary
+- Monthly: Assess plan alignment with project goals
+- Quarterly: Update plans or create new plans as needed
 
 ## Quality Checks
 

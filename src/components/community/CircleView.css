@@ -76,6 +76,8 @@
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 8px;
 }
 
 .circle-nav button {
@@ -87,6 +89,7 @@
   cursor: pointer;
   border-radius: 20px;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .circle-nav button.active {
@@ -98,8 +101,11 @@
   background-color: #f5f5f5;
 }
 
-/* Activities Section */
-.activities-section {
+/* Section Styles */
+.activities-section,
+.discussions-section,
+.members-section,
+.resources-section {
   padding: 20px 0;
 }
 
@@ -116,7 +122,10 @@
   font-size: 1.5em;
 }
 
-.create-activity-button {
+.create-activity-button,
+.create-discussion-button,
+.invite-button,
+.add-resource-button {
   padding: 10px 20px;
   background-color: #4a90e2;
   color: white;
@@ -130,7 +139,10 @@
   gap: 8px;
 }
 
-.create-activity-button:hover {
+.create-activity-button:hover,
+.create-discussion-button:hover,
+.invite-button:hover,
+.add-resource-button:hover {
   background-color: #357abd;
   transform: translateY(-1px);
 }
@@ -331,6 +343,170 @@
   z-index: 1000;
 }
 
+/* Discussion Detail View */
+.discussion-detail-view {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.discussion-detail-view .detail-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.discussion-detail-view .header-content {
+  flex: 1;
+}
+
+.discussion-detail-view .header-content h2 {
+  margin: 0 0 8px 0;
+  color: #2c3e50;
+  font-size: 1.8em;
+}
+
+.discussion-detail-view .creation-date {
+  color: #666;
+  font-size: 0.9em;
+  margin: 0;
+}
+
+.discussion-detail-view .close-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 16px;
+}
+
+.discussion-detail-view .close-button:hover {
+  color: #333;
+}
+
+.discussion-detail-view .detail-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.discussion-detail-view .author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.discussion-detail-view .author-name {
+  font-weight: 500;
+  color: #4a90e2;
+}
+
+.discussion-detail-view .discussion-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.discussion-detail-view .tag {
+  padding: 4px 12px;
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 16px;
+  font-size: 0.85em;
+}
+
+.discussion-detail-view .discussion-content {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.discussion-detail-view .discussion-content p {
+  margin: 0;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Ensure section titles in the modal view have the correct size */
+.discussion-detail-view .section-title {
+  font-size: 12px !important;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 4px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+
+/* Discussions List */
+.discussions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.discussion-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.discussion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.discussion-header h3 {
+  margin: 0 0 12px 0;
+  color: #2c3e50;
+  font-size: 1.2em;
+}
+
+.discussion-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.discussion-author {
+  font-weight: 500;
+  color: #4a90e2;
+}
+
+.discussion-comments {
+  margin-left: auto;
+  padding: 4px 8px;
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 12px;
+  font-size: 0.85em;
+}
+
+/* Resources Section */
+.resources-section .empty-state {
+  margin-top: 20px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header-top {
@@ -357,12 +533,15 @@
   }
 
   .circle-nav {
-    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
   }
 
   .circle-nav button {
-    width: 100%;
-    padding: 12px;
+    flex: 0 0 auto;
+    padding: 8px 16px;
   }
 
   .activities-grid {
@@ -376,7 +555,10 @@
     align-items: stretch;
   }
 
-  .create-activity-button {
+  .create-activity-button,
+  .create-discussion-button,
+  .invite-button,
+  .add-resource-button {
     width: 100%;
     justify-content: center;
   }
@@ -398,5 +580,16 @@
   .view-button {
     width: 100%;
     text-align: center;
+  }
+
+  .discussion-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .discussion-comments {
+    margin-left: 0;
+    align-self: flex-start;
   }
 }

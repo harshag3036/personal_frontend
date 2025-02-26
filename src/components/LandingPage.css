@@ -201,8 +201,8 @@
 }
 
 /* Decorative elements around section titles - infinity symbol */
-.section-title::before,
-.section-title::after {
+.landing-page .section-title::before,
+.landing-page .section-title::after {
     content: "\221E";
     position: absolute;
     top: 50%;
@@ -212,11 +212,11 @@
     opacity: 0.5;
 }
 
-.section-title::before {
+.landing-page .section-title::before {
     left: -40px;
 }
 
-.section-title::after {
+.landing-page .section-title::after {
     right: -40px;
 }
 
@@ -601,8 +601,8 @@
         font-size: 2rem !important;
     }
 
-    .section-title::before,
-    .section-title::after {
+    .landing-page .section-title::before,
+    .landing-page .section-title::after {
         display: none;
     }
 

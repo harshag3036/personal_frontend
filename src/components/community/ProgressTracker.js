@@ -15,6 +15,7 @@ const ProgressTracker = ({ activity }) => {
   const [milestoneReason, setMilestoneReason] = useState('');
   const [showMilestoneReason, setShowMilestoneReason] = useState(false);
   const [currentMilestone, setCurrentMilestone] = useState(null);
+  const [showStatusHistory, setShowStatusHistory] = useState(true);
 
   const progress = activity?.progress || {
     status: 'not-started',
@@ -148,6 +149,12 @@ const ProgressTracker = ({ activity }) => {
       setCurrentMilestone(milestoneId);
       setShowMilestoneReason(true);
       setMilestoneReason('');
+      
+      // Ensure the milestone is expanded to show the completion dialog
+      setExpandedMilestones(prev => ({
+        ...prev,
+        [milestoneId]: true
+      }));
     } else {
       // When unchecking, just update without reason
       setIsUpdating(true);
@@ -281,45 +288,7 @@ const ProgressTracker = ({ activity }) => {
           </div>
         </div>
         
-        {/* Milestone completion dialog - now shows which milestone is being completed */}
-        {showMilestoneReason && currentMilestone && (
-          <div className="milestone-reason-dialog">
-            <div className="milestone-completion-header">
-              <div className="milestone-workflow-indicator">
-                <div className="workflow-step-indicator">
-                  <div className="step-number">3</div>
-                  <h5>Complete Milestone</h5>
-                </div>
-              </div>
-              <h5>
-                Completing: {progress.milestones.find(m => m.id === currentMilestone)?.title}
-              </h5>
-            </div>
-            <p>Add details about this milestone completion:</p>
-            <textarea
-              placeholder="What was accomplished? Any challenges or learnings?"
-              value={milestoneReason}
-              onChange={(e) => setMilestoneReason(e.target.value)}
-              rows={3}
-              autoFocus
-            />
-            <div className="reason-actions">
-              <button 
-                onClick={confirmMilestoneCompletion}
-                disabled={isUpdating}
-                className="confirm-button"
-              >
-                Complete Milestone
-              </button>
-              <button 
-                onClick={cancelMilestoneCompletion}
-                className="cancel-button"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Milestone completion dialog moved to MilestoneList component */}
 
         <MilestoneList 
           activity={activity}
@@ -329,35 +298,49 @@ const ProgressTracker = ({ activity }) => {
           fileState={fileState}
           isUpdating={isUpdating}
           showMilestoneReason={showMilestoneReason}
+          currentMilestone={currentMilestone}
+          milestoneReason={milestoneReason}
+          setMilestoneReason={setMilestoneReason}
+          confirmMilestoneCompletion={confirmMilestoneCompletion}
+          cancelMilestoneCompletion={cancelMilestoneCompletion}
+          expandedMilestones={expandedMilestones}
+          setExpandedMilestones={setExpandedMilestones}
         />
       </div>
 
       {progress?.statusHistory && progress.statusHistory.length > 0 && (
         <div className="status-history">
-          <h4>Status History</h4>
-          <div className="history-list">
-            {progress.statusHistory.map((entry, index) => {
-              const statusColors = {
-                'not-started': '#6c757d',
-                'in-progress': '#007bff',
-                'completed': '#28a745',
-                'on-hold': '#ffc107',
-                'cancelled': '#dc3545'
-              };
-              
-              return (
-                <div key={index} className="history-item">
-                  <div className="history-status" style={{ color: statusColors[entry.status] }}>
-                    {entry.status}
-                  </div>
-                  {entry.reason && <div className="history-reason">{entry.reason}</div>}
-                  <div className="history-date">
-                    {new Date(entry.timestamp).toLocaleString()}
-                  </div>
-                </div>
-              );
-            })}
+          <div className="status-history-header" onClick={() => setShowStatusHistory(!showStatusHistory)}>
+            <h4>Status History</h4>
+            <button className="toggle-history-button">
+              {showStatusHistory ? '−' : '+'}
+            </button>
           </div>
+          {showStatusHistory && (
+            <div className="history-list">
+              {progress.statusHistory.map((entry, index) => {
+                const statusColors = {
+                  'not-started': '#6c757d',
+                  'in-progress': '#007bff',
+                  'completed': '#28a745',
+                  'on-hold': '#ffc107',
+                  'cancelled': '#dc3545'
+                };
+                
+                return (
+                  <div key={index} className="history-item">
+                    <div className="history-status" style={{ color: statusColors[entry.status] }}>
+                      {entry.status}
+                    </div>
+                    {entry.reason && <div className="history-reason">{entry.reason}</div>}
+                    <div className="history-date">
+                      {new Date(entry.timestamp).toLocaleString()}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>

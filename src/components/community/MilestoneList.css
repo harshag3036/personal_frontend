@@ -2,6 +2,7 @@
 
 .milestones-list {
   margin-top: 16px;
+  position: relative;
 }
 
 .milestone-item {
@@ -12,6 +13,12 @@
   transition: all 0.2s ease;
   background: white;
   position: relative;
+  cursor: pointer;
+}
+
+.milestone-item.completing {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 1px #4a90e2;
 }
 
 .milestone-item:hover {
@@ -68,6 +75,11 @@
   height: 16px;
   cursor: pointer;
   accent-color: #28a745;
+}
+
+.milestone-checkbox input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .milestone-title {
@@ -137,6 +149,7 @@
   color: #333;
 }
 
+/* Visual flow between steps */
 .milestone-files {
   margin-top: 12px;
   padding: 16px;
@@ -145,16 +158,35 @@
   margin-left: 24px;
   border-left: 2px solid #4a90e2;
   transition: all 0.2s ease;
+  position: relative;
+}
+
+.milestone-files::before {
+  content: "";
+  position: absolute;
+  left: 12px; /* Center of step number circles */
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #4a90e2;
+  opacity: 0.5;
+  z-index: 0;
 }
 
 .milestone-workflow-indicator {
   margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .workflow-step-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
+  background-color: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-flex;
 }
 
 .workflow-step-indicator .step-number {
@@ -169,6 +201,7 @@
   justify-content: center;
   font-weight: 500;
   flex-shrink: 0;
+  box-shadow: 0 0 0 4px #f8f9fa;
 }
 
 .workflow-step-indicator h5 {
@@ -180,6 +213,8 @@
 
 .file-upload-section {
   margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
 }
 
 .milestone-files h5 {
@@ -203,6 +238,8 @@
   border-radius: 6px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   border: 1px solid #f0f0f0;
+  position: relative;
+  z-index: 1;
 }
 
 .file-count {
@@ -276,6 +313,8 @@
   background-color: #f0f9f0;
   border-radius: 6px;
   border: 1px solid #c8e6c9;
+  position: relative;
+  z-index: 1;
 }
 
 .complete-milestone-button {
@@ -297,6 +336,81 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Embedded milestone completion dialog */
+.milestone-reason-dialog {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1;
+}
+
+.milestone-completion-header {
+  margin-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 12px;
+}
+
+.milestone-reason-dialog h5 {
+  margin: 8px 0 6px 0;
+  color: #2c3e50;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.milestone-reason-dialog p {
+  margin: 0 0 8px 0;
+  color: #6c757d;
+  font-size: 13px;
+}
+
+.milestone-reason-dialog textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  resize: vertical;
+  font-size: 13px;
+}
+
+.reason-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.reason-actions button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reason-actions .confirm-button {
+  background: #28a745;
+  color: white;
+  border: none;
+}
+
+.reason-actions .confirm-button:hover {
+  background: #218838;
+}
+
+.reason-actions .cancel-button {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #e0e0e0;
+}
+
+.reason-actions .cancel-button:hover {
+  background: #e9ecef;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .milestone-header {
@@ -316,5 +430,9 @@
 
   .files-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .reason-actions {
+    flex-direction: column;
   }
 }

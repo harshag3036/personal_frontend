@@ -4,8 +4,9 @@ import { useActivity } from '../../contexts/ActivityContext';
 import { useUser } from '../../contexts/UserContext';
 import ActivityParticipants from './ActivityParticipants';
 import ProgressTracker from './ProgressTracker';
-import CommentSection from './CommentSection';
+import { CommentSection } from './comments';
 import FileManager from './FileManager';
+import DiscussionContent from './DiscussionContent';
 import './ActivityDetailView.css';
 
 const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
@@ -222,7 +223,15 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
       <div className="detail-content">
         <div className="description-section">
           <h3>Description</h3>
-          <p>{activity.description}</p>
+          {activity.type === 'discussion' && activity.templateId ? (
+            activity.content ? (
+              <DiscussionContent discussion={activity} />
+            ) : (
+              <p>{activity.description || 'No content available'}</p>
+            )
+          ) : (
+            <p>{activity.description || 'No content available'}</p>
+          )}
         </div>
 
         <div className="metadata-section">

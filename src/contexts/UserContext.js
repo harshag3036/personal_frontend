@@ -8,6 +8,12 @@ export const UserProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isGuest, setIsGuest] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
+  const [user, setUser] = useState({
+    id: 'user-1',
+    name: 'Demo User',
+    email: 'demo@example.com',
+    role: 'member'
+  });
 
   const setAuth = (token, isGuestUser) => {
     setIsAuthenticated(!!token);
@@ -59,7 +65,8 @@ export const UserProvider = ({ children }) => {
     isGuest,
     logout,
     authChecked,
-    setAuth
+    setAuth,
+    user
   };
 
   return (

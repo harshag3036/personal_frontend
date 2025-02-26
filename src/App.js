@@ -14,6 +14,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { UserProvider, useUser } from './contexts/UserContext';
 import { ActivityProvider } from './contexts/ActivityContext';
+import { TemplateProvider } from './contexts/TemplateContext';
 import Login from './components/Login';
 import Activities from './components/Activities';
 import SignIn from './components/SignIn';
@@ -45,7 +46,9 @@ function App() {
   return (
     <UserProvider>
       <ActivityProvider>
-        <AppContent location={location} navigate={navigate} showNavbar={showNavbar} publicRoutes={publicRoutes} />
+        <TemplateProvider>
+          <AppContent location={location} navigate={navigate} showNavbar={showNavbar} publicRoutes={publicRoutes} />
+        </TemplateProvider>
       </ActivityProvider>
     </UserProvider>
   );

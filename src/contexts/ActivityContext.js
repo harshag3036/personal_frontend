@@ -583,6 +583,47 @@ export const ActivityProvider = ({ children }) => {
     });
   };
 
+  const reportComment = async (commentId, reportData) => {
+    setCommentState(prev => ({ ...prev, loading: true }));
+    try {
+      let updatedComment;
+      setCommentState(prevState => {
+        const comment = prevState.byId[commentId];
+        const reports = comment.reports || [];
+        
+        updatedComment = {
+          ...comment,
+          reports: [...reports, reportData],
+          isReported: true,
+          reportCount: (comment.reportCount || 0) + 1
+        };
+
+        return {
+          ...prevState,
+          byId: { ...prevState.byId, [commentId]: updatedComment },
+          loading: false
+        };
+      });
+
+      return updatedComment;
+    } catch (error) {
+      setCommentState(prev => ({
+        ...prev,
+        loading: false,
+        error: error.message
+      }));
+      throw error;
+    }
+  };
+
+  const pinComment = async (commentId, isPinned = true) => {
+    return updateComment(commentId, { isPinned });
+  };
+
+  const hideComment = async (commentId, isHidden = true) => {
+    return updateComment(commentId, { isHidden });
+  };
+
   const value = {
     activities,
     addActivity,
@@ -605,6 +646,9 @@ export const ActivityProvider = ({ children }) => {
     getReplies,
     addReaction,
     removeReaction,
+    reportComment,
+    pinComment,
+    hideComment,
     commentState,
     // File functions
     addFile,

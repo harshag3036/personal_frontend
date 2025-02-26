@@ -1,327 +1,374 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { SectionHeader } from './shared';
+import { useTemplate } from '../../contexts/TemplateContext';
+import TemplateConfiguration from './TemplateConfiguration';
+import StructuredDiscussionForm from './StructuredDiscussionForm';
 import './DiscussionBoard.css';
 
 /**
  * DiscussionBoard Component
- * Creates a space for meaningful discussions and self-discovery
- * Uses pattern recognition to help users see their own patterns
+ * 
+ * Displays a list of discussions for a community and allows users to create new discussions
+ * 
+ * @param {Object} props
+ * @param {Array} props.discussions - List of discussions
+ * @param {Function} props.onCreateDiscussion - Function to call when creating a new discussion
+ * @param {Function} props.onViewDiscussion - Function to call when viewing a discussion
+ * @param {String} props.communityId - ID of the community
  */
-const DiscussionBoard = ({ activity, onUpdateActivity }) => {
-  const [newPost, setNewPost] = useState('');
-  const [replyTo, setReplyTo] = useState(null);
-  const [error, setError] = useState(null);
-  const [showGuidelines, setShowGuidelines] = useState(false);
-  const [showPatternNotice, setShowPatternNotice] = useState(false);
-  const [patternFeedback, setPatternFeedback] = useState(null);
+const DiscussionBoard = ({ 
+  discussions = [], 
+  onCreateDiscussion, 
+  onViewDiscussion,
+  communityId 
+}) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('recent');
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showTemplateConfig, setShowTemplateConfig] = useState(false);
+  const [newDiscussion, setNewDiscussion] = useState({
+    title: '',
+    content: '',
+    tags: [],
+    templateId: null,
+    requiredSections: [],
+    strictRigourEnforcement: false
+  });
+  const { getTemplatesByType, getTemplate } = useTemplate();
+  const [tagInput, setTagInput] = useState('');
 
-  const guidelines = [
-    'Share from personal experience rather than theory',
-    'Notice patterns in your thoughts and reactions',
-    'Ask questions that lead to deeper understanding',
-    'Listen to understand, not to respond',
-    'Take time to reflect before posting',
-    'Be aware of seeking validation or approval',
-    'Notice when you are avoiding something uncomfortable'
-  ];
+  // Filter discussions based on search term
+  const filteredDiscussions = discussions.filter(discussion => 
+    discussion.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (discussion.content && discussion.content.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (discussion.tags && discussion.tags.some(tag => 
+      tag.toLowerCase().includes(searchTerm.toLowerCase())
+    ))
+  );
 
-  const patternNotice = {
-    title: "A Note About Patterns",
-    content: `This discussion space uses pattern recognition to offer reflections and prompts. 
-    Like an AI, we humans often operate on patterns - seeking approval, avoiding discomfort, 
-    looking for the "right" answer. The difference is that we can become aware of our patterns. 
-    As you engage here, notice your patterns: Are you trying to sound wise? Seeking validation? 
-    Avoiding something? This awareness itself is the beginning of understanding.`
-  };
-
-  const patterns = {
-    seekingValidation: {
-      indicators: ['am i right', 'is this correct', 'what do you think', 'please help'],
-      reflection: "Notice the desire for external validation. What would it mean to trust your own understanding?"
-    },
-    intellectualizing: {
-      indicators: ['i think', 'in theory', 'according to', 'studies show'],
-      reflection: "You're sharing from the intellect. What's your direct experience of this?"
-    },
-    avoidance: {
-      indicators: ['but', 'however', 'instead', 'rather than'],
-      reflection: "Notice the movement away. What might you be avoiding looking at?"
-    },
-    judgment: {
-      indicators: ['should', 'must', 'always', 'never'],
-      reflection: "There's a judgment here. Can you look at this situation without judgment?"
+  // Sort discussions based on sort option
+  const sortedDiscussions = [...filteredDiscussions].sort((a, b) => {
+    switch (sortBy) {
+      case 'recent':
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      case 'popular':
+        return (b.commentCount || 0) - (a.commentCount || 0);
+      case 'activity':
+        return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt);
+      default:
+        return 0;
     }
-  };
+  });
 
-  const detectPatterns = (text) => {
-    const lowerText = text.toLowerCase();
-    let detectedPatterns = [];
-
-    Object.entries(patterns).forEach(([key, pattern]) => {
-      if (pattern.indicators.some(indicator => lowerText.includes(indicator.toLowerCase()))) {
-        detectedPatterns.push({
-          type: key,
-          reflection: pattern.reflection
+  const handleCreateSubmit = (data) => {
+    // If data is an event (from the regular form), handle it differently
+    if (data && data.preventDefault) {
+      data.preventDefault();
+      if (newDiscussion.title.trim() && (newDiscussion.content.trim() || newDiscussion.templateId)) {
+        onCreateDiscussion({
+          ...newDiscussion,
+          communityId,
+          createdAt: new Date().toISOString()
         });
       }
-    });
-
-    return detectedPatterns;
-  };
-
-  const handleTextChange = (e) => {
-    const text = e.target.value;
-    setNewPost(text);
-
-    // Only show pattern feedback after a meaningful amount of text
-    if (text.length > 30) {
-      const detected = detectPatterns(text);
-      if (detected.length > 0) {
-        setPatternFeedback(detected[0]); // Show one pattern at a time
-      } else {
-        setPatternFeedback(null);
-      }
     } else {
-      setPatternFeedback(null);
+      // This is structured discussion data from the StructuredDiscussionForm
+      onCreateDiscussion({
+        ...data,
+        communityId
+      });
+    }
+    
+    // Reset form state
+    setNewDiscussion({ 
+      title: '', 
+      content: '', 
+      tags: [],
+      templateId: null,
+      requiredSections: [],
+      strictRigourEnforcement: false
+    });
+    setShowCreateForm(false);
+    setShowTemplateConfig(false);
+  };
+  
+  const handleTemplateConfigSave = (templateConfig) => {
+    setNewDiscussion({
+      ...newDiscussion,
+      templateId: templateConfig.templateId,
+      requiredSections: templateConfig.requiredSections,
+      strictRigourEnforcement: templateConfig.strictRigourEnforcement
+    });
+    setShowTemplateConfig(false);
+    // Immediately show the structured form after template selection
+    setShowCreateForm(true);
+  };
+
+  const handleAddTag = () => {
+    if (tagInput.trim() && !newDiscussion.tags.includes(tagInput.trim())) {
+      setNewDiscussion({
+        ...newDiscussion,
+        tags: [...newDiscussion.tags, tagInput.trim()]
+      });
+      setTagInput('');
     }
   };
 
-  const handleAddPost = async (e) => {
-    e.preventDefault();
-    setError(null);
-
-    if (!newPost.trim()) {
-      setError('Please enter a message');
-      return;
-    }
-
-    if (newPost.length < 20 && !replyTo) {
-      setError('Consider sharing more context or detail in your post');
-      return;
-    }
-
-    try {
-      const detectedPatterns = detectPatterns(newPost);
-      const post = {
-        id: Date.now(),
-        content: newPost.trim(),
-        authorId: 'current-user',
-        createdAt: new Date().toISOString(),
-        replyTo: replyTo,
-        reactions: [],
-        isEdited: false,
-        patterns: detectedPatterns,
-        reflectionPrompt: detectedPatterns.length > 0 ? detectedPatterns[0].reflection : null
-      };
-
-      const updatedActivity = {
-        ...activity,
-        discussions: [...(activity.discussions || []), post]
-      };
-
-      await onUpdateActivity(updatedActivity);
-      setNewPost('');
-      setReplyTo(null);
-      setPatternFeedback(null);
-    } catch (err) {
-      setError(err.message);
-    }
+  const handleRemoveTag = (tagToRemove) => {
+    setNewDiscussion({
+      ...newDiscussion,
+      tags: newDiscussion.tags.filter(tag => tag !== tagToRemove)
+    });
   };
 
-  const handleReact = async (postId, reaction) => {
-    try {
-      const updatedActivity = {
-        ...activity,
-        discussions: activity.discussions.map(post => {
-          if (post.id === postId) {
-            const hasReaction = post.reactions.some(r => 
-              r.userId === 'current-user' && r.type === reaction
-            );
-
-            const reactions = hasReaction
-              ? post.reactions.filter(r => 
-                  !(r.userId === 'current-user' && r.type === reaction)
-                )
-              : [...post.reactions, {
-                  userId: 'current-user',
-                  type: reaction,
-                  createdAt: new Date().toISOString()
-                }];
-
-            return { ...post, reactions };
-          }
-          return post;
-        })
-      };
-
-      await onUpdateActivity(updatedActivity);
-    } catch (err) {
-      setError(err.message);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) {
+      return 'Today';
+    } else if (diffDays === 1) {
+      return 'Yesterday';
+    } else if (diffDays < 7) {
+      return `${diffDays} days ago`;
+    } else {
+      return date.toLocaleDateString();
     }
   };
-
-  const renderPost = (post, depth = 0) => {
-    const replies = activity.discussions.filter(p => p.replyTo === post.id);
-    const maxDepth = 5; // Allow deeper conversations
-
-    return (
-      <div
-        key={post.id}
-        className={`post-container depth-${depth}`}
-        style={{ marginLeft: `${depth * 20}px` }}
-      >
-        <div className="post-card">
-          <div className="post-content">
-            <p>{post.content}</p>
-            {post.reflectionPrompt && (
-              <div className="reflection-prompt">
-                <p>{post.reflectionPrompt}</p>
-              </div>
-            )}
-          </div>
-
-          <div className="post-meta">
-            <span>Posted {new Date(post.createdAt).toLocaleDateString()}</span>
-          </div>
-
-          <div className="post-actions">
-            <div className="reactions">
-              <button
-                className={`reaction-button insight ${post.reactions.some(r => r.type === 'insight')}`}
-                onClick={() => handleReact(post.id, 'insight')}
-                title="This gave me an insight"
-              >
-                💡
-              </button>
-              <button
-                className={`reaction-button resonates ${post.reactions.some(r => r.type === 'resonates')}`}
-                onClick={() => handleReact(post.id, 'resonates')}
-                title="This resonates with me"
-              >
-                🌊
-              </button>
-              <button
-                className={`reaction-button gratitude ${post.reactions.some(r => r.type === 'gratitude')}`}
-                onClick={() => handleReact(post.id, 'gratitude')}
-                title="Grateful for this sharing"
-              >
-                🙏
-              </button>
-            </div>
-
-            {depth < maxDepth && (
-              <button
-                className="reply-button"
-                onClick={() => setReplyTo(post.id)}
-              >
-                Share Your Perspective
-              </button>
-            )}
-          </div>
-        </div>
-
-        {replies.length > 0 && (
-          <div className="replies">
-            {replies.map(reply => renderPost(reply, depth + 1))}
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const topLevelPosts = activity.discussions?.filter(post => !post.replyTo) || [];
 
   return (
     <div className="discussion-board">
-      <div className="discussion-header">
-        <h2>Shared Exploration</h2>
-        <div className="header-controls">
-          <button 
-            className="pattern-notice-toggle"
-            onClick={() => setShowPatternNotice(!showPatternNotice)}
-          >
-            {showPatternNotice ? 'Hide Pattern Notice' : 'About Patterns'}
-          </button>
-          <button 
-            className="guidelines-toggle"
-            onClick={() => setShowGuidelines(!showGuidelines)}
-          >
-            {showGuidelines ? 'Hide Guidelines' : 'Show Guidelines'}
-          </button>
+      <div className="discussion-board-header">
+        <SectionHeader 
+          title="Discussions" 
+          subtitle="Join the conversation"
+          actions={
+            <button 
+              className="create-discussion-button"
+              onClick={() => setShowCreateForm(true)}
+            >
+              Start Discussion
+            </button>
+          }
+        />
+        
+        <div className="discussion-controls">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search discussions..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          
+          <div className="sort-container">
+            <label htmlFor="sort-select">Sort by:</label>
+            <select
+              id="sort-select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="sort-select"
+            >
+              <option value="recent">Most Recent</option>
+              <option value="popular">Most Popular</option>
+              <option value="activity">Recent Activity</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      {showPatternNotice && (
-        <div className="pattern-notice">
-          <h3>{patternNotice.title}</h3>
-          <p>{patternNotice.content}</p>
-        </div>
-      )}
-
-      {showGuidelines && (
-        <div className="guidelines">
-          <h3>Guidelines for Meaningful Discussion</h3>
-          <ul>
-            {guidelines.map((guideline, index) => (
-              <li key={index}>{guideline}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <form onSubmit={handleAddPost} className="post-form">
-        <div className="form-group">
-          {replyTo && (
-            <div className="reply-header">
-              <span>Sharing your perspective</span>
-              <button
-                type="button"
-                className="cancel-reply"
-                onClick={() => setReplyTo(null)}
-              >
-                Cancel
-              </button>
+      {showCreateForm && !showTemplateConfig && (
+        <>
+          {newDiscussion.templateId ? (
+            <StructuredDiscussionForm
+              communityId={communityId}
+              template={getTemplate(newDiscussion.templateId)}
+              requiredSections={newDiscussion.requiredSections}
+              strictRigourEnforcement={newDiscussion.strictRigourEnforcement}
+              tags={newDiscussion.tags}
+              onAddTag={handleAddTag}
+              onRemoveTag={handleRemoveTag}
+              tagInput={tagInput}
+              onTagInputChange={(e) => setTagInput(e.target.value)}
+              title={newDiscussion.title}
+              onTitleChange={(e) => setNewDiscussion({...newDiscussion, title: e.target.value})}
+              onSubmit={handleCreateSubmit}
+              onCancel={() => setShowCreateForm(false)}
+            />
+          ) : (
+            <div className="create-discussion-form">
+              <h3>Start a New Discussion</h3>
+              <form onSubmit={handleCreateSubmit}>
+                <div className="template-option">
+                  <button
+                    type="button"
+                    className="template-button"
+                    onClick={() => setShowTemplateConfig(true)}
+                  >
+                    Use Discussion Template
+                  </button>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="discussion-title">Title</label>
+                  <input
+                    id="discussion-title"
+                    type="text"
+                    value={newDiscussion.title}
+                    onChange={(e) => setNewDiscussion({...newDiscussion, title: e.target.value})}
+                    placeholder="Enter a descriptive title"
+                    required
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="discussion-content">Content</label>
+                  <textarea
+                    id="discussion-content"
+                    value={newDiscussion.content}
+                    onChange={(e) => setNewDiscussion({...newDiscussion, content: e.target.value})}
+                    placeholder="Share your thoughts or questions..."
+                    rows={5}
+                    required
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="discussion-tags">Tags</label>
+                  <div className="tag-input-container">
+                    <input
+                      id="discussion-tags"
+                      type="text"
+                      value={tagInput}
+                      onChange={(e) => setTagInput(e.target.value)}
+                      placeholder="Add tags (press Enter to add)"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddTag();
+                        }
+                      }}
+                    />
+                    <button 
+                      type="button" 
+                      onClick={handleAddTag}
+                      className="add-tag-button"
+                    >
+                      Add
+                    </button>
+                  </div>
+                  
+                  {newDiscussion.tags.length > 0 && (
+                    <div className="tags-container">
+                      {newDiscussion.tags.map(tag => (
+                        <span key={tag} className="tag">
+                          {tag}
+                          <button 
+                            type="button"
+                            onClick={() => handleRemoveTag(tag)}
+                            className="remove-tag"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
+                <div className="form-actions">
+                  <button 
+                    type="button" 
+                    onClick={() => setShowCreateForm(false)}
+                    className="cancel-button"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="submit-button"
+                  >
+                    Post Discussion
+                  </button>
+                </div>
+              </form>
             </div>
           )}
-          <textarea
-            value={newPost}
-            onChange={handleTextChange}
-            placeholder={replyTo 
-              ? "Share your perspective or experience..."
-              : "What's on your mind? Share your experience or ask a question..."
-            }
-            rows={4}
-            required
-          />
-          <div className="character-count">
-            {newPost.length} characters
-            {!replyTo && newPost.length < 20 && newPost.length > 0 && (
-              <span className="suggestion"> - Consider adding more context</span>
-            )}
-          </div>
-          {patternFeedback && (
-            <div className="pattern-feedback">
-              <p>{patternFeedback.reflection}</p>
-              <small>This is a pattern observation, not a judgment. You can choose to post as is or reflect further.</small>
+        </>
+      )}
+      
+      {showTemplateConfig && (
+        <TemplateConfiguration
+          communityId={communityId}
+          selectedTemplateId={newDiscussion.templateId}
+          onSave={handleTemplateConfigSave}
+          onCancel={() => setShowTemplateConfig(false)}
+        />
+      )}
+
+      <div className="discussions-list">
+        {sortedDiscussions.length > 0 ? (
+          sortedDiscussions.map(discussion => (
+            <div 
+              key={discussion.id} 
+              className="discussion-card"
+              onClick={() => onViewDiscussion(discussion.id)}
+            >
+              <div className="discussion-card-header">
+                <h3 className="discussion-title">{discussion.title}</h3>
+                {discussion.tags && discussion.tags.length > 0 && (
+                  <div className="discussion-tags">
+                    {discussion.tags.map(tag => (
+                      <span key={tag} className="tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              <div className="discussion-preview">
+                <p>
+                  {discussion.templateId ? (
+                    <span className="template-badge">
+                      {getTemplate(discussion.templateId)?.name || 'Structured Discussion'}
+                    </span>
+                  ) : discussion.content ? (
+                    <>
+                      {discussion.content.substring(0, 150)}
+                      {discussion.content.length > 150 ? '...' : ''}
+                    </>
+                  ) : (
+                    <em>No content preview available</em>
+                  )}
+                </p>
+              </div>
+              
+              <div className="discussion-meta">
+                <div className="discussion-author">
+                  <span className="author-name">{discussion.author.name}</span>
+                </div>
+                <div className="discussion-stats">
+                  <span className="comment-count">
+                    {discussion.commentCount || 0} comments
+                  </span>
+                  <span className="date">
+                    {formatDate(discussion.updatedAt || discussion.createdAt)}
+                  </span>
+                </div>
+              </div>
             </div>
-          )}
-        </div>
-
-        {error && <div className="error-message">{error}</div>}
-
-        <div className="form-actions">
-          <button type="submit" className="submit-button">
-            {replyTo ? 'Share Perspective' : 'Start Discussion'}
-          </button>
-        </div>
-      </form>
-
-      <div className="posts-list">
-        {topLevelPosts.length > 0 ? (
-          topLevelPosts.map(post => renderPost(post))
+          ))
         ) : (
           <div className="empty-state">
-            <p>No discussions yet</p>
-            <p>Share your experience or ask a question to start the exploration</p>
+            <p>No discussions found. Start a new conversation!</p>
+            <button 
+              onClick={() => setShowCreateForm(true)}
+              className="create-discussion-button"
+            >
+              Start Discussion
+            </button>
           </div>
         )}
       </div>

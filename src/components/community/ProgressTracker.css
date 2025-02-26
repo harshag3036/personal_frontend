@@ -55,12 +55,28 @@
   padding: 16px;
   border: 1px solid #f0f0f0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+/* Visual flow between steps in the workflow */
+.milestones-workflow::before {
+  content: "";
+  position: absolute;
+  left: 14px; /* Center of step number circles */
+  top: 28px;
+  bottom: 28px;
+  width: 2px;
+  background-color: #4a90e2;
+  opacity: 0.5;
+  z-index: 0;
 }
 
 .workflow-step {
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .step-number {
@@ -75,6 +91,7 @@
   font-weight: 500;
   font-size: 14px;
   flex-shrink: 0;
+  box-shadow: 0 0 0 4px white;
 }
 
 .step-content {
@@ -94,44 +111,6 @@
   margin: 0;
 }
 
-.milestone-reason-dialog {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.milestone-completion-header {
-  margin-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0;
-  padding-bottom: 12px;
-}
-
-.milestone-reason-dialog h5 {
-  margin: 8px 0 6px 0;
-  color: #2c3e50;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.milestone-reason-dialog p {
-  margin: 0 0 8px 0;
-  color: #6c757d;
-  font-size: 13px;
-}
-
-.milestone-reason-dialog textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  margin-bottom: 12px;
-  resize: vertical;
-  font-size: 13px;
-}
-
 /* Status History */
 .status-history {
   margin-top: 24px;
@@ -139,11 +118,46 @@
   border-top: 1px solid #f0f0f0;
 }
 
+.status-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.status-history-header:hover {
+  background-color: #f8f9fa;
+}
+
 .status-history h4 {
-  margin: 0 0 12px 0;
+  margin: 0;
   color: #2c3e50;
   font-size: 15px;
   font-weight: 500;
+}
+
+.toggle-history-button {
+  background: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.toggle-history-button:hover {
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 .history-list {
