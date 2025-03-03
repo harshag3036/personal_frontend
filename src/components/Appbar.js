@@ -2,7 +2,6 @@ import React from 'react';
 import { AppBar, Box, Toolbar, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
-import ForumIcon from '@mui/icons-material/Forum';
 import ChatIcon from '@mui/icons-material/Chat';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
@@ -65,14 +64,6 @@ export default function Appbar() {
               startIcon={<ArticleIcon />}
             >
               Articles
-            </Button>
-            <Button 
-              color="inherit" 
-              onClick={() => navigate('/forums')}
-              className="nav-button"
-              startIcon={<ForumIcon />}
-            >
-              Forums
             </Button>
             <Button 
               color="inherit" 

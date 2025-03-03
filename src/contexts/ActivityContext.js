@@ -170,7 +170,16 @@ export const ActivityProvider = ({ children }) => {
   };
 
   const getActivities = (circleId) => {
-    return activities.filter(activity => activity.circleId === circleId);
+    console.log('getActivities called with circleId:', circleId);
+    console.log('All activities:', activities);
+    
+    // Check for both circleId and communityId for backward compatibility
+    const filtered = activities.filter(activity => 
+      activity.circleId === circleId || activity.communityId === circleId
+    );
+    
+    console.log('Filtered activities:', filtered);
+    return filtered;
   };
 
   const joinActivity = (activityId, participant) => {
@@ -624,6 +633,24 @@ export const ActivityProvider = ({ children }) => {
     return updateComment(commentId, { isHidden });
   };
 
+  const inviteParticipant = async (activityId, email, message) => {
+    // In a real app, this would send an invitation email
+    // For now, we'll just log the invitation
+    console.log(`Invitation sent to ${email} for activity ${activityId}`);
+    console.log(`Message: ${message}`);
+    
+    // Return a mock invitation object
+    return {
+      id: Date.now().toString(),
+      activityId,
+      email,
+      message,
+      status: 'sent',
+      sentAt: new Date().toISOString(),
+      sentBy: user?.id
+    };
+  };
+
   const value = {
     activities,
     addActivity,
@@ -638,6 +665,7 @@ export const ActivityProvider = ({ children }) => {
     updateStatus,
     addMilestone,
     toggleMilestone,
+    inviteParticipant,
     // Comment functions
     addComment,
     updateComment,

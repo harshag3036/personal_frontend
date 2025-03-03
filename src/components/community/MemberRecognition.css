@@ -1,0 +1,242 @@
+/* MemberRecognition.css */
+
+.member-recognition {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.recognition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.recognition-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.recognition-controls {
+  display: flex;
+  align-items: center;
+}
+
+.period-select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+}
+
+.no-contributors {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+  font-style: italic;
+}
+
+.contributors-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.contributor-card {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.contributor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.contributor-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.contributor-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.contributor-info {
+  flex-grow: 1;
+}
+
+.contributor-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.contributor-role {
+  font-size: 12px;
+  color: #666;
+  text-transform: capitalize;
+}
+
+.recognition-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.recognition-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: help;
+}
+
+.recognition-badge.communicator {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.recognition-badge.resource {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.recognition-badge.achiever {
+  background-color: #fff8e1;
+  color: #ffa000;
+}
+
+.recognition-badge.star {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.recognition-badge.leader {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.contribution-metrics {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.metric-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.contribution-score {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  border-left: 4px solid #4caf50;
+}
+
+.score-label {
+  font-size: 14px;
+  color: #555;
+}
+
+.score-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #4caf50;
+}
+
+.last-active {
+  font-size: 12px;
+  color: #777;
+  text-align: right;
+  font-style: italic;
+}
+
+.show-more-button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  color: #555;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.show-more-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .contributors-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .recognition-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .recognition-controls {
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .period-select {
+    width: 100%;
+  }
+}

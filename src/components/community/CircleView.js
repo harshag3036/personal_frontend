@@ -4,6 +4,7 @@ import { useActivity } from '../../contexts/ActivityContext';
 import { useUser } from '../../contexts/UserContext';
 import ActivityDetailView from './ActivityDetailView';
 import ActivityManager from './ActivityManager';
+import ActivityBrowser from './ActivityBrowser';
 import InviteManager from './InviteManager';
 import ParticipantManager from './ParticipantManager';
 import MemberDirectory from './MemberDirectory';
@@ -71,9 +72,12 @@ const CircleView = () => {
   const [discussions, setDiscussions] = useState([]);
   const [discussionRefreshKey, setDiscussionRefreshKey] = useState(0);
 
+  // No test activities - removed as requested
+
   // Refresh activities when activities state changes or on refresh trigger
   useEffect(() => {
     const filteredActivities = getActivities(id);
+    console.log('Filtered activities for community:', id, filteredActivities);
     setLocalActivities(filteredActivities);
   }, [activities, id, getActivities, refreshKey]);
   
@@ -315,6 +319,7 @@ const CircleView = () => {
       const newActivity = {
         ...activityData,
         circleId: id,
+        communityId: id, // Add communityId for compatibility
         createdBy: {
           id: user?.id || 'temp-id',
           name: user?.name || 'Anonymous'
@@ -324,8 +329,12 @@ const CircleView = () => {
         createdAt: new Date().toISOString()
       };
 
+      console.log('Creating new activity:', newActivity);
       await addActivity(id, newActivity);
       setShowActivityModal(false);
+      
+      // Force refresh to show the new activity
+      setRefreshKey(prev => prev + 1);
     } catch (error) {
       console.error('Error creating activity:', error);
       // Show error feedback to user
@@ -385,6 +394,8 @@ const CircleView = () => {
     if (discussion) {
       setSelectedDiscussion(discussion);
       setShowDiscussionDetail(true);
+      // Scroll to top when showing discussion detail
+      window.scrollTo(0, 0);
       console.log('Set showDiscussionDetail to true');
     }
   };
@@ -405,100 +416,19 @@ const CircleView = () => {
   const renderActivities = () => {
     return (
       <div className="activities-section">
-        <SectionHeader 
-          title="Activities" 
-          subtitle="Engage with your community"
-          actions={
-            <button 
-              className="create-activity-button"
-              onClick={() => setShowActivityModal(true)}
-            >
-              Create Activity
-            </button>
-          }
+        <ActivityBrowser 
+          communityId={id} 
+          onActivityClick={(activityId) => {
+            const activity = localActivities.find(a => a.id === activityId);
+            if (activity) {
+              setSelectedActivity(activity);
+              setShowActivityDetail(true);
+              // Scroll to top when showing activity detail
+              window.scrollTo(0, 0);
+            }
+          }}
+          onCreateActivity={() => setShowActivityModal(true)}
         />
-
-        {localActivities.length === 0 ? (
-          <div className="empty-state">
-            <p>No activities yet. Start something together!</p>
-            <button onClick={() => setShowActivityModal(true)}>
-              Create Activity
-            </button>
-          </div>
-        ) : (
-          <div className="activities-grid">
-            {localActivities.map(activity => (
-              <div key={activity.id} className="activity-card">
-                <div className="activity-header">
-                  <div className="header-main">
-                    <span className={`activity-type ${activity.type}`}>
-                      {activityTypes.find(t => t.id === activity.type)?.icon} {activityTypes.find(t => t.id === activity.type)?.label || activity.type}
-                    </span>
-                    <span className={`activity-status ${activity.status}`}>
-                      {activity.status}
-                    </span>
-                  </div>
-                  <h3>{activity.title}</h3>
-                </div>
-                <div className="activity-content">
-                  <p>{activity.description}</p>
-                  {activity.metadata && (
-                    <div className="activity-metadata">
-                      {activity.type === 'event' && (
-                        <>
-                          <div className="metadata-item">
-                            <span>📅 {new Date(activity.metadata.startDate).toLocaleDateString()}</span>
-                          </div>
-                          <div className="metadata-item">
-                            <span>📍 {activity.metadata.location}</span>
-                          </div>
-                        </>
-                      )}
-                      {activity.type === 'skill-share' && (
-                        <>
-                          <div className="metadata-item">
-                            <span>🎓 Level: {activity.metadata.level}</span>
-                          </div>
-                          <div className="metadata-item">
-                            <span>⏱️ Duration: {activity.metadata.duration}</span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <div className="activity-footer">
-                  <div className="activity-stats">
-                    <span>{getParticipants(activity.id).length} participants</span>
-                    <span>•</span>
-                    <span>{getComments(activity.id).length} comments</span>
-                    <span>•</span>
-                    <span>{getFiles(activity.id).length} files</span>
-                  </div>
-                  {activity.progress?.milestones?.length > 0 && (
-                    <span className="progress-indicator">
-                      {activity.progress.milestones.filter(m => m.completed).length} / {activity.progress.milestones.length} milestones
-                    </span>
-                  )}
-                  {activity.progress?.status && (
-                    <span className={`activity-progress-status ${activity.progress.status}`}>
-                      {activity.progress.status.replace('-', ' ')}
-                    </span>
-                  )}
-                  <button 
-                    className="view-button"
-                    onClick={() => {
-                      setSelectedActivity(activity);
-                      setShowActivityDetail(true);
-                    }}
-                  >
-                    View Details
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     );
   };

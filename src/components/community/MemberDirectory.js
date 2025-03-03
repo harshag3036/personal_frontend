@@ -220,6 +220,21 @@ const MemberDirectory = ({
     return roles[currentMember.role]?.permissions.includes(permission);
   };
 
+  // State for role comparison mode and section visibility
+  const [compareRolesMode, setCompareRolesMode] = useState(false);
+  const [showRolePermissions, setShowRolePermissions] = useState(true);
+
+  // Handle role selection with compare mode
+  const handleRoleSelect = (roleId, compareMode = compareRolesMode) => {
+    if (compareMode !== compareRolesMode) {
+      setCompareRolesMode(compareMode);
+    }
+    
+    if (!compareMode) {
+      handleFilterChange('role', roleId || 'all');
+    }
+  };
+
   // Render member filters
   const renderFilters = () => {
     if (!showFilters) return null;
@@ -232,12 +247,18 @@ const MemberDirectory = ({
             value={filters.role}
             onChange={(e) => handleFilterChange('role', e.target.value)}
             className="filter-select"
+            disabled={compareRolesMode}
           >
             <option value="all">All Roles</option>
             {Object.entries(roles).map(([key, role]) => (
               <option key={key} value={key}>{role.label}</option>
             ))}
           </select>
+          {compareRolesMode && (
+            <div className="filter-note">
+              Role filter disabled in comparison mode
+            </div>
+          )}
         </div>
         
         <div className="filter-group">
@@ -427,13 +448,25 @@ const MemberDirectory = ({
       
       {/* Role & Permission Visualization */}
       <div className="role-permission-section">
-        <h3>Community Roles & Permissions</h3>
-        <p>Understand what each role can do in this community</p>
-        <RolePermissionVisualization 
-          roles={roles}
-          selectedRole={filters.role !== 'all' ? filters.role : null}
-          onRoleSelect={(role) => handleFilterChange('role', role)}
-        />
+        <div className="role-permission-header" onClick={() => setShowRolePermissions(!showRolePermissions)}>
+          <div>
+            <h3>Community Roles & Permissions</h3>
+            <p>Understand what each role can do in this community</p>
+          </div>
+          <div className="toggle-icon">
+            {showRolePermissions ? '▼' : '►'}
+          </div>
+        </div>
+        
+        {showRolePermissions && (
+          <RolePermissionVisualization 
+            roles={roles}
+            selectedRole={filters.role !== 'all' ? filters.role : null}
+            onRoleSelect={handleRoleSelect}
+            compareMode={compareRolesMode}
+            compact={true}
+          />
+        )}
       </div>
       
       <div className="members-grid">

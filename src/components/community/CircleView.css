@@ -339,8 +339,10 @@
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 50px;
   z-index: 1000;
+  overflow-y: auto;
 }
 
 /* Discussion Detail View */

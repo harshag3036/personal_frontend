@@ -1,18 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useActivity } from '../../contexts/ActivityContext';
 import { useUser } from '../../contexts/UserContext';
-import ActivityParticipants from './ActivityParticipants';
+import EnhancedParticipantView from './EnhancedParticipantView';
+import ActivityLifecycleView from './ActivityLifecycleView';
 import ProgressTracker from './ProgressTracker';
 import { CommentSection } from './comments';
 import FileManager from './FileManager';
 import DiscussionContent from './DiscussionContent';
+import MemberRecognition from './MemberRecognition';
 import './ActivityDetailView.css';
 
 const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
   const [activity, setActivity] = useState(initialActivity);
   const [refreshKey, setRefreshKey] = useState(0);
   const { activities } = useActivity();
+  
+  // State for active tab
+  const [activeTab, setActiveTab] = useState('description');
+  
+  // Tab definitions
+  const tabs = [
+    { id: 'description', label: 'Description' },
+    { id: 'details', label: 'Details' },
+    { id: 'participants', label: 'Participants' },
+    { id: 'recognition', label: 'Recognition' },
+    { id: 'lifecycle', label: 'Activity Lifecycle' },
+    { id: 'progress', label: 'Progress Tracking' },
+    { id: 'files', label: 'Files' },
+    { id: 'comments', label: 'Reflections' }
+  ];
+  
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   
   // Update the activity when it changes in the context
   useEffect(() => {
@@ -36,6 +58,16 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
   if (!activity) return null;
 
   const renderMetadata = () => {
+    // Check if activity has metadata
+    if (!activity.metadata) {
+      return (
+        <div className="metadata-row">
+          <span className="metadata-label">Status</span>
+          <span className="metadata-value">{activity.status}</span>
+        </div>
+      );
+    }
+    
     switch (activity.type) {
       case 'event':
         return (
@@ -43,12 +75,12 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
             <div className="metadata-row">
               <span className="metadata-label">Date & Time</span>
               <span className="metadata-value">
-                {new Date(activity.metadata.startDate).toLocaleString()}
+                {activity.metadata.startDate ? new Date(activity.metadata.startDate).toLocaleString() : 'Not specified'}
               </span>
             </div>
             <div className="metadata-row">
               <span className="metadata-label">Location</span>
-              <span className="metadata-value">{activity.metadata.location}</span>
+              <span className="metadata-value">{activity.metadata.location || 'Not specified'}</span>
             </div>
             {activity.metadata.maxParticipants && (
               <div className="metadata-row">
@@ -65,7 +97,7 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
             <div className="metadata-row">
               <span className="metadata-label">Start Date</span>
               <span className="metadata-value">
-                {new Date(activity.metadata.startDate).toLocaleDateString()}
+                {activity.metadata.startDate ? new Date(activity.metadata.startDate).toLocaleDateString() : 'Not specified'}
               </span>
             </div>
             {activity.metadata.endDate && (
@@ -94,7 +126,7 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
           <>
             <div className="metadata-row">
               <span className="metadata-label">Level</span>
-              <span className="metadata-value">{activity.metadata.level}</span>
+              <span className="metadata-value">{activity.metadata.level || 'Not specified'}</span>
             </div>
             {activity.metadata.duration && (
               <div className="metadata-row">
@@ -132,7 +164,7 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
           <>
             <div className="metadata-row">
               <span className="metadata-label">Resource Type</span>
-              <span className="metadata-value">{activity.metadata.resourceType}</span>
+              <span className="metadata-value">{activity.metadata.resourceType || 'Not specified'}</span>
             </div>
             {activity.metadata.url && (
               <div className="metadata-row">
@@ -165,9 +197,9 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
           <>
             <div className="metadata-row">
               <span className="metadata-label">Duration</span>
-              <span className="metadata-value">{activity.metadata.duration}</span>
+              <span className="metadata-value">{activity.metadata.duration || 'Not specified'}</span>
             </div>
-            {activity.metadata.goals && (
+            {activity.metadata.goals && activity.metadata.goals.length > 0 && (
               <div className="metadata-row">
                 <span className="metadata-label">Goals</span>
                 <ul className="goals-list">
@@ -177,7 +209,7 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
                 </ul>
               </div>
             )}
-            {activity.metadata.criteria && (
+            {activity.metadata.criteria && activity.metadata.criteria.length > 0 && (
               <div className="metadata-row">
                 <span className="metadata-label">Success Criteria</span>
                 <ul className="criteria-list">
@@ -191,7 +223,12 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
         );
 
       default:
-        return null;
+        return (
+          <div className="metadata-row">
+            <span className="metadata-label">Status</span>
+            <span className="metadata-value">{activity.status}</span>
+          </div>
+        );
     }
   };
 
@@ -220,29 +257,74 @@ const ActivityDetailView = ({ activity: initialActivity, onClose }) => {
         </button>
       </div>
 
+      <div className="tab-navigation">
+        {tabs.map(tab => (
+          <button
+            key={tab.id}
+            className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       <div className="detail-content">
-        <div className="description-section">
-          <h3>Description</h3>
-          {activity.type === 'discussion' && activity.templateId ? (
-            activity.content ? (
-              <DiscussionContent discussion={activity} />
+        {activeTab === 'description' && (
+          <div className="tab-content">
+            {activity.type === 'discussion' && activity.templateId ? (
+              activity.content ? (
+                <DiscussionContent discussion={activity} />
+              ) : (
+                <p>{activity.description || 'No content available'}</p>
+              )
             ) : (
               <p>{activity.description || 'No content available'}</p>
-            )
-          ) : (
-            <p>{activity.description || 'No content available'}</p>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
-        <div className="metadata-section">
-          <h3>Details</h3>
-          {renderMetadata()}
-        </div>
+        {activeTab === 'details' && (
+          <div className="tab-content">
+            {renderMetadata()}
+          </div>
+        )}
 
-        <ActivityParticipants activity={activity} />
-        <ProgressTracker activity={activity} />
-        <FileManager activityId={activity.id} />
-        <CommentSection activity={activity} />
+        {activeTab === 'participants' && (
+          <div className="tab-content">
+            <EnhancedParticipantView activity={activity} />
+          </div>
+        )}
+
+        {activeTab === 'recognition' && (
+          <div className="tab-content">
+            <MemberRecognition activityId={activity.id} />
+          </div>
+        )}
+
+        {activeTab === 'lifecycle' && (
+          <div className="tab-content">
+            <ActivityLifecycleView activity={activity} />
+          </div>
+        )}
+
+        {activeTab === 'progress' && (
+          <div className="tab-content">
+            <ProgressTracker activity={activity} />
+          </div>
+        )}
+
+        {activeTab === 'files' && (
+          <div className="tab-content">
+            <FileManager activityId={activity.id} />
+          </div>
+        )}
+
+        {activeTab === 'comments' && (
+          <div className="tab-content">
+            <CommentSection activity={activity} />
+          </div>
+        )}
       </div>
     </div>
   );

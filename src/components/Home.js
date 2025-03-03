@@ -129,13 +129,6 @@ export default function Home() {
             >
               Share Your Understanding
             </Button>
-            <Button 
-              variant="contained" 
-              onClick={handleChatBot}
-              className="chatbot-btn"
-            >
-              Explore Together
-            </Button>
           </div>
         </div>
 

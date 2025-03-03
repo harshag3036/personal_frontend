@@ -27,7 +27,7 @@ const CommentSection = ({
   const { addComment, getComments, getReplies } = useActivity();
   const { getTemplate } = useTemplate();
   const [sortBy, setSortBy] = useState('newest');
-  const [showForm, setShowForm] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const comments = getComments(activity.id);
   
   // Get the template if this discussion uses one

@@ -1,21 +1,24 @@
 .activity-detail-view {
   background: white;
-  border-radius: 12px;
+  border-radius: 10px;
   width: 100%;
   max-width: 800px;
   max-height: 90vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  margin-top: 0;
+  position: relative;
+  top: 0;
 }
 
 .detail-header {
-  padding: 20px;
+  padding: 12px;
   border-bottom: 1px solid #eee;
   position: sticky;
   top: 0;
   background: white;
-  border-radius: 12px 12px 0 0;
+  border-radius: 10px 10px 0 0;
   z-index: 10;
   display: flex;
   justify-content: space-between;
@@ -28,20 +31,20 @@
 
 .type-status {
   display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 .detail-header h2 {
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   color: #2c3e50;
-  font-size: 1.8em;
+  font-size: 1.6em;
 }
 
 .creation-date {
   margin: 0;
   color: #666;
-  font-size: 0.9em;
+  font-size: 0.85em;
 }
 
 .close-button {
@@ -60,16 +63,64 @@
   color: #333;
 }
 
-.detail-content {
-  padding: 20px;
+/* Tab Navigation */
+.tab-navigation {
   display: flex;
-  flex-direction: column;
-  gap: 32px;
+  overflow-x: auto;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  padding: 0;
+  margin: 0;
+  position: sticky;
+  top: 56px; /* Height of the header */
+  z-index: 5;
 }
 
-.detail-content > div:not(:last-child) {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 32px;
+.tab-button {
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 0.9em;
+  color: #666;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.tab-button.active {
+  border-bottom: 3px solid #4a90e2;
+  color: #4a90e2;
+  font-weight: 500;
+}
+
+/* Tab Content */
+.detail-content {
+  padding: 16px;
+  overflow-y: auto;
+  height: 600px; /* Fixed height for content area */
+  position: relative;
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .description-section,
@@ -78,9 +129,9 @@
 .goals-list,
 .criteria-list {
   margin: 0;
-  padding-left: 20px;
+  padding-left: 16px;
   color: #2c3e50;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
 .goals-list li,
@@ -91,16 +142,16 @@
 .participants-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
 .participant-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
+  padding: 8px;
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .participant-name {
@@ -116,22 +167,22 @@
 .no-participants {
   color: #666;
   text-align: center;
-  padding: 20px;
+  padding: 12px;
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 6px;
   margin: 0;
 }
 
 .join-button {
-  padding: 12px 24px;
+  padding: 8px 16px;
   background-color: #4a90e2;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 1em;
+  border-radius: 6px;
+  font-size: 0.95em;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 16px;
+  margin-top: 10px;
   width: 100%;
 }
 
@@ -150,9 +201,9 @@
 
 /* Activity Type & Status Badges */
 .activity-type {
-  padding: 4px 12px;
-  border-radius: 16px;
-  font-size: 0.85em;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
   font-weight: 500;
 }
 
@@ -164,9 +215,9 @@
 .activity-type.challenge { background: #fbe9e7; color: #d84315; }
 
 .activity-status {
-  padding: 4px 12px;
-  border-radius: 16px;
-  font-size: 0.85em;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
   font-weight: 500;
 }
 
