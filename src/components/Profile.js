@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, Typography, Grid, Container } from '@mui/material';
+import { useUser } from '../contexts/UserContext';
 import '../styles/shared.css';
 import './Profile.css';
 import config from '../config';
 
 export default function Profile() {
   const [profileData, setProfileData] = useState(null);
+  const { isAuthenticated } = useUser();
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
+      if (!isAuthenticated) {
         console.error('Unable to verify seeker identity');
         return;
       }
       try {
         const response = await fetch(`${config.API_BASE_URL}/api/v1/customerData`, {
           method: 'GET',
+          credentials: 'include', // Send cookies
           headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
-          },
+            'Accept': 'application/json'
+          }
         });
         if (response.ok) {
           const data = await response.json();
@@ -34,7 +36,7 @@ export default function Profile() {
     };
 
     fetchProfileData();
-  }, []);
+  }, [isAuthenticated]);
 
   const formatFieldName = (key) => {
     const fieldMappings = {

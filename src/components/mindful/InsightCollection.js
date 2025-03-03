@@ -17,9 +17,12 @@ import {
     Paper, 
     Button, 
     Box, 
-    CircularProgress 
+    CircularProgress,
+    Dialog,
+    TextField
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../contexts/UserContext';
 import config from '../../config';
 import { MINDFUL_LOADING_PROMPTS } from '../../constants/observationPrompts.js';
 import ReflectionPrompt from './ReflectionPrompt';
@@ -35,7 +38,11 @@ const InsightCollection = ({ userInsights = false }) => {
     const [loading, setLoading] = useState(true);
     const [showReflection, setShowReflection] = useState(false);
     const [currentPromptIndex, setCurrentPromptIndex] = useState(0);
+    const [showCreateDialog, setShowCreateDialog] = useState(false);
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
     const navigate = useNavigate();
+    const { isAuthenticated } = useUser();
 
     useEffect(() => {
         fetchInsights();
@@ -45,17 +52,16 @@ const InsightCollection = ({ userInsights = false }) => {
         if (!hasMore) return;
 
         setLoading(true);
-        const token = localStorage.getItem('token');
-        const customerId = localStorage.getItem('customerId');
         const url = userInsights
-            ? `${config.API_BASE_URL}/api/v1/getAllPosts/${customerId}?page=${page}&size=${INSIGHTS_PER_PAGE}`
+            ? `${config.API_BASE_URL}/api/v1/getAllPosts/me?page=${page}&size=${INSIGHTS_PER_PAGE}`
             : `${config.API_BASE_URL}/api/v1/getAllPosts?page=${page}&size=${INSIGHTS_PER_PAGE}`;
 
         try {
             const response = await fetch(url, {
+                credentials: 'include',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
+                    'Accept': 'application/json'
+                }
             });
             
             if (response.ok) {
@@ -115,7 +121,48 @@ const InsightCollection = ({ userInsights = false }) => {
     };
 
     const handleCreateInsight = () => {
-        navigate('/create-post');
+        setShowCreateDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setShowCreateDialog(false);
+        setTitle('');
+        setContent('');
+    };
+
+    const handleSubmitInsight = async () => {
+        if (!isAuthenticated) {
+            console.error('Unable to identify seeker');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${config.API_BASE_URL}/api/v1/createPost`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    title,
+                    content
+                }),
+            });
+
+            if (response.ok) {
+                console.log('Post created successfully');
+                handleCloseDialog();
+                // Reset page and insights to fetch fresh data
+                setPage(0);
+                setInsights([]);
+                fetchInsights();
+            } else {
+                console.error('Unable to share insight');
+            }
+        } catch (error) {
+            console.error('Error sharing insight:', error);
+        }
     };
 
     if (loading && insights.length === 0) {
@@ -154,6 +201,56 @@ const InsightCollection = ({ userInsights = false }) => {
 
     return (
         <Paper elevation={3} className="insight-collection">
+            <Dialog 
+                open={showCreateDialog} 
+                onClose={handleCloseDialog}
+                maxWidth="md"
+                fullWidth
+            >
+                <Paper className="create-post-container">
+                    <Typography variant="h5" gutterBottom className="create-post-title">
+                        Share Your Insight
+                    </Typography>
+                    <Typography variant="body1" className="create-post-subtitle">
+                        Share your understanding and reflections with fellow seekers
+                    </Typography>
+                    <Box className="create-post-form">
+                        <TextField
+                            label="Title of Your Insight"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            fullWidth
+                            required
+                            margin="normal"
+                            variant="outlined"
+                            placeholder="What is the essence of your understanding?"
+                            className="input-field"
+                        />
+                        <TextField
+                            label="Your Reflection"
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            fullWidth
+                            required
+                            multiline
+                            rows={8}
+                            margin="normal"
+                            variant="outlined"
+                            placeholder="Share your thoughts, experiences, and realizations..."
+                            className="input-field"
+                        />
+                        <Button 
+                            onClick={handleSubmitInsight}
+                            variant="contained" 
+                            fullWidth
+                            className="share-button"
+                            disabled={!title.trim() || !content.trim()}
+                        >
+                            Share Insight
+                        </Button>
+                    </Box>
+                </Paper>
+            </Dialog>
             <Typography variant="h5" gutterBottom className="collection-title">
                 {userInsights ? 'Your Journey of Understanding' : 'Shared Insights'}
             </Typography>

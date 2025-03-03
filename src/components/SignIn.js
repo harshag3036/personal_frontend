@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { Box, TextField, FormControl, OutlinedInput, InputAdornment, Button, IconButton, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { TextField, FormControl, OutlinedInput, InputAdornment, Button, IconButton, Typography } from '@mui/material';
+import { useUser } from '../contexts/UserContext';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import config from '../config';
 import '../styles/shared.css';
 import './SignIn.css';
 
-export default function SignIn() {
+const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -20,14 +21,17 @@ export default function SignIn() {
     event.preventDefault();
   };
 
+  const { isAuthenticated } = useUser();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/home');
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleSubmit = async () => {
     setIsSigningIn(true);
     try {
-      console.log('Attempting signin with:', {
-        url: `${config.API_BASE_URL}/api/v1/signin`,
-        username
-      });
-      
       const response = await fetch(`${config.API_BASE_URL}/api/v1/signin`, {
         method: 'POST',
         headers: {
@@ -41,9 +45,7 @@ export default function SignIn() {
         })
       });
       
-      console.log('Signin response status:', response.status);
       const result = await response.json();
-      console.log('Signin response:', result);
       
       if (response.status === 200 && result.token) {
         localStorage.setItem('token', result.token);
@@ -51,7 +53,7 @@ export default function SignIn() {
         if (result.customerId) {
           localStorage.setItem('customerId', result.customerId);
         }
-        navigate('/home');
+        // UserContext will handle the navigation after detecting the token
       } else {
         setError(result.message || 'Unable to begin journey. Please try again.');
         setIsSigningIn(false);
@@ -119,7 +121,7 @@ export default function SignIn() {
           {error}
         </Typography>
       )}
-
+      
       <Button 
         onClick={() => navigate('/login')} 
         className="return-button"
@@ -129,4 +131,6 @@ export default function SignIn() {
       </Button>
     </div>
   );
-}
+};
+
+export default SignIn;

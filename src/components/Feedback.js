@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { TextField, Button, Snackbar, Paper, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { useUser } from '../contexts/UserContext';
 import config from '../config';
 import './Feedback.css';
 
 const Feedback = () => {
+    const { isAuthenticated, isGuest } = useUser();
     const [feedback, setFeedback] = useState('');
     const [snackbar, setSnackbar] = useState({ open: false, message: '' });
 
@@ -13,17 +15,24 @@ const Feedback = () => {
         if (!feedback.trim()) return;
 
         try {
+            const headers = {
+                'Content-Type': 'text/plain'
+            };
+
+            // Add token for authenticated users
+            const token = localStorage.getItem('token');
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
             const response = await fetch(`${config.API_BASE_URL}/api/v1/feedback`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
+                headers,
                 body: feedback
             });
 
             if (response.ok) {
-                setSnackbar({ open: true, message: 'Feedback submitted successfully!' });
+                setSnackbar({ open: true, message: 'Thank you for your feedback!' });
                 setFeedback('');
             } else {
                 throw new Error('Failed to submit feedback');

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, IconButton, InputAdornment, Container, Typography, Divider } from '@mui/material';
+import { TextField, Button, IconButton, InputAdornment, Typography, Divider } from '@mui/material';
+import { useUser } from '../contexts/UserContext';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import config from '../config';
@@ -65,16 +66,16 @@ const Login = () => {
     event.preventDefault();
   };
 
+  const { isAuthenticated, setAuth } = useUser();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/home');
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleLogin = async (credentials) => {
     try {
-      console.log('Attempting login with:', {
-        url: `${config.API_BASE_URL}/api/v1/login`,
-        credentials: {
-          username: credentials.username,
-          isGuest: credentials.isGuest
-        }
-      });
-      
       const response = await fetch(`${config.API_BASE_URL}/api/v1/login`, {
         method: 'POST',
         headers: {
@@ -88,18 +89,22 @@ const Login = () => {
         })
       });
       
-      console.log('Login response status:', response.status);
       const result = await response.json();
-      console.log('Login response:', result);
       
       if (response.status === 200 && result.token) {
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('firstLogin', credentials.isGuest ? 'false' : result.firstLogin);
-        localStorage.setItem('isGuest', credentials.isGuest ? 'true' : 'false');
+        const token = result.token;
+        const isGuestUser = credentials.isGuest;
+        
+        // Store in localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('firstLogin', isGuestUser ? 'false' : result.firstLogin);
+        localStorage.setItem('isGuest', isGuestUser ? 'true' : 'false');
         if (result.customerId) {
           localStorage.setItem('customerId', result.customerId);
         }
-        navigate('/home');
+        
+        // Update auth state immediately
+        setAuth(token, isGuestUser);
       } else {
         throw new Error(result.message || 'Unable to begin journey');
       }

@@ -1,0 +1,234 @@
+/* ProgressTracker.css */
+
+.progress-tracker {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 16px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.header-title h3 {
+  margin: 0 0 4px 0;
+  color: #2c3e50;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.help-text {
+  font-size: 12px;
+  color: #6c757d;
+  margin-bottom: 4px;
+}
+
+.status-control-section {
+  display: none; /* Hide the separate status control section */
+}
+
+.milestones-section {
+  background: white;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-left: 2px solid #28a745;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* Milestone workflow steps */
+.milestones-workflow {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+/* Visual flow between steps in the workflow */
+.milestones-workflow::before {
+  content: "";
+  position: absolute;
+  left: 14px; /* Center of step number circles */
+  top: 28px;
+  bottom: 28px;
+  width: 2px;
+  background-color: #4a90e2;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.workflow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #4a90e2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 14px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 4px white;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content h5 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.step-instruction {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Status History */
+.status-history {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.status-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.status-history-header:hover {
+  background-color: #f8f9fa;
+}
+
+.status-history h4 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.toggle-history-button {
+  background: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.toggle-history-button:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 2px solid #ddd;
+  font-size: 13px;
+}
+
+.history-status {
+  font-weight: 500;
+}
+
+.history-reason {
+  font-size: 12px;
+  color: #666;
+}
+
+.history-date {
+  font-size: 11px;
+  color: #999;
+}
+
+.add-milestone {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.add-milestone input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.add-milestone button {
+  padding: 6px 12px;
+  background: #f0f9ff;
+  color: #4a90e2;
+  border: 1px solid #bbdefb;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.add-milestone button:hover {
+  background: #e3f2fd;
+}
+
+.add-milestone button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .progress-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

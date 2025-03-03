@@ -1,10 +1,15 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { useUser } from '../contexts/UserContext';
 
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
-  const isGuest = localStorage.getItem('isGuest') === 'true';
-  return token || isGuest ? children : <Navigate to="/" />;
+  const { isAuthenticated, isLoading, isGuest, authChecked } = useUser();
+
+  if (!authChecked || (isLoading && !isGuest)) {
+    return null; // Don't render anything until auth is checked
+  }
+
+  return (isAuthenticated || isGuest) ? children : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
