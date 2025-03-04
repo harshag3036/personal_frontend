@@ -1,0 +1,495 @@
+/* Container */
+.activity-schedule {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header */
+.schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.schedule-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.75rem;
+}
+
+.new-event-button {
+  padding: 0.75rem 1.5rem;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.new-event-button:hover {
+  background: #1976d2;
+}
+
+/* Controls */
+.schedule-controls {
+  margin-bottom: 2rem;
+}
+
+.schedule-filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.schedule-filters select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.schedule-filters select:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+/* Schedule Grid */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2rem;
+}
+
+/* Events List */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Event Card */
+.event-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.event-card.selected {
+  border: 2px solid #2196f3;
+}
+
+/* Event Header */
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.event-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.event-icon {
+  font-size: 1.5rem;
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.event-meta h4 {
+  margin: 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.event-type {
+  color: #666;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+}
+
+.event-timing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.event-date {
+  color: #333;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.event-time {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.event-description {
+  margin: 0 0 1rem;
+  color: #666;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Event Footer */
+.event-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.event-duration {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.event-recurrence {
+  color: #2196f3;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Event Form */
+.event-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 2rem;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section h3 {
+  margin: 0 0 1.5rem;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group input[type="number"],
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+/* Form Row */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.submit-button:hover {
+  background: #1976d2;
+}
+
+.cancel-button {
+  padding: 0.75rem 1.5rem;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancel-button:hover {
+  background: #e0e0e0;
+}
+
+.delete-button {
+  padding: 0.75rem 1.5rem;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.delete-button:hover {
+  background: #d32f2f;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.empty-state p {
+  margin: 0 0 0.5rem;
+  color: #666;
+}
+
+.empty-state p:last-child {
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+/* Error Message */
+.error-message {
+  color: #f44336;
+  background: #ffebee;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .schedule-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .event-form {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .activity-schedule {
+    padding: 1rem;
+  }
+
+  .schedule-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .new-event-button {
+    width: 100%;
+  }
+
+  .schedule-filters {
+    flex-direction: column;
+  }
+
+  .schedule-filters select {
+    width: 100%;
+  }
+
+  .event-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .event-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .event-timing {
+    align-items: center;
+  }
+
+  .event-footer {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons button {
+    width: 100%;
+  }
+
+  .delete-button {
+    width: 100%;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .schedule-header h2 {
+    color: #e0e0e0;
+  }
+
+  .schedule-filters select {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+  }
+
+  .event-card {
+    background: #1e1e1e;
+  }
+
+  .event-meta h4 {
+    color: #e0e0e0;
+  }
+
+  .event-type {
+    color: #999;
+  }
+
+  .event-date {
+    color: #e0e0e0;
+  }
+
+  .event-time {
+    color: #999;
+  }
+
+  .event-description {
+    color: #999;
+  }
+
+  .event-footer {
+    border-color: #404040;
+  }
+
+  .event-duration {
+    color: #999;
+  }
+
+  .event-form {
+    background: #1e1e1e;
+  }
+
+  .form-section h3 {
+    color: #e0e0e0;
+  }
+
+  .form-group label {
+    color: #e0e0e0;
+  }
+
+  .form-group select,
+  .form-group input,
+  .form-group textarea {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+  }
+
+  .form-actions {
+    border-color: #404040;
+  }
+
+  .cancel-button {
+    background: #2d2d2d;
+    color: #e0e0e0;
+  }
+
+  .cancel-button:hover {
+    background: #404040;
+  }
+
+  .empty-state {
+    background: #2d2d2d;
+  }
+
+  .empty-state p {
+    color: #999;
+  }
+
+  .error-message {
+    background: #391515;
+  }
+}

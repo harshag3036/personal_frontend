@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { TextField, Button, Paper, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import config from '../config';
+import '../styles/shared.css';
+import './CreatePost.css';
 
 const CreatePost = ({ onPostCreated }) => {
   const [title, setTitle] = useState('');
@@ -14,16 +16,24 @@ const CreatePost = ({ onPostCreated }) => {
     const customerId = localStorage.getItem('customerId');
 
     if (!customerId) {
-      console.error('Customer ID not found');
+      console.error('Unable to identify seeker');
       return;
     }
 
     try {
+      console.log('Creating post with:', {
+        url: `${config.API_BASE_URL}/api/v1/createPost`,
+        token: token ? 'Token exists' : 'No token',
+        customerId: customerId || 'No customerId'
+      });
+
       const response = await fetch(`${config.API_BASE_URL}/api/v1/createPost`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           title,
@@ -32,91 +42,64 @@ const CreatePost = ({ onPostCreated }) => {
         }),
       });
 
+      console.log('Create post response status:', response.status);
+      const result = await response.json();
+      console.log('Create post response:', result);
+
       if (response.ok) {
+        console.log('Post created successfully');
         if (onPostCreated) {
           onPostCreated();
         }
-        // Navigate to home page with MyPosts tab selected
         navigate('/home', { state: { showMyPosts: true } });
       } else {
-        console.error('Failed to create post');
+        console.error('Unable to share insight');
       }
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error('Error sharing insight:', error);
     }
   };
 
   return (
-    <Paper elevation={3} style={{ 
-      padding: '30px',
-      maxWidth: '800px',
-      margin: '20px auto',
-      borderRadius: '12px',
-      backgroundColor: '#ffffff'
-    }}>
-      <Typography variant="h5" gutterBottom style={{ 
-        color: '#1a237e',
-        textAlign: 'center',
-        marginBottom: '24px',
-        fontWeight: '600'
-      }}>
-        Create New Post
+    <Paper elevation={3} className="create-post-container">
+      <Typography variant="h5" gutterBottom className="create-post-title">
+        Share Your Insight
       </Typography>
-      <form onSubmit={handleSubmit}>
+      <Typography variant="body1" className="create-post-subtitle">
+        Share your understanding and reflections with fellow seekers
+      </Typography>
+      <form onSubmit={handleSubmit} className="create-post-form">
         <TextField
-          label="Title"
+          label="Title of Your Insight"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           fullWidth
           required
           margin="normal"
           variant="outlined"
-          sx={{
-            marginBottom: '20px',
-            '& .MuiOutlinedInput-root': {
-              borderRadius: '8px',
-              '&:hover fieldset': {
-                borderColor: '#3f51b5',
-              },
-            },
-          }}
+          placeholder="What is the essence of your understanding?"
+          className="input-field"
         />
         <TextField
-          label="Content"
+          label="Your Reflection"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           fullWidth
           required
           multiline
-          rows={6}
+          rows={8}
           margin="normal"
           variant="outlined"
-          sx={{
-            marginBottom: '24px',
-            '& .MuiOutlinedInput-root': {
-              borderRadius: '8px',
-              '&:hover fieldset': {
-                borderColor: '#3f51b5',
-              },
-            },
-          }}
+          placeholder="Share your thoughts, experiences, and realizations..."
+          className="input-field"
         />
         <Button 
           type="submit" 
           variant="contained" 
           fullWidth
-          style={{ 
-            padding: '12px',
-            backgroundColor: '#3f51b5',
-            borderRadius: '8px',
-            textTransform: 'none',
-            fontSize: '16px',
-            fontWeight: '500',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            transition: 'all 0.3s ease',
-          }}
+          className="share-button"
         >
-          Create Post
+          Share Insight
         </Button>
       </form>
     </Paper>

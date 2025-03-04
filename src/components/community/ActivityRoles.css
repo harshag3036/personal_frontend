@@ -1,0 +1,447 @@
+/* Container */
+.activity-roles {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header */
+.roles-header {
+  margin-bottom: 2rem;
+}
+
+.roles-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.75rem;
+}
+
+/* Roles Grid */
+.roles-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2rem;
+}
+
+/* Roles List */
+.roles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Role Card */
+.role-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.role-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.role-card.selected {
+  border: 2px solid #2196f3;
+}
+
+/* Role Header */
+.role-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.role-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.role-date {
+  color: #666;
+  font-size: 0.75rem;
+}
+
+.role-description {
+  margin: 0 0 1rem;
+  color: #666;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Role Permissions */
+.role-permissions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.role-permissions h4 {
+  margin: 0 0 0.75rem;
+  color: #666;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.permission-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.permission-tag {
+  padding: 0.25rem 0.75rem;
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+.permission-tag.more {
+  background: #f5f5f5;
+  color: #666;
+}
+
+/* Role Form */
+.role-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 2rem;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section h3 {
+  margin: 0 0 1.5rem;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+/* Permission Categories */
+.permission-category {
+  margin-bottom: 1.5rem;
+}
+
+.permission-category h4 {
+  margin: 0 0 1rem;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.permission-item {
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.permission-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  cursor: pointer;
+}
+
+.permission-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.permission-name {
+  color: #333;
+  font-size: 0.875rem;
+}
+
+.permission-description {
+  display: block;
+  margin-left: 1.5rem;
+  color: #666;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.submit-button:hover {
+  background: #1976d2;
+}
+
+.cancel-button {
+  padding: 0.75rem 1.5rem;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancel-button:hover {
+  background: #e0e0e0;
+}
+
+.delete-button {
+  padding: 0.75rem 1.5rem;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.delete-button:hover {
+  background: #d32f2f;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.empty-state p {
+  margin: 0 0 0.5rem;
+  color: #666;
+}
+
+.empty-state p:last-child {
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+/* Error Message */
+.error-message {
+  color: #f44336;
+  background: #ffebee;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .roles-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .role-form {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .activity-roles {
+    padding: 1rem;
+  }
+
+  .roles-header {
+    text-align: center;
+  }
+
+  .role-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .permission-tags {
+    justify-content: center;
+  }
+
+  .permission-item {
+    padding-left: 0;
+  }
+
+  .permission-description {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons button {
+    width: 100%;
+  }
+
+  .delete-button {
+    width: 100%;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .roles-header h2 {
+    color: #e0e0e0;
+  }
+
+  .role-card {
+    background: #1e1e1e;
+  }
+
+  .role-header h3 {
+    color: #e0e0e0;
+  }
+
+  .role-date {
+    color: #999;
+  }
+
+  .role-description {
+    color: #999;
+  }
+
+  .role-permissions {
+    border-color: #404040;
+  }
+
+  .role-permissions h4 {
+    color: #999;
+  }
+
+  .permission-tag {
+    background: #1565c0;
+    color: #e0e0e0;
+  }
+
+  .permission-tag.more {
+    background: #2d2d2d;
+    color: #999;
+  }
+
+  .role-form {
+    background: #1e1e1e;
+  }
+
+  .form-section h3 {
+    color: #e0e0e0;
+  }
+
+  .form-group label {
+    color: #e0e0e0;
+  }
+
+  .form-group input[type="text"],
+  .form-group textarea {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+  }
+
+  .permission-category h4 {
+    color: #e0e0e0;
+  }
+
+  .permission-name {
+    color: #e0e0e0;
+  }
+
+  .permission-description {
+    color: #999;
+  }
+
+  .form-actions {
+    border-color: #404040;
+  }
+
+  .cancel-button {
+    background: #2d2d2d;
+    color: #e0e0e0;
+  }
+
+  .cancel-button:hover {
+    background: #404040;
+  }
+
+  .empty-state {
+    background: #2d2d2d;
+  }
+
+  .empty-state p {
+    color: #999;
+  }
+
+  .error-message {
+    background: #391515;
+  }
+}

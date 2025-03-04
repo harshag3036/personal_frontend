@@ -1,0 +1,256 @@
+.activity-detail-view {
+  background: white;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+  position: relative;
+  top: 0;
+}
+
+.detail-header {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  background: white;
+  border-radius: 10px 10px 0 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.type-status {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.detail-header h2 {
+  margin: 0 0 6px 0;
+  color: #2c3e50;
+  font-size: 1.6em;
+}
+
+.creation-date {
+  margin: 0;
+  color: #666;
+  font-size: 0.85em;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  overflow-x: auto;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  padding: 0;
+  margin: 0;
+  position: sticky;
+  top: 56px; /* Height of the header */
+  z-index: 5;
+}
+
+.tab-button {
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 0.9em;
+  color: #666;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.tab-button.active {
+  border-bottom: 3px solid #4a90e2;
+  color: #4a90e2;
+  font-weight: 500;
+}
+
+/* Tab Content */
+.detail-content {
+  padding: 16px;
+  overflow-y: auto;
+  height: 600px; /* Fixed height for content area */
+  position: relative;
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.description-section,
+.metadata-section,
+
+.goals-list,
+.criteria-list {
+  margin: 0;
+  padding-left: 16px;
+  color: #2c3e50;
+  line-height: 1.4;
+}
+
+.goals-list li,
+.criteria-list li {
+  margin-bottom: 8px;
+}
+
+.participants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.participant-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.participant-name {
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.join-date {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.no-participants {
+  color: #666;
+  text-align: center;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin: 0;
+}
+
+.join-button {
+  padding: 8px 16px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.join-button:hover {
+  background-color: #357abd;
+  transform: translateY(-1px);
+}
+
+.join-button.leave {
+  background-color: #e53935;
+}
+
+.join-button.leave:hover {
+  background-color: #d32f2f;
+}
+
+/* Activity Type & Status Badges */
+.activity-type {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.activity-type.discussion { background: #e3f2fd; color: #1976d2; }
+.activity-type.event { background: #f3e5f5; color: #7b1fa2; }
+.activity-type.project { background: #e8f5e9; color: #2e7d32; }
+.activity-type.skill-share { background: #fff3e0; color: #f57c00; }
+.activity-type.resource { background: #fce4ec; color: #c2185b; }
+.activity-type.challenge { background: #fbe9e7; color: #d84315; }
+
+.activity-status {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.activity-status.active { background: #e8f5e9; color: #2e7d32; }
+.activity-status.pending { background: #fff3e0; color: #f57c00; }
+.activity-status.completed { background: #e3f2fd; color: #1976d2; }
+.activity-status.cancelled { background: #fbe9e7; color: #d84315; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+.activity-detail-view {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+  .detail-header h2 {
+    font-size: 1.5em;
+  }
+
+  .type-status {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .participant-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

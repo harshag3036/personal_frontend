@@ -1,0 +1,268 @@
+/* Comment Section Layout Styles */
+
+.comment-section {
+  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+}
+
+.comment-section-header {
+  margin-bottom: 24px;
+}
+
+.comment-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.sort-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sort-container label {
+  font-size: 14px;
+  color: #666;
+}
+
+.sort-select {
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.add-comment-button {
+  padding: 10px 18px;
+  background-color: #7ba7d0;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.add-comment-button:hover {
+  background-color: #6a96c0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main-comment-form {
+  margin-bottom: 24px;
+}
+
+.empty-comments {
+  text-align: center;
+  padding: 40px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  color: #666;
+  border: 1px dashed #7ba7d0;
+  font-style: italic;
+}
+
+/* Template Configuration */
+.template-configuration {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.template-config-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #444;
+}
+
+.template-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.template-description {
+  margin: 16px 0;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.template-description p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.section-configuration {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.section-configuration h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #444;
+}
+
+.section-config-info {
+  margin-bottom: 16px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Rigour enforcement option */
+.rigour-enforcement-option {
+  margin-bottom: 20px;
+  padding: 12px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.rigour-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.rigour-label {
+  font-weight: 500;
+  color: #444;
+}
+
+.rigour-description {
+  font-size: 13px;
+  color: #666;
+  margin-top: 8px;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.section-item {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.section-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.section-label {
+  font-weight: 500;
+  color: #444;
+}
+
+.template-config-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Template info for structured discussion form */
+.template-info {
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.template-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.template-header h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #444;
+}
+
+/* Discussion template info */
+.discussion-template-info {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.discussion-template-info h4 {
+  font-size: 15px;
+  margin-bottom: 4px;
+  color: #444;
+}
+
+.discussion-template-info p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 0;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 768px) {
+  .comment-section {
+    padding: 16px;
+  }
+
+  .comment-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .sort-container {
+    width: 100%;
+  }
+
+  .sort-select {
+    flex: 1;
+  }
+}

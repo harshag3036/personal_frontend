@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useNavigate } from 'react-router-dom';
 import config from '../config';
 import PostItem from './PostItem';
+import '../styles/shared.css';
 import './PostList.css';
 
 const PostList = ({ userPosts = false }) => {
@@ -29,22 +30,34 @@ const PostList = ({ userPosts = false }) => {
       : `${config.API_BASE_URL}/api/v1/getAllPosts?page=${page}&size=10`;
 
     try {
+      console.log('Fetching posts with:', {
+        url,
+        token: token ? 'Token exists' : 'No token',
+        customerId: customerId || 'No customerId'
+      });
+      
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
       });
+      console.log('Posts response status:', response.status);
+      const data = await response.json();
+      console.log('Posts response data:', data);
+      
       if (response.ok) {
-        const data = await response.json();
         setPosts(prevPosts => [...prevPosts, ...data.content]);
         setHasMore(data.content.length === 10);
         setPage(prevPage => prevPage + 1);
       } else {
-        console.error('Failed to fetch posts');
+        console.error('Unable to fetch insights');
         setHasMore(false);
       }
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error('Error fetching insights:', error);
       setHasMore(false);
     } finally {
       setLoading(false);
@@ -75,15 +88,21 @@ const PostList = ({ userPosts = false }) => {
     return (
       <Paper elevation={3} className="post-list-container">
         <Typography variant="h5" gutterBottom className="post-list-title">
-          {userPosts ? 'My Posts' : 'All Posts'}
+          {userPosts ? 'Your Reflections' : 'Shared Insights'}
         </Typography>
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="200px">
-          <Typography variant="body1" gutterBottom>
-            {userPosts ? "You haven't created any posts yet." : "There are no posts available."}
+          <Typography variant="body1" gutterBottom className="empty-message">
+            {userPosts 
+              ? "Begin your journey of sharing insights and reflections." 
+              : "Be the first to share your insights with our community of seekers."}
           </Typography>
           {userPosts && (
-            <Button variant="contained" color="primary" onClick={handleCreatePost}>
-              Create Your First Post
+            <Button 
+              variant="contained" 
+              onClick={handleCreatePost}
+              className="start-button"
+            >
+              Share Your First Insight
             </Button>
           )}
         </Box>
@@ -94,7 +113,7 @@ const PostList = ({ userPosts = false }) => {
   return (
     <Paper elevation={3} className="post-list-container">
       <Typography variant="h5" gutterBottom className="post-list-title">
-        {userPosts ? 'My Posts' : 'All Posts'}
+        {userPosts ? 'Your Reflections' : 'Shared Insights'}
       </Typography>
       <InfiniteScroll
         dataLength={posts.length}
@@ -106,8 +125,8 @@ const PostList = ({ userPosts = false }) => {
           </Box>
         }
         endMessage={
-          <Typography variant="body2" textAlign="center" my={2}>
-            You've seen all posts
+          <Typography variant="body2" textAlign="center" my={2} className="end-message">
+            You've explored all shared insights
           </Typography>
         }
         scrollThreshold={0.9}

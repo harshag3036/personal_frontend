@@ -1,11 +1,37 @@
+/**
+ * Home Component
+ * 
+ * Purpose:
+ * This component serves as the main interface for users to:
+ * 1. Begin their journey of self-discovery
+ * 2. Share and explore insights mindfully
+ * 3. Engage with content in a way that promotes understanding
+ * 4. Track their progress in understanding
+ */
+
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Typography, Paper, FormControl, InputLabel, Select, MenuItem, Container, Tabs, Tab } from '@mui/material';
+import { 
+    Box, 
+    TextField, 
+    Button, 
+    Typography, 
+    Paper, 
+    FormControl, 
+    InputLabel, 
+    Select, 
+    MenuItem, 
+    Container, 
+    Tabs, 
+    Tab 
+} from '@mui/material';
+import { useUser } from '../contexts/UserContext';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useNavigate, useLocation } from 'react-router-dom';
 import config from '../config';
+import '../styles/shared.css';
 import './Home.css';
-import PostList from './PostList';
+import InsightCollection from './mindful/InsightCollection';
 
 export default function Home() {
   const [firstLogin, setFirstLogin] = useState(false);
@@ -16,23 +42,34 @@ export default function Home() {
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const isGuest = localStorage.getItem('isGuest') === 'true';
+  const { isGuest, isAuthenticated, authChecked } = useUser();
 
   useEffect(() => {
-    if (!isGuest) {
-      const firstLoginStatus = localStorage.getItem('firstLogin') === 'true';
-      setFirstLogin(firstLoginStatus);
-    }
+    if (authChecked) {
+      if (!isAuthenticated) {
+        navigate('/');
+        return;
+      }
 
-    if (location.state?.showMyPosts) {
-      setTabValue(1);
-      window.history.replaceState({}, document.title);
+      if (!isGuest) {
+        const firstLoginStatus = localStorage.getItem('firstLogin') === 'true';
+        setFirstLogin(firstLoginStatus);
+      }
+
+      if (location.state?.showMyPosts) {
+        setTabValue(1);
+        window.history.replaceState({}, document.title);
+      }
     }
-  }, [location.state, isGuest]);
+  }, [location.state, isGuest, isAuthenticated, authChecked, navigate]);
+
+  if (!authChecked) {
+    return null; // Don't render anything until auth is checked
+  }
 
   const handleSubmit = async () => {
     if (!name || !dob || !gender) {
-      alert('All fields are required');
+      alert('Please complete all fields to begin your journey');
       return;
     }
 
@@ -47,14 +84,13 @@ export default function Home() {
         body: JSON.stringify({ name, dob, gender }),
       });
       if (response.ok) {
-        console.log('Customer data submitted successfully');
         setFirstLogin(false);
         localStorage.setItem('firstLogin', 'false');
       } else {
-        console.error('Failed to submit customer data');
+        console.error('Unable to begin journey');
       }
     } catch (error) {
-      console.error('Error submitting customer data:', error);
+      console.error('Error starting journey:', error);
     }
   };
 
@@ -62,12 +98,12 @@ export default function Home() {
     setTabValue(newValue);
   };
 
-  const handleCreatePost = () => {
+  const handleCreateInsight = () => {
     if (isGuest) {
       setShowLoginPrompt(true);
       return;
     }
-    navigate('/create-post');
+    navigate('/share-insight');
   };
 
   const handleChatBot = () => {
@@ -75,31 +111,23 @@ export default function Home() {
   };
 
   const handleLoginRedirect = () => {
-    localStorage.clear(); // Clear all localStorage items
-    navigate('/');
+    navigate('/login');
   };
 
   return (
     <div className="home-container">
       <Container maxWidth="md" className="main-content">
         <div className="header">
-          <Typography variant="h4" className="welcome-text">Social Feed</Typography>
+          <Typography variant="h4" className="welcome-text">
+            Journey of Understanding
+          </Typography>
           <div className="header-buttons">
             <Button 
               variant="contained" 
-              color="primary" 
-              onClick={handleCreatePost}
-              className="create-post-btn"
+              onClick={handleCreateInsight}
+              className="create-insight-btn"
             >
-              Create Post
-            </Button>
-            <Button 
-              variant="contained" 
-              color="secondary" 
-              onClick={handleChatBot}
-              className="chatbot-btn"
-            >
-              Chat Bot
+              Share Your Understanding
             </Button>
           </div>
         </div>
@@ -107,58 +135,59 @@ export default function Home() {
         {showLoginPrompt && isGuest ? (
           <Paper elevation={3} className="login-prompt-paper">
             <Typography variant="h6" align="center" gutterBottom>
-              Create Your First Post
+              Begin Your Journey of Understanding
             </Typography>
             <Typography variant="body1" align="center" gutterBottom>
-              You need to be logged in to create posts. Please login or sign up to continue.
+              To share your insights and contribute to our collective understanding, 
+              please join our community of seekers and explorers.
             </Typography>
             <Button 
               variant="contained" 
-              color="primary" 
               onClick={handleLoginRedirect}
+              className="start-button"
               fullWidth
-              style={{ marginTop: '16px' }}
             >
-              Go to Login
+              Begin Journey
             </Button>
             <Button 
               variant="text" 
-              color="primary" 
               onClick={() => setShowLoginPrompt(false)}
+              className="continue-button"
               fullWidth
-              style={{ marginTop: '8px' }}
             >
-              Continue Browsing
+              Continue Exploring
             </Button>
           </Paper>
         ) : firstLogin && !isGuest ? (
           <Paper elevation={3} className="profile-paper">
-            <Typography variant="h6" align="center">Complete Your Profile</Typography>
+            <Typography variant="h6" align="center">Create Your Path</Typography>
             <Box className="profile-form">
               <TextField
-                label="Name"
+                label="Your Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="profile-input"
                 required
+                placeholder="As you wish to be known"
               />
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  label="Date of Birth"
+                  label="Your Journey's Beginning"
                   value={dob}
                   onChange={(newValue) => {
-                    console.log('Date of Birth selected:', newValue);
                     setDob(newValue);
                   }}
-                  renderInput={(params) => <TextField {...params} required className="profile-input" />}
+                  renderInput={(params) => 
+                    <TextField {...params} required className="profile-input" />
+                  }
                 />
               </LocalizationProvider>
               <FormControl className="profile-input" required>
-                <InputLabel>Gender</InputLabel>
+                <InputLabel>Identity</InputLabel>
                 <Select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  label="Gender"
+                  label="Identity"
                 >
                   <MenuItem value="MALE">Male</MenuItem>
                   <MenuItem value="FEMALE">Female</MenuItem>
@@ -167,22 +196,21 @@ export default function Home() {
               </FormControl>
               <Button 
                 variant="contained" 
-                color="primary" 
                 onClick={handleSubmit} 
-                className="profile-submit"
+                className="start-button"
               >
-                Submit
+                Begin Your Journey
               </Button>
             </Box>
           </Paper>
         ) : (
-          <Box className="posts-container">
-            <Tabs value={tabValue} onChange={handleTabChange} centered className="post-tabs">
-              <Tab label="All Posts" />
-              <Tab label="My Posts" />
+          <Box className="insights-container">
+            <Tabs value={tabValue} onChange={handleTabChange} centered className="insight-tabs">
+              <Tab label="All Insights" />
+              <Tab label="My Journey" />
             </Tabs>
-            {tabValue === 0 && <PostList key="all-posts" />}
-            {tabValue === 1 && <PostList key="my-posts" userPosts />}
+            {tabValue === 0 && <InsightCollection key="all-insights" />}
+            {tabValue === 1 && <InsightCollection key="my-insights" userInsights />}
           </Box>
         )}
       </Container>

@@ -1,0 +1,22 @@
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    height: 4px;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: transparent;
+}
+
+/* Override Material-UI styles for better visibility */
+.progress-bar .MuiLinearProgress-bar {
+    background-color: #1976d2;
+}
+
+.progress-bar .MuiLinearProgress-dashed {
+    display: none;
+}

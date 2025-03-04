@@ -1,0 +1,115 @@
+/* ActivityInsights.css */
+
+.activity-insights {
+  background-color: #f5f9ff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.insights-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.insights-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.insights-toggle {
+  background: none;
+  border: none;
+  color: #2196f3;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.insights-toggle-icon {
+  margin-left: 5px;
+  font-size: 10px;
+  transition: transform 0.3s ease;
+}
+
+.insights-toggle-icon.up {
+  transform: rotate(180deg);
+}
+
+.insights-content {
+  transition: all 0.3s ease;
+}
+
+.insights-content.hidden {
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.insight-card {
+  background-color: white;
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.insight-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
+.insight-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.insight-trend {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.trend-up {
+  color: #4caf50;
+}
+
+.trend-down {
+  color: #f44336;
+}
+
+.trend-neutral {
+  color: #757575;
+}
+
+.trend-icon {
+  margin-right: 5px;
+}
+
+.insight-chart {
+  height: 150px;
+  margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+  .insights-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}

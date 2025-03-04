@@ -1,0 +1,138 @@
+/**
+ * InsightCollection Styles
+ *
+ * Purpose:
+ * These styles support mindful content exploration by:
+ * 1. Creating visual breathing room between insights
+ * 2. Using subtle visual cues to encourage slower consumption
+ * 3. Maintaining a clean, focused layout
+ * 4. Supporting the reflection experience
+ */
+
+.insight-collection {
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 1200px;
+    background: #fff;
+}
+
+.collection-title {
+    color: #333;
+    margin-bottom: 2rem !important;
+    text-align: center;
+    font-weight: 500 !important;
+    /* Slightly larger letter spacing for emphasis */
+    letter-spacing: 0.02em !important;
+}
+
+.insights-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.load-more-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding: 2rem;
+    /* Subtle background to create visual separation */
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.load-more-button {
+    min-width: 200px !important;
+    /* Softer button style */
+    color: #555 !important;
+    border-color: #555 !important;
+}
+
+.load-more-subtitle {
+    color: #666;
+    font-style: italic;
+}
+
+/* Empty State Styles */
+.insight-collection-empty {
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding: 2rem;
+    /* Subtle background */
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.start-button {
+    margin-top: 1rem !important;
+    min-width: 200px !important;
+    /* Calming color */
+    background-color: #4a6fa5 !important;
+}
+
+/* Create Post Dialog Styles */
+.create-post-container {
+    padding: 2rem;
+    background: #fff;
+}
+
+.create-post-title {
+    color: #333;
+    text-align: center;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+}
+
+.create-post-subtitle {
+    color: #666;
+    text-align: center;
+    margin-bottom: 2rem !important;
+}
+
+.create-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-field {
+    background: #f8f9fa;
+}
+
+.share-button {
+    margin-top: 1rem !important;
+    background-color: #4a6fa5 !important;
+    color: white !important;
+    padding: 0.8rem !important;
+}
+
+.share-button:disabled {
+    background-color: #cccccc !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .insight-collection {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .load-more-container {
+        padding: 1rem;
+    }
+
+    .empty-state {
+        padding: 1rem;
+    }
+}

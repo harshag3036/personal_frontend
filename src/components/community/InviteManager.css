@@ -1,0 +1,290 @@
+.invite-manager {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.invite-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.invite-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background-color: #f5f5f5;
+}
+
+.invite-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 24px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.tab-button.active {
+  background-color: white;
+  color: #1976d2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.invite-form {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.message-group {
+  flex: 2;
+}
+
+.expiry-group {
+  flex: 1;
+}
+
+.remove-button {
+  padding: 8px 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-end;
+  margin-bottom: 8px;
+  transition: background-color 0.2s;
+}
+
+.remove-button:hover {
+  background-color: #d32f2f;
+}
+
+.invite-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.add-button {
+  padding: 8px 16px;
+  background-color: transparent;
+  border: 1px solid #1976d2;
+  color: #1976d2;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-button:hover {
+  background-color: #f5f5f5;
+}
+
+.send-button {
+  padding: 8px 24px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: #1565c0;
+}
+
+.error-message {
+  color: #d32f2f;
+  margin-top: 16px;
+  padding: 8px;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+.pending-invites {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pending-invite-card {
+  background-color: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invite-info {
+  flex: 1;
+}
+
+.invite-primary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.invite-email {
+  font-weight: 500;
+  color: #333;
+}
+
+.invite-status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.invite-status.pending {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.invite-status.cancelled {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.invite-details {
+  display: flex;
+  gap: 16px;
+  color: #666;
+  font-size: 13px;
+}
+
+.invite-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.resend-button {
+  padding: 6px 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.resend-button:hover {
+  background-color: #43a047;
+}
+
+.cancel-button {
+  padding: 6px 12px;
+  background-color: transparent;
+  border: 1px solid #666;
+  color: #666;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.cancel-button:hover {
+  background-color: #f5f5f5;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  color: #666;
+}
+
+/* Tooltip styles */
+[title] {
+  position: relative;
+  cursor: help;
+}
+
+[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 8px;
+}
