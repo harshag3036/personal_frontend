@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useActivity } from '../../contexts/ActivityContext';
+import MilestoneDependencyView from './MilestoneDependencyView';
 import './ActivityLifecycleView.css';
 
 /**
@@ -12,7 +13,7 @@ import './ActivityLifecycleView.css';
  * - Enhanced progress metrics
  */
 const ActivityLifecycleView = ({ activity }) => {
-  const { updateStatus } = useActivity();
+  const { updateStatus, updateActivity } = useActivity();
   const [showStatusTransitions, setShowStatusTransitions] = useState(false);
   const [showMilestoneDependencies, setShowMilestoneDependencies] = useState(false);
   const [predictedCompletionDate, setPredictedCompletionDate] = useState(null);
@@ -109,20 +110,123 @@ const ActivityLifecycleView = ({ activity }) => {
     setPredictedCompletionDate(predictedDate);
   };
 
+  // Calculate critical path based on milestone dependencies
   const identifyCriticalPath = () => {
-    // In a real app, this would analyze dependencies between milestones
-    // For now, we'll just mock a critical path
     if (!activity?.progress?.milestones || activity.progress.milestones.length === 0) {
       setCriticalPath([]);
       return;
     }
     
-    // Mock critical path - in a real app, this would be calculated based on dependencies
-    const mockCriticalPath = activity.progress.milestones
-      .filter((_, index) => index % 2 === 0) // Every other milestone for demo purposes
-      .map(m => m.id);
+    const milestones = activity.progress.milestones;
     
-    setCriticalPath(mockCriticalPath);
+    // Create a dependency graph
+    const graph = {};
+    milestones.forEach(milestone => {
+      // Initialize each milestone in the graph
+      graph[milestone.id] = {
+        id: milestone.id,
+        title: milestone.title,
+        completed: milestone.completed,
+        dependencies: milestone.dependencies || [],
+        dependents: [],
+        earliestStart: 0,
+        earliestFinish: 1, // Assume each milestone takes 1 time unit
+        latestStart: 0,
+        latestFinish: 0,
+        slack: 0
+      };
+    });
+    
+    // Add dependents (reverse dependencies)
+    milestones.forEach(milestone => {
+      const dependencies = milestone.dependencies || [];
+      dependencies.forEach(depId => {
+        if (graph[depId]) {
+          graph[depId].dependents.push(milestone.id);
+        }
+      });
+    });
+    
+    // If no explicit dependencies exist, create implicit ones based on order
+    let hasExplicitDependencies = false;
+    milestones.forEach(milestone => {
+      if (milestone.dependencies && milestone.dependencies.length > 0) {
+        hasExplicitDependencies = true;
+      }
+    });
+    
+    if (!hasExplicitDependencies) {
+      // Create implicit dependencies (each milestone depends on the previous one)
+      for (let i = 1; i < milestones.length; i++) {
+        const currentId = milestones[i].id;
+        const previousId = milestones[i-1].id;
+        
+        graph[currentId].dependencies.push(previousId);
+        graph[previousId].dependents.push(currentId);
+      }
+    }
+    
+    // Find start nodes (no dependencies) and end nodes (no dependents)
+    const startNodes = Object.values(graph).filter(node => node.dependencies.length === 0);
+    const endNodes = Object.values(graph).filter(node => node.dependents.length === 0);
+    
+    // Forward pass - calculate earliest start/finish times
+    const calculateEarliestTimes = (nodeId, visited = new Set()) => {
+      if (visited.has(nodeId)) return graph[nodeId].earliestFinish;
+      visited.add(nodeId);
+      
+      const node = graph[nodeId];
+      
+      if (node.dependencies.length === 0) {
+        node.earliestStart = 0;
+        node.earliestFinish = 1;
+      } else {
+        // Node's earliest start is the maximum of all dependencies' earliest finish
+        node.earliestStart = Math.max(
+          ...node.dependencies.map(depId => calculateEarliestTimes(depId, visited))
+        );
+        node.earliestFinish = node.earliestStart + 1;
+      }
+      
+      return node.earliestFinish;
+    };
+    
+    // Calculate earliest times for all nodes
+    startNodes.forEach(node => calculateEarliestTimes(node.id));
+    
+    // Find the project duration (maximum earliest finish of any end node)
+    const projectDuration = Math.max(...endNodes.map(node => node.earliestFinish));
+    
+    // Backward pass - calculate latest start/finish times
+    const calculateLatestTimes = (nodeId, visited = new Set()) => {
+      if (visited.has(nodeId)) return graph[nodeId].latestStart;
+      visited.add(nodeId);
+      
+      const node = graph[nodeId];
+      
+      if (node.dependents.length === 0) {
+        node.latestFinish = projectDuration;
+        node.latestStart = node.latestFinish - 1;
+      } else {
+        // Node's latest finish is the minimum of all dependents' latest start
+        node.latestFinish = Math.min(
+          ...node.dependents.map(depId => calculateLatestTimes(depId, visited))
+        );
+        node.latestStart = node.latestFinish - 1;
+      }
+      
+      // Calculate slack
+      node.slack = node.latestStart - node.earliestStart;
+      
+      return node.latestStart;
+    };
+    
+    // Calculate latest times for all nodes
+    endNodes.forEach(node => calculateLatestTimes(node.id));
+    
+    // Critical path consists of all nodes with zero slack
+    const criticalPathNodes = Object.values(graph).filter(node => node.slack === 0);
+    setCriticalPath(criticalPathNodes.map(node => node.id));
   };
 
   const renderStatusTransitions = () => {
@@ -179,63 +283,6 @@ const ActivityLifecycleView = ({ activity }) => {
               </li>
             ))}
           </ul>
-        </div>
-      </div>
-    );
-  };
-
-  const renderMilestoneDependencies = () => {
-    if (!activity?.progress?.milestones || activity.progress.milestones.length === 0) {
-      return (
-        <div className="no-milestones">
-          <p>No milestones have been created yet.</p>
-        </div>
-      );
-    }
-    
-    return (
-      <div className="milestone-dependencies">
-        <h4>Milestone Dependencies</h4>
-        <p className="section-explainer">
-          This diagram shows how milestones relate to each other. Critical path items (highlighted in red) are essential for completion.
-        </p>
-        <div className="dependencies-diagram">
-          {activity.progress.milestones.map((milestone, index) => (
-            <div 
-              key={milestone.id} 
-              className={`milestone-node ${milestone.completed ? 'completed' : ''} ${
-                criticalPath.includes(milestone.id) ? 'critical' : ''
-              }`}
-            >
-              <div className="milestone-number">{index + 1}</div>
-              <div className="milestone-title">{milestone.title}</div>
-              
-              {/* Connect to next milestone if not the last one */}
-              {index < activity.progress.milestones.length - 1 && (
-                <div className={`dependency-line ${
-                  criticalPath.includes(milestone.id) && 
-                  criticalPath.includes(activity.progress.milestones[index + 1].id) 
-                    ? 'critical' 
-                    : ''
-                }`}></div>
-              )}
-            </div>
-          ))}
-        </div>
-        
-        <div className="critical-path-legend">
-          <div className="legend-item">
-            <div className="legend-marker critical"></div>
-            <div className="legend-label">Critical Path</div>
-          </div>
-          <div className="legend-item">
-            <div className="legend-marker completed"></div>
-            <div className="legend-label">Completed</div>
-          </div>
-          <div className="legend-item">
-            <div className="legend-marker"></div>
-            <div className="legend-label">In Progress</div>
-          </div>
         </div>
       </div>
     );
@@ -608,7 +655,7 @@ const ActivityLifecycleView = ({ activity }) => {
         {showStatusTransitions && renderStatusTransitions()}
         
         {/* Milestone dependencies visualization */}
-        {showMilestoneDependencies && renderMilestoneDependencies()}
+        {showMilestoneDependencies && <MilestoneDependencyView activity={activity} criticalPath={criticalPath} onUpdateActivity={updateActivity} />}
       </div>
     </div>
   );

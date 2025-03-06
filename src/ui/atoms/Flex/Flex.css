@@ -1,0 +1,14 @@
+/**
+ * Flex Component Styles
+ */
+
+.ui-flex {
+  display: flex; /* Add a declaration to avoid empty ruleset */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .ui-flex {
+    flex-wrap: wrap; /* Add a declaration to avoid empty ruleset */
+  }
+}

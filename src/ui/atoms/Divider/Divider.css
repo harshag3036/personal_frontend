@@ -1,0 +1,43 @@
+/**
+ * Divider Component Styles
+ */
+
+.ui-divider {
+  border: none;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* Horizontal divider */
+.ui-divider-horizontal {
+  display: block;
+}
+
+/* Vertical divider */
+.ui-divider-vertical {
+  display: inline-block;
+  align-self: stretch;
+}
+
+/* Divider with text */
+.ui-divider-with-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.ui-divider-with-text::before,
+.ui-divider-with-text::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--color-border, #e0e0e0);
+}
+
+.ui-divider-with-text::before {
+  margin-right: var(--spacing-md, 1rem);
+}
+
+.ui-divider-with-text::after {
+  margin-left: var(--spacing-md, 1rem);
+}

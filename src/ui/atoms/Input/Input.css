@@ -1,0 +1,236 @@
+/**
+ * Input Component Styles
+ */
+
+/* Base Input Styles */
+.ds-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-4);
+  width: fit-content;
+}
+
+.ds-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ds-input {
+  font-family: var(--font-family-primary);
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-default);
+  width: 100%;
+  outline: none;
+}
+
+.ds-input:focus {
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 2px var(--color-brand-100);
+}
+
+.ds-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.ds-input-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-1);
+}
+
+.ds-input-required {
+  color: var(--color-error-500);
+  margin-left: var(--spacing-1);
+}
+
+.ds-input-helper-text {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-top: var(--spacing-1);
+}
+
+.ds-input-error-text {
+  color: var(--color-error-500);
+}
+
+.ds-input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.ds-input-start-icon {
+  left: var(--spacing-3);
+}
+
+.ds-input-end-icon {
+  right: var(--spacing-3);
+}
+
+/* Input Sizes */
+.ds-input-small .ds-input {
+  padding: var(--spacing-1) var(--spacing-2);
+  font-size: var(--font-size-xs);
+  height: 2rem;
+}
+
+.ds-input-small .ds-input-icon {
+  font-size: var(--font-size-md);
+}
+
+.ds-input-small .ds-input-start-icon ~ .ds-input {
+  padding-left: var(--spacing-6);
+}
+
+.ds-input-small .ds-input-end-icon ~ .ds-input {
+  padding-right: var(--spacing-6);
+}
+
+.ds-input-medium .ds-input {
+  padding: var(--spacing-2) var(--spacing-3);
+  font-size: var(--font-size-sm);
+  height: 2.5rem;
+}
+
+.ds-input-medium .ds-input-icon {
+  font-size: var(--font-size-lg);
+}
+
+.ds-input-medium .ds-input-start-icon ~ .ds-input {
+  padding-left: var(--spacing-8);
+}
+
+.ds-input-medium .ds-input-end-icon ~ .ds-input {
+  padding-right: var(--spacing-8);
+}
+
+.ds-input-large .ds-input {
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-size-md);
+  height: 3rem;
+}
+
+.ds-input-large .ds-input-icon {
+  font-size: var(--font-size-xl);
+}
+
+.ds-input-large .ds-input-start-icon ~ .ds-input {
+  padding-left: var(--spacing-10);
+}
+
+.ds-input-large .ds-input-end-icon ~ .ds-input {
+  padding-right: var(--spacing-10);
+}
+
+/* Input Variants */
+.ds-input-default .ds-input {
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border-medium);
+}
+
+.ds-input-filled .ds-input {
+  background-color: var(--color-background-tertiary);
+  border: 1px solid transparent;
+}
+
+.ds-input-filled .ds-input:focus {
+  background-color: var(--color-background-secondary);
+  border-color: var(--color-brand-500);
+}
+
+.ds-input-outlined .ds-input {
+  background-color: transparent;
+  border: 1px solid var(--color-border-medium);
+}
+
+/* Input States */
+.ds-input-success .ds-input {
+  border-color: var(--color-success-500);
+}
+
+.ds-input-success .ds-input:focus {
+  box-shadow: 0 0 0 2px var(--color-success-100);
+}
+
+.ds-input-error .ds-input {
+  border-color: var(--color-error-500);
+}
+
+.ds-input-error .ds-input:focus {
+  box-shadow: 0 0 0 2px var(--color-error-100);
+}
+
+.ds-input-warning .ds-input {
+  border-color: var(--color-warning-500);
+}
+
+.ds-input-warning .ds-input:focus {
+  box-shadow: 0 0 0 2px var(--color-warning-100);
+}
+
+/* Disabled Input */
+.ds-input-disabled .ds-input {
+  background-color: var(--color-background-disabled);
+  border-color: var(--color-border-light);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-input-disabled .ds-input-label,
+.ds-input-disabled .ds-input-helper-text,
+.ds-input-disabled .ds-input-icon {
+  color: var(--color-text-disabled);
+}
+
+/* Full Width Input */
+.ds-input-full-width {
+  width: 100%;
+}
+
+/* Dark Theme Adjustments */
+.theme-dark .ds-input {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+}
+
+.theme-dark .ds-input-filled .ds-input {
+  background-color: var(--color-background-tertiary);
+}
+
+.theme-dark .ds-input-filled .ds-input:focus {
+  background-color: var(--color-background-secondary);
+}
+
+.theme-dark .ds-input-disabled .ds-input {
+  background-color: var(--color-background-disabled);
+  color: var(--color-text-disabled);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .ds-input-wrapper {
+    margin-bottom: var(--spacing-3);
+  }
+  
+  .ds-input-medium .ds-input {
+    padding: var(--spacing-1) var(--spacing-2);
+    height: 2.25rem;
+  }
+  
+  .ds-input-large .ds-input {
+    padding: var(--spacing-2) var(--spacing-3);
+    height: 2.5rem;
+  }
+}

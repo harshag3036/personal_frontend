@@ -1,0 +1,262 @@
+/**
+ * Button Component Styles
+ */
+
+/* Base Button Styles */
+.ds-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-semibold);
+  border: none;
+  border-radius: var(--border-radius-full);
+  cursor: pointer;
+  transition: all var(--transition-default);
+  text-decoration: none;
+  line-height: 1;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.ds-button:focus {
+  box-shadow: var(--shadow-focus);
+}
+
+.ds-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Button Sizes */
+.ds-button-small {
+  padding: 8px 16px;
+  font-size: var(--font-size-sm);
+  height: 32px;
+}
+
+.ds-button-medium {
+  padding: 12px 24px;
+  font-size: var(--font-size-md);
+  height: 40px;
+}
+
+.ds-button-large {
+  padding: 16px 32px;
+  font-size: var(--font-size-lg);
+  height: 48px;
+}
+
+/* Button Variants */
+.ds-button-primary {
+  background-color: var(--color-brand-500);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button-primary:hover:not(:disabled) {
+  background-color: var(--color-brand-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.ds-button-primary:active:not(:disabled) {
+  background-color: var(--color-brand-700);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button-secondary {
+  background-color: var(--color-neutral-200);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button-secondary:hover:not(:disabled) {
+  background-color: var(--color-neutral-300);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.ds-button-secondary:active:not(:disabled) {
+  background-color: var(--color-neutral-400);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button-accent {
+  background-color: var(--color-accent-500);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button-accent:hover:not(:disabled) {
+  background-color: var(--color-accent-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.ds-button-accent:active:not(:disabled) {
+  background-color: var(--color-accent-700);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button-outline {
+  background-color: transparent;
+  color: var(--color-brand-500);
+  border: 1px solid var(--color-brand-500);
+}
+
+.ds-button-outline:hover:not(:disabled) {
+  background-color: rgba(20, 66, 114, 0.05);
+  transform: translateY(-2px);
+}
+
+.ds-button-outline:active:not(:disabled) {
+  background-color: rgba(20, 66, 114, 0.1);
+  transform: translateY(0);
+}
+
+.ds-button-text {
+  background-color: transparent;
+  color: var(--color-brand-500);
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.ds-button-text:hover:not(:disabled) {
+  background-color: rgba(20, 66, 114, 0.05);
+}
+
+.ds-button-text:active:not(:disabled) {
+  background-color: rgba(20, 66, 114, 0.1);
+}
+
+.ds-button-danger {
+  background-color: var(--color-error-500);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button-danger:hover:not(:disabled) {
+  background-color: var(--color-error-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.ds-button-danger:active:not(:disabled) {
+  background-color: var(--color-error-700);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button-success {
+  background-color: var(--color-success-500);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button-success:hover:not(:disabled) {
+  background-color: var(--color-success-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.ds-button-success:active:not(:disabled) {
+  background-color: var(--color-success-700);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Full Width Button */
+.ds-button-full-width {
+  width: 100%;
+}
+
+/* Button with Icon */
+.ds-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ds-button-icon-left {
+  margin-right: 8px;
+}
+
+.ds-button-icon-right {
+  margin-left: 8px;
+}
+
+/* Button Loading State */
+.ds-button-loading {
+  position: relative;
+  color: transparent !important;
+}
+
+.ds-button-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-top: -8px;
+  margin-left: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark Theme Adjustments */
+.theme-dark .ds-button-secondary {
+  background-color: var(--color-neutral-700);
+  color: var(--color-text-primary);
+}
+
+.theme-dark .ds-button-secondary:hover:not(:disabled) {
+  background-color: var(--color-neutral-600);
+}
+
+.theme-dark .ds-button-secondary:active:not(:disabled) {
+  background-color: var(--color-neutral-500);
+}
+
+.theme-dark .ds-button-outline {
+  border-color: var(--color-brand-300);
+  color: var(--color-brand-300);
+}
+
+.theme-dark .ds-button-text {
+  color: var(--color-brand-300);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .ds-button-small {
+    padding: 6px 12px;
+    font-size: var(--font-size-xs);
+    height: 28px;
+  }
+  
+  .ds-button-medium {
+    padding: 10px 20px;
+    font-size: var(--font-size-sm);
+    height: 36px;
+  }
+  
+  .ds-button-large {
+    padding: 14px 28px;
+    font-size: var(--font-size-md);
+    height: 44px;
+  }
+}

@@ -1,0 +1,216 @@
+/**
+ * Textarea Component Styles
+ */
+
+/* Base Textarea Styles */
+.ds-textarea-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-family: var(--font-family-primary);
+  margin-bottom: var(--spacing-3);
+}
+
+.ds-textarea-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-textarea-label {
+  margin-bottom: var(--spacing-1);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.ds-textarea-required {
+  color: var(--color-error-500);
+  margin-left: var(--spacing-1);
+}
+
+.ds-textarea-input {
+  width: 100%;
+  padding: var(--spacing-2);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-default);
+  resize: vertical;
+  min-height: 60px;
+  box-sizing: border-box;
+}
+
+.ds-textarea-input:focus {
+  outline: none;
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 2px var(--color-brand-100);
+}
+
+.ds-textarea-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.ds-textarea-helper-text {
+  margin-top: var(--spacing-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+.ds-textarea-error-text {
+  color: var(--color-error-500);
+}
+
+.ds-textarea-char-count {
+  position: absolute;
+  bottom: var(--spacing-1);
+  right: var(--spacing-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  pointer-events: none;
+}
+
+.ds-textarea-char-count-exceeded {
+  color: var(--color-error-500);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Textarea Variants */
+.ds-textarea-default .ds-textarea-input {
+  background-color: var(--color-background-primary);
+}
+
+.ds-textarea-filled .ds-textarea-input {
+  background-color: var(--color-background-tertiary);
+}
+
+.ds-textarea-outlined .ds-textarea-input {
+  background-color: transparent;
+  border: 1px solid var(--color-border-medium);
+}
+
+/* Textarea Sizes */
+.ds-textarea-small .ds-textarea-input {
+  padding: var(--spacing-1);
+  font-size: var(--font-size-sm);
+  min-height: 50px;
+}
+
+.ds-textarea-small .ds-textarea-label {
+  font-size: var(--font-size-sm);
+}
+
+.ds-textarea-medium .ds-textarea-input {
+  padding: var(--spacing-2);
+  font-size: var(--font-size-md);
+  min-height: 60px;
+}
+
+.ds-textarea-medium .ds-textarea-label {
+  font-size: var(--font-size-md);
+}
+
+.ds-textarea-large .ds-textarea-input {
+  padding: var(--spacing-3);
+  font-size: var(--font-size-lg);
+  min-height: 80px;
+}
+
+.ds-textarea-large .ds-textarea-label {
+  font-size: var(--font-size-lg);
+}
+
+/* Textarea States */
+.ds-textarea-error .ds-textarea-input {
+  border-color: var(--color-error-500);
+}
+
+.ds-textarea-error .ds-textarea-input:focus {
+  box-shadow: 0 0 0 2px var(--color-error-100);
+}
+
+.ds-textarea-success .ds-textarea-input {
+  border-color: var(--color-success-500);
+}
+
+.ds-textarea-success .ds-textarea-input:focus {
+  box-shadow: 0 0 0 2px var(--color-success-100);
+}
+
+.ds-textarea-warning .ds-textarea-input {
+  border-color: var(--color-warning-500);
+}
+
+.ds-textarea-warning .ds-textarea-input:focus {
+  box-shadow: 0 0 0 2px var(--color-warning-100);
+}
+
+/* Disabled State */
+.ds-textarea-disabled .ds-textarea-input {
+  background-color: var(--color-background-disabled);
+  border-color: var(--color-border-light);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  resize: none;
+}
+
+.ds-textarea-disabled .ds-textarea-label {
+  color: var(--color-text-disabled);
+}
+
+/* Read-only State */
+.ds-textarea-readonly .ds-textarea-input {
+  background-color: var(--color-background-tertiary);
+  cursor: default;
+}
+
+/* Full Width */
+.ds-textarea-full-width {
+  width: 100%;
+}
+
+/* Dark Theme Adjustments */
+.theme-dark .ds-textarea-input {
+  background-color: var(--color-background-secondary);
+  border-color: var(--color-border-medium);
+  color: var(--color-text-primary);
+}
+
+.theme-dark .ds-textarea-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.theme-dark .ds-textarea-disabled .ds-textarea-input {
+  background-color: var(--color-background-disabled);
+  border-color: var(--color-border-light);
+  color: var(--color-text-disabled);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .ds-textarea-wrapper {
+    margin-bottom: var(--spacing-2);
+  }
+  
+  .ds-textarea-input {
+    font-size: var(--font-size-sm);
+  }
+  
+  .ds-textarea-label {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Accessibility Focus Styles */
+.ds-textarea-input:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
+
+/* Auto-resize Styles */
+.ds-textarea-input[style*="height"] {
+  transition: height 0.1s ease-out;
+}

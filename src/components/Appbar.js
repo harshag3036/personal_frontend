@@ -9,6 +9,7 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
+import ThemeSwitcher from './ThemeSwitcher';
 import '../styles/shared.css';
 import './Appbar.css';
 
@@ -99,6 +100,7 @@ export default function Appbar() {
             </Button>
           </div>
           <div className="profile-section">
+            <ThemeSwitcher />
             {isAuthenticated ? (
               <>
                 <IconButton

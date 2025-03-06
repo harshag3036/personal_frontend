@@ -1,0 +1,14 @@
+/**
+ * Grid Component Styles
+ */
+
+.ui-grid {
+  display: grid; /* Add a declaration to avoid empty ruleset */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .ui-grid {
+    grid-template-columns: 1fr; /* Add a declaration to avoid empty ruleset */
+  }
+}

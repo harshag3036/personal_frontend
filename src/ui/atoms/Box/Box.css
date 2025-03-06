@@ -1,0 +1,15 @@
+/**
+ * Box Component Styles
+ */
+
+.ui-box {
+  box-sizing: border-box;
+  display: block; /* Add a declaration to avoid empty ruleset */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .ui-box {
+    max-width: 100%; /* Add a declaration to avoid empty ruleset */
+  }
+}

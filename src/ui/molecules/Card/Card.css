@@ -1,0 +1,110 @@
+/**
+ * Card Component Styles
+ */
+
+/* Base Card Styles */
+.ds-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background-secondary);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  transition: all var(--transition-default);
+  position: relative;
+}
+
+.ds-card-content {
+  padding: var(--spacing-6);
+  flex: 1;
+}
+
+.ds-card-header {
+  padding: var(--spacing-4) var(--spacing-6);
+  border-bottom: 1px solid var(--color-border-medium);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ds-card-footer {
+  padding: var(--spacing-4) var(--spacing-6);
+  border-top: 1px solid var(--color-border-medium);
+  background-color: var(--color-background-tertiary);
+}
+
+/* Empty Card State */
+.ds-card-empty {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  text-align: center;
+  padding: var(--spacing-4);
+  border: 1px dashed var(--color-border-medium);
+  border-radius: var(--border-radius-sm);
+  margin: var(--spacing-2) 0;
+}
+
+/* Card Variants */
+.ds-card-default {
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-medium);
+}
+
+.ds-card-elevated {
+  box-shadow: var(--shadow-md);
+  border: none;
+}
+
+.ds-card-outlined {
+  box-shadow: none;
+  border: 1px solid var(--color-border-medium);
+}
+
+.ds-card-interactive {
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-medium);
+  cursor: pointer;
+  transition: all var(--transition-default);
+}
+
+.ds-card-interactive:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.ds-card-interactive:active {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(0);
+}
+
+/* Full Width Card */
+.ds-card-full-width {
+  width: 100%;
+}
+
+/* Dark Theme Adjustments */
+.theme-dark .ds-card {
+  background-color: var(--color-background-secondary);
+}
+
+.theme-dark .ds-card-footer {
+  background-color: var(--color-background-tertiary);
+}
+
+.theme-dark .ds-card-empty {
+  border-color: var(--color-border-medium);
+  color: var(--color-text-tertiary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .ds-card-content {
+    padding: var(--spacing-4);
+  }
+  
+  .ds-card-header,
+  .ds-card-footer {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+  
+  .ds-card-empty {
+    padding: var(--spacing-3);
+  }
+}

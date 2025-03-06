@@ -153,6 +153,21 @@
 .profile-section {
   display: flex;
   align-items: center;
+  gap: 16px;
+}
+
+/* Theme Switcher Styling */
+.profile-section .ds-button {
+  padding: 6px 12px !important;
+  height: auto !important;
+  font-size: 0.9rem !important;
+  opacity: 0.85;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.profile-section .ds-button:hover {
+  opacity: 1;
+  transform: translateY(-2px);
 }
 
 @keyframes pulseProfile {
