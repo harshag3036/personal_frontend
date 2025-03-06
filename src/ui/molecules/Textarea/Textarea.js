@@ -1,49 +1,117 @@
 /**
  * Textarea Component
  * 
- * A customizable textarea component with support for variants and extensions.
+ * A customizable textarea component with support for variants, sizes, states, and responsive props.
+ * 
+ * @example
+ * ```jsx
+ * // Basic usage
+ * <Textarea 
+ *   id="description"
+ *   name="description"
+ *   label="Description"
+ * />
+ * 
+ * // Controlled textarea
+ * <Textarea 
+ *   id="message"
+ *   name="message"
+ *   label="Message"
+ *   value={message}
+ *   onChange={handleChange}
+ * />
+ * 
+ * // With helper text
+ * <Textarea 
+ *   id="bio"
+ *   name="bio"
+ *   label="Bio"
+ *   helperText="Tell us about yourself"
+ * />
+ * 
+ * // Different variants
+ * <Textarea id="default" name="default" label="Default variant" variant="default" />
+ * <Textarea id="filled" name="filled" label="Filled variant" variant="filled" />
+ * <Textarea id="outlined" name="outlined" label="Outlined variant" variant="outlined" />
+ * 
+ * // Different sizes
+ * <Textarea id="small" name="small" label="Small textarea" size="small" />
+ * <Textarea id="medium" name="medium" label="Medium textarea" size="medium" />
+ * <Textarea id="large" name="large" label="Large textarea" size="large" />
+ * 
+ * // Different states
+ * <Textarea id="default-state" name="default-state" label="Default state" state="default" />
+ * <Textarea id="success" name="success" label="Success state" state="success" />
+ * <Textarea id="error" name="error" label="Error state" state="error" errorText="This field is required" />
+ * <Textarea id="warning" name="warning" label="Warning state" state="warning" />
+ * 
+ * // Auto-resize
+ * <Textarea 
+ *   id="auto-resize"
+ *   name="auto-resize"
+ *   label="Auto-resize textarea"
+ *   autoResize
+ *   minRows={2}
+ *   maxRows={10}
+ * />
+ * 
+ * // With character count
+ * <Textarea 
+ *   id="char-count"
+ *   name="char-count"
+ *   label="Character count"
+ *   maxLength={100}
+ * />
+ * 
+ * // Responsive props
+ * <Textarea 
+ *   id="responsive"
+ *   name="responsive"
+ *   label="Responsive textarea"
+ *   size={{ base: "small", md: "medium", lg: "large" }}
+ * />
+ * 
+ * // Polymorphic rendering
+ * <Textarea 
+ *   as="section"
+ *   id="polymorphic"
+ *   name="polymorphic"
+ *   label="Polymorphic textarea"
+ * />
+ * ```
  */
 
-import React, { forwardRef, useEffect, useRef } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { componentExtension } from '../../utilities';
+import { isResponsiveObject } from '../../utilities/responsive-props';
+import { polymorphicPropTypes } from '../../utilities/polymorphic';
+import Box from '../../atoms/Box';
+import Text from '../../atoms/Text';
+import { 
+  TEXTAREA_CLASS, 
+  TEXTAREA_VARIANTS, 
+  TEXTAREA_SIZES, 
+  TEXTAREA_STATES,
+  TEXTAREA_MODIFIERS, 
+  TEXTAREA_BREAKPOINTS 
+} from './index';
 import './Textarea.css';
-
-// Textarea variants
-export const TEXTAREA_VARIANTS = {
-  DEFAULT: 'default',
-  FILLED: 'filled',
-  OUTLINED: 'outlined',
-};
-
-// Textarea sizes
-export const TEXTAREA_SIZES = {
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
-};
-
-// Textarea states
-export const TEXTAREA_STATES = {
-  DEFAULT: 'default',
-  SUCCESS: 'success',
-  ERROR: 'error',
-  WARNING: 'warning',
-};
 
 /**
  * Textarea Component
  * 
  * @param {Object} props - Component props
+ * @param {React.ElementType} [props.as='div'] - Element to render the Textarea as
  * @param {string} props.id - Textarea ID
  * @param {string} props.name - Textarea name
  * @param {string} [props.value=''] - Textarea value
  * @param {Function} [props.onChange] - Callback when textarea value changes
  * @param {string} [props.label] - Textarea label
  * @param {string} [props.placeholder=''] - Textarea placeholder
- * @param {string} [props.variant=TEXTAREA_VARIANTS.DEFAULT] - Textarea variant
- * @param {string} [props.size=TEXTAREA_SIZES.MEDIUM] - Textarea size
- * @param {string} [props.state=TEXTAREA_STATES.DEFAULT] - Textarea state
+ * @param {string|Object} [props.variant=TEXTAREA_VARIANTS.DEFAULT] - Textarea variant or responsive object
+ * @param {string|Object} [props.size=TEXTAREA_SIZES.MEDIUM] - Textarea size or responsive object
+ * @param {string|Object} [props.state=TEXTAREA_STATES.DEFAULT] - Textarea state or responsive object
  * @param {string} [props.helperText] - Helper text
  * @param {string} [props.errorText] - Error text (shown when state is ERROR)
  * @param {boolean} [props.disabled=false] - Whether the textarea is disabled
@@ -56,10 +124,12 @@ export const TEXTAREA_STATES = {
  * @param {number} [props.maxLength] - Maximum length of the textarea value
  * @param {boolean} [props.fullWidth=false] - Whether the textarea should take up the full width
  * @param {string} [props.className=''] - Additional CSS class names
+ * @param {Object} [props.style={}] - Additional inline styles
  * @param {Array<string>} [props.extensions=[]] - Extensions to apply to the textarea
  * @returns {JSX.Element} Textarea component
  */
 const Textarea = forwardRef(({
+  as = 'div',
   id,
   name,
   value = '',
@@ -81,9 +151,13 @@ const Textarea = forwardRef(({
   maxLength,
   fullWidth = false,
   className = '',
+  style = {},
   extensions = [],
   ...props
 }, ref) => {
+  // State for focus tracking
+  const [isFocused, setIsFocused] = useState(false);
+  
   // Internal ref for auto-resize
   const textareaRef = useRef(null);
   
@@ -97,22 +171,58 @@ const Textarea = forwardRef(({
       ref.current = element;
     }
   };
+  
+  // Process responsive props
+  const responsiveProps = {
+    variant,
+    size,
+    state,
+  };
+  
+  // Generate responsive styles if needed
+  let responsiveStyles = '';
+  const hasResponsiveProps = Object.values(responsiveProps).some(isResponsiveObject);
+  
+  if (hasResponsiveProps) {
+    // We'll handle these with classes, but we need to track if they're responsive
+    const responsiveClasses = {};
+    
+    if (isResponsiveObject(variant)) {
+      responsiveClasses.variant = variant;
+    }
+    
+    if (isResponsiveObject(size)) {
+      responsiveClasses.size = size;
+    }
+    
+    if (isResponsiveObject(state)) {
+      responsiveClasses.state = state;
+    }
+    
+    // Create a CSS string for responsive styles
+    responsiveStyles = JSON.stringify(responsiveClasses);
+  }
+  
+  // Determine base values for non-responsive props
+  const baseVariant = !isResponsiveObject(variant) ? variant : TEXTAREA_VARIANTS.DEFAULT;
+  const baseSize = !isResponsiveObject(size) ? size : TEXTAREA_SIZES.MEDIUM;
+  const baseState = !isResponsiveObject(state) ? state : TEXTAREA_STATES.DEFAULT;
 
   // Error handling for invalid variants
-  if (variant && !Object.values(TEXTAREA_VARIANTS).includes(variant)) {
-    console.warn(`Textarea: Invalid variant "${variant}". Falling back to DEFAULT.`);
+  if (baseVariant && !Object.values(TEXTAREA_VARIANTS).includes(baseVariant)) {
+    console.warn(`Textarea: Invalid variant "${baseVariant}". Falling back to DEFAULT.`);
     variant = TEXTAREA_VARIANTS.DEFAULT;
   }
 
   // Error handling for invalid sizes
-  if (size && !Object.values(TEXTAREA_SIZES).includes(size)) {
-    console.warn(`Textarea: Invalid size "${size}". Falling back to MEDIUM.`);
+  if (baseSize && !Object.values(TEXTAREA_SIZES).includes(baseSize)) {
+    console.warn(`Textarea: Invalid size "${baseSize}". Falling back to MEDIUM.`);
     size = TEXTAREA_SIZES.MEDIUM;
   }
 
   // Error handling for invalid states
-  if (state && !Object.values(TEXTAREA_STATES).includes(state)) {
-    console.warn(`Textarea: Invalid state "${state}". Falling back to DEFAULT.`);
+  if (baseState && !Object.values(TEXTAREA_STATES).includes(baseState)) {
+    console.warn(`Textarea: Invalid state "${baseState}". Falling back to DEFAULT.`);
     state = TEXTAREA_STATES.DEFAULT;
   }
 
@@ -158,6 +268,32 @@ const Textarea = forwardRef(({
       autoResizeTextarea(event.target);
     }
   };
+  
+  // Handle focus event
+  const handleFocus = (event) => {
+    setIsFocused(true);
+    
+    if (props.onFocus) {
+      try {
+        props.onFocus(event);
+      } catch (error) {
+        console.error('Textarea: Error in onFocus handler:', error);
+      }
+    }
+  };
+  
+  // Handle blur event
+  const handleBlur = (event) => {
+    setIsFocused(false);
+    
+    if (props.onBlur) {
+      try {
+        props.onBlur(event);
+      } catch (error) {
+        console.error('Textarea: Error in onBlur handler:', error);
+      }
+    }
+  };
 
   // Auto-resize on mount and when value changes
   useEffect(() => {
@@ -170,15 +306,18 @@ const Textarea = forwardRef(({
   let extendedProps;
   try {
     extendedProps = componentExtension.applyComponentExtensions('Textarea', {
+      as,
       id,
       name,
       value,
       onChange: handleChange,
+      onFocus: handleFocus,
+      onBlur: handleBlur,
       label,
       placeholder,
-      variant,
-      size,
-      state,
+      variant: baseVariant,
+      size: baseSize,
+      state: baseState,
       helperText,
       errorText,
       disabled,
@@ -191,21 +330,26 @@ const Textarea = forwardRef(({
       maxLength,
       fullWidth,
       className,
+      style,
+      isFocused,
       ...props,
     }, extensions);
   } catch (error) {
     console.error('Textarea: Error applying extensions:', error);
     // Fallback to original props if extension application fails
     extendedProps = {
+      as,
       id,
       name,
       value,
       onChange: handleChange,
+      onFocus: handleFocus,
+      onBlur: handleBlur,
       label,
       placeholder,
-      variant,
-      size,
-      state,
+      variant: baseVariant,
+      size: baseSize,
+      state: baseState,
       helperText,
       errorText,
       disabled,
@@ -218,16 +362,21 @@ const Textarea = forwardRef(({
       maxLength,
       fullWidth,
       className,
+      style,
+      isFocused,
       ...props,
     };
   }
   
   // Extract props after extensions
   const {
+    as: extendedAs,
     id: extendedId,
     name: extendedName,
     value: extendedValue,
     onChange: extendedOnChange,
+    onFocus: extendedOnFocus,
+    onBlur: extendedOnBlur,
     label: extendedLabel,
     placeholder: extendedPlaceholder,
     variant: extendedVariant,
@@ -245,20 +394,39 @@ const Textarea = forwardRef(({
     maxLength: extendedMaxLength,
     fullWidth: extendedFullWidth,
     className: extendedClassName,
+    style: extendedStyle,
+    isFocused: extendedIsFocused,
     ...restProps
   } = extendedProps;
   
+  // Generate a unique ID if not provided
+  const uniqueId = extendedId || `textarea-${Math.random().toString(36).substring(2, 9)}`;
+  
   // Combine class names
   const textareaWrapperClasses = [
-    'ds-textarea-wrapper',
-    `ds-textarea-${extendedVariant}`,
-    `ds-textarea-${extendedSize}`,
-    `ds-textarea-${extendedState}`,
-    extendedDisabled ? 'ds-textarea-disabled' : '',
-    extendedReadOnly ? 'ds-textarea-readonly' : '',
-    extendedFullWidth ? 'ds-textarea-full-width' : '',
+    TEXTAREA_CLASS,
+    `${TEXTAREA_CLASS}-wrapper`,
+    `${TEXTAREA_CLASS}-${extendedVariant}`,
+    `${TEXTAREA_CLASS}-${extendedSize}`,
+    `${TEXTAREA_CLASS}-${extendedState}`,
+    extendedDisabled ? `${TEXTAREA_CLASS}-${TEXTAREA_MODIFIERS.DISABLED}` : '',
+    extendedReadOnly ? `${TEXTAREA_CLASS}-${TEXTAREA_MODIFIERS.READONLY}` : '',
+    extendedRequired ? `${TEXTAREA_CLASS}-${TEXTAREA_MODIFIERS.REQUIRED}` : '',
+    extendedFullWidth ? `${TEXTAREA_CLASS}-${TEXTAREA_MODIFIERS.FULL_WIDTH}` : '',
+    extendedAutoResize ? `${TEXTAREA_CLASS}-${TEXTAREA_MODIFIERS.AUTO_RESIZE}` : '',
+    extendedIsFocused ? `${TEXTAREA_CLASS}-${TEXTAREA_MODIFIERS.FOCUSED}` : '',
     extendedClassName,
   ].filter(Boolean).join(' ');
+  
+  // Combine styles
+  const textareaWrapperStyle = {
+    ...extendedStyle,
+  };
+  
+  // If we have responsive styles, add them as a data attribute
+  if (responsiveStyles) {
+    textareaWrapperStyle['--responsive-styles'] = responsiveStyles;
+  }
   
   // Determine if we should show error text
   const showErrorText = extendedState === TEXTAREA_STATES.ERROR && extendedErrorText;
@@ -270,39 +438,40 @@ const Textarea = forwardRef(({
   const showCharCount = extendedMaxLength !== undefined;
   const charCount = extendedValue ? extendedValue.length : 0;
   const charCountClasses = [
-    'ds-textarea-char-count',
-    charCount > extendedMaxLength ? 'ds-textarea-char-count-exceeded' : '',
+    `${TEXTAREA_CLASS}-char-count`,
+    charCount > extendedMaxLength ? `${TEXTAREA_CLASS}-char-count-exceeded` : '',
   ].filter(Boolean).join(' ');
   
   return (
-    <div className={textareaWrapperClasses}>
+    <Box as={extendedAs} className={textareaWrapperClasses} style={textareaWrapperStyle} {...restProps}>
       {extendedLabel && (
         <label 
-          htmlFor={extendedId} 
-          className="ds-textarea-label"
+          htmlFor={uniqueId} 
+          className={`${TEXTAREA_CLASS}-label`}
         >
           {extendedLabel}
-          {extendedRequired && <span className="ds-textarea-required">*</span>}
+          {extendedRequired && <span className={`${TEXTAREA_CLASS}-required`}>*</span>}
         </label>
       )}
       
-      <div className="ds-textarea-container">
+      <div className={`${TEXTAREA_CLASS}-container`}>
         <textarea
           ref={combinedRef}
-          id={extendedId}
+          id={uniqueId}
           name={extendedName}
           value={extendedValue}
           onChange={extendedOnChange}
+          onFocus={extendedOnFocus}
+          onBlur={extendedOnBlur}
           placeholder={extendedPlaceholder}
           disabled={extendedDisabled}
           required={extendedRequired}
           readOnly={extendedReadOnly}
           rows={extendedRows}
           maxLength={extendedMaxLength}
-          className="ds-textarea-input"
+          className={`${TEXTAREA_CLASS}-input`}
           aria-invalid={extendedState === TEXTAREA_STATES.ERROR}
-          aria-describedby={displayHelperText ? `${extendedId}-helper-text` : undefined}
-          {...restProps}
+          aria-describedby={displayHelperText ? `${uniqueId}-helper-text` : undefined}
         />
         
         {showCharCount && (
@@ -314,21 +483,23 @@ const Textarea = forwardRef(({
       
       {displayHelperText && (
         <div 
-          id={`${extendedId}-helper-text`}
-          className={`ds-textarea-helper-text ${showErrorText ? 'ds-textarea-error-text' : ''}`}
+          id={`${uniqueId}-helper-text`}
+          className={`${TEXTAREA_CLASS}-helper-text ${showErrorText ? `${TEXTAREA_CLASS}-error-text` : ''}`}
         >
           {displayHelperText}
         </div>
       )}
-    </div>
+    </Box>
   );
 });
 
 Textarea.displayName = 'Textarea';
 
 Textarea.propTypes = {
+  /** Element to render the Textarea as */
+  ...polymorphicPropTypes,
   /** Textarea ID */
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   /** Textarea name */
   name: PropTypes.string.isRequired,
   /** Textarea value */
@@ -339,12 +510,21 @@ Textarea.propTypes = {
   label: PropTypes.node,
   /** Textarea placeholder */
   placeholder: PropTypes.string,
-  /** Textarea variant */
-  variant: PropTypes.oneOf(Object.values(TEXTAREA_VARIANTS)),
-  /** Textarea size */
-  size: PropTypes.oneOf(Object.values(TEXTAREA_SIZES)),
-  /** Textarea state */
-  state: PropTypes.oneOf(Object.values(TEXTAREA_STATES)),
+  /** Textarea variant or responsive object */
+  variant: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(TEXTAREA_VARIANTS)),
+    PropTypes.object
+  ]),
+  /** Textarea size or responsive object */
+  size: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(TEXTAREA_SIZES)),
+    PropTypes.object
+  ]),
+  /** Textarea state or responsive object */
+  state: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(TEXTAREA_STATES)),
+    PropTypes.object
+  ]),
   /** Helper text */
   helperText: PropTypes.string,
   /** Error text (shown when state is ERROR) */
@@ -369,6 +549,8 @@ Textarea.propTypes = {
   fullWidth: PropTypes.bool,
   /** Additional CSS class names */
   className: PropTypes.string,
+  /** Additional inline styles */
+  style: PropTypes.object,
   /** Extensions to apply to the textarea */
   extensions: PropTypes.arrayOf(PropTypes.string),
 };

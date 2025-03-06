@@ -1,50 +1,107 @@
 /**
  * Toast Component
  * 
- * A notification component for displaying temporary messages.
+ * A notification component for displaying temporary messages with support for variants, positions, and responsive props.
+ * 
+ * @example
+ * ```jsx
+ * // Basic usage
+ * <Toast visible={true} onClose={handleClose}>
+ *   This is a toast message
+ * </Toast>
+ * 
+ * // With variant
+ * <Toast variant="success" visible={true} onClose={handleClose}>
+ *   Operation completed successfully!
+ * </Toast>
+ * 
+ * // With position
+ * <Toast position="top-center" visible={true} onClose={handleClose}>
+ *   This toast appears at the top center
+ * </Toast>
+ * 
+ * // With icon
+ * <Toast 
+ *   icon={<CheckCircleIcon />} 
+ *   visible={true} 
+ *   onClose={handleClose}
+ * >
+ *   Operation completed successfully!
+ * </Toast>
+ * 
+ * // With auto-dismiss
+ * <Toast 
+ *   duration={5000} 
+ *   visible={true} 
+ *   onClose={handleClose}
+ * >
+ *   This toast will auto-dismiss after 5 seconds
+ * </Toast>
+ * 
+ * // Without close button
+ * <Toast 
+ *   showCloseButton={false} 
+ *   visible={true} 
+ *   onClose={handleClose}
+ * >
+ *   This toast doesn't have a close button
+ * </Toast>
+ * 
+ * // Responsive props
+ * <Toast 
+ *   position={{ 
+ *     base: "bottom-center", 
+ *     md: "bottom-right", 
+ *     lg: "top-right" 
+ *   }} 
+ *   visible={true} 
+ *   onClose={handleClose}
+ * >
+ *   This toast changes position at different breakpoints
+ * </Toast>
+ * 
+ * // Polymorphic rendering
+ * <Toast as="section" visible={true} onClose={handleClose}>
+ *   This toast is rendered as a section element
+ * </Toast>
+ * ```
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { componentExtension } from '../../utilities';
+import { isResponsiveObject } from '../../utilities/responsive-props';
+import Box from '../../atoms/Box';
+import { 
+  TOAST_CLASS, 
+  TOAST_VARIANTS, 
+  TOAST_POSITIONS, 
+  TOAST_MODIFIERS,
+  TOAST_BREAKPOINTS
+} from './index';
 import './Toast.css';
-
-// Toast variants
-export const TOAST_VARIANTS = {
-  DEFAULT: 'default',
-  SUCCESS: 'success',
-  ERROR: 'error',
-  WARNING: 'warning',
-  INFO: 'info',
-};
-
-// Toast positions
-export const TOAST_POSITIONS = {
-  TOP_LEFT: 'top-left',
-  TOP_CENTER: 'top-center',
-  TOP_RIGHT: 'top-right',
-  BOTTOM_LEFT: 'bottom-left',
-  BOTTOM_CENTER: 'bottom-center',
-  BOTTOM_RIGHT: 'bottom-right',
-};
 
 /**
  * Toast Component
  * 
  * @param {Object} props - Component props
+ * @param {React.ElementType} [props.as='div'] - Element to render the Toast as
  * @param {React.ReactNode} props.children - Toast content
- * @param {string} [props.variant=TOAST_VARIANTS.DEFAULT] - Toast variant
- * @param {string} [props.position=TOAST_POSITIONS.BOTTOM_RIGHT] - Toast position
+ * @param {string|Object} [props.variant=TOAST_VARIANTS.DEFAULT] - Toast variant or responsive object
+ * @param {string|Object} [props.position=TOAST_POSITIONS.BOTTOM_RIGHT] - Toast position or responsive object
  * @param {boolean} [props.visible=true] - Whether the toast is visible
  * @param {number} [props.duration=3000] - Duration in milliseconds before auto-dismissing (0 for no auto-dismiss)
  * @param {Function} [props.onClose] - Callback when toast is closed
  * @param {React.ReactNode} [props.icon] - Icon to display in the toast
  * @param {boolean} [props.showCloseButton=true] - Whether to show the close button
  * @param {string} [props.className=''] - Additional CSS class names
+ * @param {Object} [props.style={}] - Additional inline styles
  * @param {Array<string>} [props.extensions=[]] - Extensions to apply to the toast
  * @returns {JSX.Element|null} Toast component or null if not visible
  */
 const Toast = ({
+  as = 'div',
   children,
   variant = TOAST_VARIANTS.DEFAULT,
   position = TOAST_POSITIONS.BOTTOM_RIGHT,
@@ -54,20 +111,51 @@ const Toast = ({
   icon,
   showCloseButton = true,
   className = '',
+  style = {},
   extensions = [],
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(visible);
+  
+  // Process responsive props
+  const responsiveProps = {
+    variant,
+    position,
+  };
+  
+  // Generate responsive styles if needed
+  let responsiveStyles = '';
+  const hasResponsiveProps = Object.values(responsiveProps).some(isResponsiveObject);
+  
+  if (hasResponsiveProps) {
+    // We'll handle these with classes, but we need to track if they're responsive
+    const responsiveClasses = {};
+    
+    if (isResponsiveObject(variant)) {
+      responsiveClasses.variant = variant;
+    }
+    
+    if (isResponsiveObject(position)) {
+      responsiveClasses.position = position;
+    }
+    
+    // Create a CSS string for responsive styles
+    responsiveStyles = JSON.stringify(responsiveClasses);
+  }
+  
+  // Determine base values for non-responsive props
+  const baseVariant = !isResponsiveObject(variant) ? variant : TOAST_VARIANTS.DEFAULT;
+  const basePosition = !isResponsiveObject(position) ? position : TOAST_POSITIONS.BOTTOM_RIGHT;
 
   // Error handling for invalid variants
-  if (variant && !Object.values(TOAST_VARIANTS).includes(variant)) {
-    console.warn(`Toast: Invalid variant "${variant}". Falling back to DEFAULT.`);
+  if (baseVariant && !Object.values(TOAST_VARIANTS).includes(baseVariant)) {
+    console.warn(`Toast: Invalid variant "${baseVariant}". Falling back to DEFAULT.`);
     variant = TOAST_VARIANTS.DEFAULT;
   }
 
   // Error handling for invalid positions
-  if (position && !Object.values(TOAST_POSITIONS).includes(position)) {
-    console.warn(`Toast: Invalid position "${position}". Falling back to BOTTOM_RIGHT.`);
+  if (basePosition && !Object.values(TOAST_POSITIONS).includes(basePosition)) {
+    console.warn(`Toast: Invalid position "${basePosition}". Falling back to BOTTOM_RIGHT.`);
     position = TOAST_POSITIONS.BOTTOM_RIGHT;
   }
 
@@ -105,36 +193,41 @@ const Toast = ({
   let extendedProps;
   try {
     extendedProps = componentExtension.applyComponentExtensions('Toast', {
+      as,
       children,
-      variant,
-      position,
+      variant: baseVariant,
+      position: basePosition,
       visible: isVisible,
       duration,
       onClose: handleClose,
       icon,
       showCloseButton,
       className,
+      style,
       ...props,
     }, extensions);
   } catch (error) {
     console.error('Toast: Error applying extensions:', error);
     // Fallback to original props if extension application fails
     extendedProps = {
+      as,
       children,
-      variant,
-      position,
+      variant: baseVariant,
+      position: basePosition,
       visible: isVisible,
       duration,
       onClose: handleClose,
       icon,
       showCloseButton,
       className,
+      style,
       ...props,
     };
   }
   
   // Extract props after extensions
   const {
+    as: extendedAs,
     children: extendedChildren,
     variant: extendedVariant,
     position: extendedPosition,
@@ -144,6 +237,7 @@ const Toast = ({
     icon: extendedIcon,
     showCloseButton: extendedShowCloseButton,
     className: extendedClassName,
+    style: extendedStyle,
     ...restProps
   } = extendedProps;
   
@@ -154,32 +248,47 @@ const Toast = ({
   
   // Combine class names
   const toastClasses = [
-    'ds-toast',
-    `ds-toast-${extendedVariant}`,
-    `ds-toast-${extendedPosition}`,
+    TOAST_CLASS,
+    `${TOAST_CLASS}-${extendedVariant}`,
+    `${TOAST_CLASS}-${extendedPosition}`,
+    extendedIcon ? `${TOAST_CLASS}-${TOAST_MODIFIERS.WITH_ICON}` : '',
+    extendedShowCloseButton ? `${TOAST_CLASS}-${TOAST_MODIFIERS.WITH_CLOSE}` : '',
     extendedClassName,
   ].filter(Boolean).join(' ');
   
+  // Combine styles
+  const toastStyles = {
+    ...extendedStyle,
+  };
+  
+  // If we have responsive styles, add them as a data attribute
+  if (responsiveStyles) {
+    toastStyles['--responsive-styles'] = responsiveStyles;
+  }
+  
+  // Use Box for consistent rendering and polymorphic support
   return (
-    <div
+    <Box
+      as={extendedAs}
       className={toastClasses}
+      style={toastStyles}
       role="alert"
       aria-live="polite"
       {...restProps}
     >
       {extendedIcon && (
-        <div className="ds-toast-icon">
+        <div className={`${TOAST_CLASS}-icon`}>
           {extendedIcon}
         </div>
       )}
       
-      <div className="ds-toast-content">
+      <div className={`${TOAST_CLASS}-content`}>
         {extendedChildren || 'Notification'}
       </div>
       
       {extendedShowCloseButton && (
         <button
-          className="ds-toast-close"
+          className={`${TOAST_CLASS}-close`}
           onClick={extendedOnClose}
           aria-label="Close notification"
           type="button"
@@ -187,17 +296,25 @@ const Toast = ({
           <span aria-hidden="true">×</span>
         </button>
       )}
-    </div>
+    </Box>
   );
 };
 
 Toast.propTypes = {
+  /** Element to render the Toast as */
+  ...polymorphicPropTypes,
   /** Toast content */
   children: PropTypes.node.isRequired,
-  /** Toast variant */
-  variant: PropTypes.oneOf(Object.values(TOAST_VARIANTS)),
-  /** Toast position */
-  position: PropTypes.oneOf(Object.values(TOAST_POSITIONS)),
+  /** Toast variant or responsive object */
+  variant: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(TOAST_VARIANTS)),
+    PropTypes.object,
+  ]),
+  /** Toast position or responsive object */
+  position: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(TOAST_POSITIONS)),
+    PropTypes.object,
+  ]),
   /** Whether the toast is visible */
   visible: PropTypes.bool,
   /** Duration in milliseconds before auto-dismissing (0 for no auto-dismiss) */
@@ -210,8 +327,20 @@ Toast.propTypes = {
   showCloseButton: PropTypes.bool,
   /** Additional CSS class names */
   className: PropTypes.string,
+  /** Additional inline styles */
+  style: PropTypes.object,
   /** Extensions to apply to the toast */
   extensions: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default Toast;
+Toast.defaultProps = {
+  as: 'div',
+  variant: TOAST_VARIANTS.DEFAULT,
+  position: TOAST_POSITIONS.BOTTOM_RIGHT,
+  visible: true,
+  duration: 3000,
+  showCloseButton: true,
+  className: '',
+  style: {},
+  extensions: [],
+};

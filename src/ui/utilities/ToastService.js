@@ -4,7 +4,7 @@
  * A utility for managing toast notifications.
  */
 
-import { TOAST_VARIANTS, TOAST_POSITIONS } from '../components/Toast';
+import { TOAST_VARIANTS, TOAST_POSITIONS } from '../molecules/Toast';
 
 // Unique ID generator for toasts
 const generateId = () => `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;

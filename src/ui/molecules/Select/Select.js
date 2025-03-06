@@ -1,47 +1,113 @@
 /**
  * Select Component
  * 
- * A customizable select/dropdown component with support for variants and extensions.
+ * A customizable select/dropdown component with support for variants, sizes, states, and responsive props.
+ * 
+ * @example
+ * ```jsx
+ * // Basic usage
+ * <Select 
+ *   options={[
+ *     { value: 'option1', label: 'Option 1' },
+ *     { value: 'option2', label: 'Option 2' },
+ *     { value: 'option3', label: 'Option 3' }
+ *   ]} 
+ *   label="Select an option" 
+ * />
+ * 
+ * // Controlled select
+ * <Select 
+ *   options={options} 
+ *   value={selectedValue} 
+ *   onChange={handleChange} 
+ *   label="Controlled select" 
+ * />
+ * 
+ * // With helper text
+ * <Select 
+ *   options={options} 
+ *   label="Select with helper text" 
+ *   helperText="Choose the best option for you"
+ * />
+ * 
+ * // Different variants
+ * <Select options={options} label="Default variant" variant="default" />
+ * <Select options={options} label="Filled variant" variant="filled" />
+ * <Select options={options} label="Outlined variant" variant="outlined" />
+ * 
+ * // Different sizes
+ * <Select options={options} label="Small select" size="small" />
+ * <Select options={options} label="Medium select" size="medium" />
+ * <Select options={options} label="Large select" size="large" />
+ * 
+ * // Different states
+ * <Select options={options} label="Default state" state="default" />
+ * <Select options={options} label="Success state" state="success" />
+ * <Select options={options} label="Error state" state="error" errorText="This field is required" />
+ * <Select options={options} label="Warning state" state="warning" />
+ * 
+ * // Disabled select
+ * <Select options={options} label="Disabled select" disabled />
+ * 
+ * // Required select
+ * <Select options={options} label="Required select" required />
+ * 
+ * // Full width select
+ * <Select options={options} label="Full width select" fullWidth />
+ * 
+ * // With icons
+ * <Select 
+ *   options={options} 
+ *   label="Select with icons" 
+ *   startIcon={<SearchIcon />} 
+ *   endIcon={<ArrowIcon />} 
+ * />
+ * 
+ * // Responsive props
+ * <Select 
+ *   options={options} 
+ *   label="Responsive select" 
+ *   size={{ base: "small", md: "medium", lg: "large" }}
+ * />
+ * 
+ * // Polymorphic rendering
+ * <Select 
+ *   as="section"
+ *   options={options} 
+ *   label="Polymorphic select" 
+ * />
+ * ```
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { componentExtension } from '../../utilities';
+import { isResponsiveObject } from '../../utilities/responsive-props';
+import { polymorphicPropTypes } from '../../utilities/polymorphic';
+import Box from '../../atoms/Box';
+import Text from '../../atoms/Text';
+import { 
+  SELECT_CLASS, 
+  SELECT_VARIANTS, 
+  SELECT_SIZES, 
+  SELECT_STATES, 
+  SELECT_MODIFIERS, 
+  SELECT_BREAKPOINTS 
+} from './index';
 import './Select.css';
-
-// Select variants
-export const SELECT_VARIANTS = {
-  DEFAULT: 'default',
-  FILLED: 'filled',
-  OUTLINED: 'outlined',
-};
-
-// Select sizes
-export const SELECT_SIZES = {
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
-};
-
-// Select states
-export const SELECT_STATES = {
-  DEFAULT: 'default',
-  SUCCESS: 'success',
-  ERROR: 'error',
-  WARNING: 'warning',
-};
 
 /**
  * Select Component
  * 
  * @param {Object} props - Component props
+ * @param {React.ElementType} [props.as='div'] - Element to render the Select as
  * @param {Array} props.options - Array of options to display in the select
  * @param {string|number} [props.value] - Selected value
  * @param {Function} [props.onChange] - Callback when selection changes
  * @param {string} [props.placeholder='Select an option'] - Placeholder text
- * @param {string} [props.variant=SELECT_VARIANTS.DEFAULT] - Select variant
- * @param {string} [props.size=SELECT_SIZES.MEDIUM] - Select size
- * @param {string} [props.state=SELECT_STATES.DEFAULT] - Select state
+ * @param {string|Object} [props.variant=SELECT_VARIANTS.DEFAULT] - Select variant or responsive object
+ * @param {string|Object} [props.size=SELECT_SIZES.MEDIUM] - Select size or responsive object
+ * @param {string|Object} [props.state=SELECT_STATES.DEFAULT] - Select state or responsive object
  * @param {string} [props.label] - Select label
  * @param {string} [props.helperText] - Helper text
  * @param {string} [props.errorText] - Error text (shown when state is ERROR)
@@ -51,10 +117,12 @@ export const SELECT_STATES = {
  * @param {React.ReactNode} [props.startIcon] - Icon to display at the start of the select
  * @param {React.ReactNode} [props.endIcon] - Icon to display at the end of the select
  * @param {string} [props.className=''] - Additional CSS class names
+ * @param {Object} [props.style={}] - Additional inline styles
  * @param {Array<string>} [props.extensions=[]] - Extensions to apply to the select
  * @returns {JSX.Element} Select component
  */
-const Select = ({
+const Select = forwardRef(({
+  as = 'div',
   options = [],
   value,
   onChange,
@@ -71,30 +139,87 @@ const Select = ({
   startIcon,
   endIcon,
   className = '',
+  style = {},
   extensions = [],
   ...props
-}) => {
+}, ref) => {
+  // State for dropdown open/close
   const [isOpen, setIsOpen] = useState(false);
+  
+  // State for selected value
   const [selectedValue, setSelectedValue] = useState(value);
+  
+  // State for highlighted option index
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  
+  // State for focus tracking
+  const [isFocused, setIsFocused] = useState(false);
+  
+  // Refs for DOM elements
   const selectRef = useRef(null);
   const dropdownRef = useRef(null);
+  
+  // Forward the ref to the select container
+  const combinedRef = (node) => {
+    selectRef.current = node;
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+  };
+  
+  // Process responsive props
+  const responsiveProps = {
+    variant,
+    size,
+    state,
+  };
+  
+  // Generate responsive styles if needed
+  let responsiveStyles = '';
+  const hasResponsiveProps = Object.values(responsiveProps).some(isResponsiveObject);
+  
+  if (hasResponsiveProps) {
+    // We'll handle these with classes, but we need to track if they're responsive
+    const responsiveClasses = {};
+    
+    if (isResponsiveObject(variant)) {
+      responsiveClasses.variant = variant;
+    }
+    
+    if (isResponsiveObject(size)) {
+      responsiveClasses.size = size;
+    }
+    
+    if (isResponsiveObject(state)) {
+      responsiveClasses.state = state;
+    }
+    
+    // Create a CSS string for responsive styles
+    responsiveStyles = JSON.stringify(responsiveClasses);
+  }
+  
+  // Determine base values for non-responsive props
+  const baseVariant = !isResponsiveObject(variant) ? variant : SELECT_VARIANTS.DEFAULT;
+  const baseSize = !isResponsiveObject(size) ? size : SELECT_SIZES.MEDIUM;
+  const baseState = !isResponsiveObject(state) ? state : SELECT_STATES.DEFAULT;
 
   // Error handling for invalid variants
-  if (variant && !Object.values(SELECT_VARIANTS).includes(variant)) {
-    console.warn(`Select: Invalid variant "${variant}". Falling back to DEFAULT.`);
+  if (baseVariant && !Object.values(SELECT_VARIANTS).includes(baseVariant)) {
+    console.warn(`Select: Invalid variant "${baseVariant}". Falling back to DEFAULT.`);
     variant = SELECT_VARIANTS.DEFAULT;
   }
 
   // Error handling for invalid sizes
-  if (size && !Object.values(SELECT_SIZES).includes(size)) {
-    console.warn(`Select: Invalid size "${size}". Falling back to MEDIUM.`);
+  if (baseSize && !Object.values(SELECT_SIZES).includes(baseSize)) {
+    console.warn(`Select: Invalid size "${baseSize}". Falling back to MEDIUM.`);
     size = SELECT_SIZES.MEDIUM;
   }
 
   // Error handling for invalid states
-  if (state && !Object.values(SELECT_STATES).includes(state)) {
-    console.warn(`Select: Invalid state "${state}". Falling back to DEFAULT.`);
+  if (baseState && !Object.values(SELECT_STATES).includes(baseState)) {
+    console.warn(`Select: Invalid state "${baseState}". Falling back to DEFAULT.`);
     state = SELECT_STATES.DEFAULT;
   }
 
@@ -130,6 +255,20 @@ const Select = ({
         setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : -1);
       }
     }
+  };
+  
+  // Handle focus event
+  const handleFocus = (event) => {
+    setIsFocused(true);
+  };
+  
+  // Handle blur event
+  const handleBlur = (event) => {
+    // Don't blur if clicking on an option
+    if (dropdownRef.current && dropdownRef.current.contains(event.relatedTarget)) {
+      return;
+    }
+    setIsFocused(false);
   };
 
   // Close dropdown when clicking outside
@@ -215,13 +354,14 @@ const Select = ({
   let extendedProps;
   try {
     extendedProps = componentExtension.applyComponentExtensions('Select', {
+      as,
       options: validOptions,
       value: selectedValue,
       onChange,
       placeholder,
-      variant,
-      size,
-      state,
+      variant: baseVariant,
+      size: baseSize,
+      state: baseState,
       label,
       helperText,
       errorText,
@@ -231,21 +371,26 @@ const Select = ({
       startIcon,
       endIcon,
       className,
+      style,
       isOpen,
+      isFocused,
       onToggle: toggleDropdown,
+      onFocus: handleFocus,
+      onBlur: handleBlur,
       ...props,
     }, extensions);
   } catch (error) {
     console.error('Select: Error applying extensions:', error);
     // Fallback to original props if extension application fails
     extendedProps = {
+      as,
       options: validOptions,
       value: selectedValue,
       onChange,
       placeholder,
-      variant,
-      size,
-      state,
+      variant: baseVariant,
+      size: baseSize,
+      state: baseState,
       label,
       helperText,
       errorText,
@@ -255,14 +400,19 @@ const Select = ({
       startIcon,
       endIcon,
       className,
+      style,
       isOpen,
+      isFocused,
       onToggle: toggleDropdown,
+      onFocus: handleFocus,
+      onBlur: handleBlur,
       ...props,
     };
   }
   
   // Extract props after extensions
   const {
+    as: extendedAs,
     options: extendedOptions,
     value: extendedValue,
     onChange: extendedOnChange,
@@ -279,21 +429,41 @@ const Select = ({
     startIcon: extendedStartIcon,
     endIcon: extendedEndIcon,
     className: extendedClassName,
+    style: extendedStyle,
     isOpen: extendedIsOpen,
+    isFocused: extendedIsFocused,
     onToggle: extendedOnToggle,
+    onFocus: extendedOnFocus,
+    onBlur: extendedOnBlur,
     ...restProps
   } = extendedProps;
   
+  // Generate a unique ID for accessibility
+  const uniqueId = props.id || `select-${Math.random().toString(36).substring(2, 9)}`;
+  
   // Combine class names
   const selectWrapperClasses = [
-    'ds-select-wrapper',
-    `ds-select-${extendedVariant}`,
-    `ds-select-${extendedSize}`,
-    `ds-select-${extendedState}`,
-    extendedDisabled ? 'ds-select-disabled' : '',
-    extendedFullWidth ? 'ds-select-full-width' : '',
+    SELECT_CLASS,
+    `${SELECT_CLASS}-wrapper`,
+    `${SELECT_CLASS}-${extendedVariant}`,
+    `${SELECT_CLASS}-${extendedSize}`,
+    `${SELECT_CLASS}-${extendedState}`,
+    extendedDisabled ? `${SELECT_CLASS}-${SELECT_MODIFIERS.DISABLED}` : '',
+    extendedRequired ? `${SELECT_CLASS}-${SELECT_MODIFIERS.REQUIRED}` : '',
+    extendedFullWidth ? `${SELECT_CLASS}-${SELECT_MODIFIERS.FULL_WIDTH}` : '',
+    extendedIsFocused ? `${SELECT_CLASS}-${SELECT_MODIFIERS.FOCUSED}` : '',
     extendedClassName,
   ].filter(Boolean).join(' ');
+  
+  // Combine styles
+  const selectWrapperStyle = {
+    ...extendedStyle,
+  };
+  
+  // If we have responsive styles, add them as a data attribute
+  if (responsiveStyles) {
+    selectWrapperStyle['--responsive-styles'] = responsiveStyles;
+  }
   
   // Determine if we should show error text
   const showErrorText = extendedState === SELECT_STATES.ERROR && extendedErrorText;
@@ -315,10 +485,12 @@ const Select = ({
     </svg>
   );
   
+  // Use Box for consistent rendering and polymorphic support
   return (
-    <div 
+    <Box
+      as={extendedAs}
       className={selectWrapperClasses} 
-      ref={selectRef}
+      ref={combinedRef}
       onKeyDown={handleKeyDown}
       {...restProps}
     >
@@ -386,11 +558,13 @@ const Select = ({
           {displayHelperText}
         </div>
       )}
-    </div>
+    </Box>
   );
-};
+});
 
 Select.propTypes = {
+  /** Element to render the Select as */
+  ...polymorphicPropTypes,
   /** Array of options to display in the select */
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -404,12 +578,21 @@ Select.propTypes = {
   onChange: PropTypes.func,
   /** Placeholder text */
   placeholder: PropTypes.string,
-  /** Select variant */
-  variant: PropTypes.oneOf(Object.values(SELECT_VARIANTS)),
-  /** Select size */
-  size: PropTypes.oneOf(Object.values(SELECT_SIZES)),
-  /** Select state */
-  state: PropTypes.oneOf(Object.values(SELECT_STATES)),
+  /** Select variant or responsive object */
+  variant: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(SELECT_VARIANTS)),
+    PropTypes.object
+  ]),
+  /** Select size or responsive object */
+  size: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(SELECT_SIZES)),
+    PropTypes.object
+  ]),
+  /** Select state or responsive object */
+  state: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(SELECT_STATES)),
+    PropTypes.object
+  ]),
   /** Select label */
   label: PropTypes.string,
   /** Helper text */
@@ -428,8 +611,12 @@ Select.propTypes = {
   endIcon: PropTypes.node,
   /** Additional CSS class names */
   className: PropTypes.string,
+  /** Additional inline styles */
+  style: PropTypes.object,
   /** Extensions to apply to the select */
   extensions: PropTypes.arrayOf(PropTypes.string),
+  /** ID for the select */
+  id: PropTypes.string,
 };
 
 export default Select;

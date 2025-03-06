@@ -1,9 +1,12 @@
 /**
  * Card Component Styles
+ * 
+ * This file contains styles for the Card component.
+ * The Card component is a customizable container with support for variants, responsive props, and polymorphic rendering.
  */
 
 /* Base Card Styles */
-.ds-card {
+.ui-card {
   display: flex;
   flex-direction: column;
   background-color: var(--color-background-secondary);
@@ -11,27 +14,29 @@
   overflow: hidden;
   transition: all var(--transition-default);
   position: relative;
+  box-sizing: border-box;
 }
 
-.ds-card-content {
+/* Card Elements */
+.ui-card__content {
   padding: var(--spacing-6);
   flex: 1;
 }
 
-.ds-card-header {
+.ui-card__header {
   padding: var(--spacing-4) var(--spacing-6);
   border-bottom: 1px solid var(--color-border-medium);
   font-weight: var(--font-weight-semibold);
 }
 
-.ds-card-footer {
+.ui-card__footer {
   padding: var(--spacing-4) var(--spacing-6);
   border-top: 1px solid var(--color-border-medium);
   background-color: var(--color-background-tertiary);
 }
 
 /* Empty Card State */
-.ds-card-empty {
+.ui-card__empty {
   color: var(--color-text-tertiary);
   font-style: italic;
   text-align: center;
@@ -42,69 +47,98 @@
 }
 
 /* Card Variants */
-.ds-card-default {
+.ui-card--default {
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border-medium);
 }
 
-.ds-card-elevated {
+.ui-card--elevated {
   box-shadow: var(--shadow-md);
   border: none;
 }
 
-.ds-card-outlined {
+.ui-card--outlined {
   box-shadow: none;
   border: 1px solid var(--color-border-medium);
 }
 
-.ds-card-interactive {
+.ui-card--interactive {
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border-medium);
   cursor: pointer;
   transition: all var(--transition-default);
 }
 
-.ds-card-interactive:hover {
+.ui-card--interactive:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 
-.ds-card-interactive:active {
+.ui-card--interactive:active {
   box-shadow: var(--shadow-sm);
   transform: translateY(0);
 }
 
 /* Full Width Card */
-.ds-card-full-width {
+.ui-card--full-width {
   width: 100%;
 }
 
+/* Support for custom responsive styles */
+.ui-card[style*="--responsive-styles"] {
+  /* This selector targets Card components with responsive styles */
+  /* The actual styles are applied via inline style in the component */
+  display: flex; /* Ensure the display property is explicitly set */
+}
+
 /* Dark Theme Adjustments */
-.theme-dark .ds-card {
+.theme-dark .ui-card {
   background-color: var(--color-background-secondary);
 }
 
-.theme-dark .ds-card-footer {
+.theme-dark .ui-card__footer {
   background-color: var(--color-background-tertiary);
 }
 
-.theme-dark .ds-card-empty {
+.theme-dark .ui-card__empty {
   border-color: var(--color-border-medium);
   color: var(--color-text-tertiary);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 600px) {
-  .ds-card-content {
+/* Responsive Adjustments - using the same breakpoints as responsive-props.js */
+@media (max-width: 576px) { /* xs */
+  .ui-card__content {
     padding: var(--spacing-4);
   }
   
-  .ds-card-header,
-  .ds-card-footer {
+  .ui-card__header,
+  .ui-card__footer {
     padding: var(--spacing-3) var(--spacing-4);
   }
   
-  .ds-card-empty {
+  .ui-card__empty {
     padding: var(--spacing-3);
+  }
+  
+  .ui-card--responsive {
+    border-radius: var(--border-radius-sm);
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) { /* sm */
+  .ui-card--responsive-sm {
+    border-radius: var(--border-radius-md);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { /* md */
+  .ui-card--responsive-md {
+    border-radius: var(--border-radius-md);
+  }
+}
+
+@media (min-width: 992px) { /* lg */
+  .ui-card--responsive-lg {
+    border-radius: var(--border-radius-lg);
   }
 }
