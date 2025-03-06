@@ -1,14 +1,212 @@
 /**
  * Flex Component Styles
+ * 
+ * This file contains styles for the Flex component.
+ * The Flex component extends the Box component with flexbox-specific properties.
  */
 
+/* Base Flex styles */
 .ui-flex {
-  display: flex; /* Add a declaration to avoid empty ruleset */
+  display: flex;
+  box-sizing: border-box;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .ui-flex {
-    flex-wrap: wrap; /* Add a declaration to avoid empty ruleset */
+/* Flex direction modifiers - these match the FLEX_MODIFIERS constants in index.js */
+.ui-flex--row {
+  flex-direction: row;
+}
+
+.ui-flex--column {
+  flex-direction: column;
+}
+
+.ui-flex--row-reverse {
+  flex-direction: row-reverse;
+}
+
+.ui-flex--column-reverse {
+  flex-direction: column-reverse;
+}
+
+/* Flex wrap modifiers */
+.ui-flex--wrap {
+  flex-wrap: wrap;
+}
+
+.ui-flex--nowrap {
+  flex-wrap: nowrap;
+}
+
+.ui-flex--wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+/* Flex alignment modifiers */
+.ui-flex--align-start {
+  align-items: flex-start;
+}
+
+.ui-flex--align-center {
+  align-items: center;
+}
+
+.ui-flex--align-end {
+  align-items: flex-end;
+}
+
+.ui-flex--align-stretch {
+  align-items: stretch;
+}
+
+.ui-flex--align-baseline {
+  align-items: baseline;
+}
+
+/* Flex justification modifiers */
+.ui-flex--justify-start {
+  justify-content: flex-start;
+}
+
+.ui-flex--justify-center {
+  justify-content: center;
+}
+
+.ui-flex--justify-end {
+  justify-content: flex-end;
+}
+
+.ui-flex--justify-between {
+  justify-content: space-between;
+}
+
+.ui-flex--justify-around {
+  justify-content: space-around;
+}
+
+.ui-flex--justify-evenly {
+  justify-content: space-evenly;
+}
+
+/* Common layout patterns */
+.ui-flex--center-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ui-flex--space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ui-flex--equal-columns > * {
+  flex: 1 1 0%;
+}
+
+/* Responsive layout adjustments - using the same breakpoints as responsive-props.js */
+@media (max-width: 576px) { /* xs */
+  .ui-flex--responsive {
+    flex-direction: column;
   }
+  
+  .ui-flex--responsive-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 576px) { /* sm */
+  .ui-flex--responsive-sm {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 768px) { /* md */
+  .ui-flex--responsive-md {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 992px) { /* lg */
+  .ui-flex--responsive-lg {
+    flex-direction: row;
+  }
+}
+
+/* Support for custom responsive styles */
+.ui-flex[style*="--responsive-styles"] {
+  /* This selector targets Flex components with responsive styles */
+  /* The actual styles are applied via inline style in the component */
+  display: flex; /* Ensure the element maintains flex display */
+}
+
+/* Flex item modifiers */
+.ui-flex--grow {
+  flex-grow: 1;
+}
+
+.ui-flex--no-grow {
+  flex-grow: 0;
+}
+
+.ui-flex--shrink {
+  flex-shrink: 1;
+}
+
+.ui-flex--no-shrink {
+  flex-shrink: 0;
+}
+
+.ui-flex--basis-auto {
+  flex-basis: auto;
+}
+
+.ui-flex--basis-0 {
+  flex-basis: 0;
+}
+
+.ui-flex--basis-100 {
+  flex-basis: 100%;
+}
+
+/* Common flex shorthand modifiers */
+.ui-flex--1 {
+  flex: 1;
+}
+
+.ui-flex--auto {
+  flex: 0 0 auto;
+}
+
+.ui-flex--none {
+  flex: none;
+}
+
+/* Gap modifiers */
+.ui-flex--gap-xs {
+  gap: var(--spacing-xs);
+}
+
+.ui-flex--gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.ui-flex--gap-md {
+  gap: var(--spacing-md);
+}
+
+.ui-flex--gap-lg {
+  gap: var(--spacing-lg);
+}
+
+.ui-flex--gap-xl {
+  gap: var(--spacing-xl);
+}
+
+/* Common layout patterns */
+.ui-flex--stack > * + * {
+  margin-top: var(--spacing-md);
+}
+
+.ui-flex--inline > * + * {
+  margin-left: var(--spacing-md);
 }

@@ -1,22 +1,27 @@
 /**
  * Input Component Styles
+ * 
+ * This file contains styles for the Input component.
+ * The Input component is a fundamental building block for user input.
  */
 
 /* Base Input Styles */
-.ds-input-wrapper {
+.ui-input-wrapper {
   display: flex;
   flex-direction: column;
   margin-bottom: var(--spacing-4);
   width: fit-content;
+  box-sizing: border-box;
 }
 
-.ds-input-container {
+.ui-input__container {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
-.ds-input {
+.ui-input__field {
   font-family: var(--font-family-primary);
   background-color: var(--color-background-secondary);
   color: var(--color-text-primary);
@@ -25,18 +30,19 @@
   transition: all var(--transition-default);
   width: 100%;
   outline: none;
+  box-sizing: border-box;
 }
 
-.ds-input:focus {
+.ui-input__field:focus {
   border-color: var(--color-brand-500);
   box-shadow: 0 0 0 2px var(--color-brand-100);
 }
 
-.ds-input::placeholder {
+.ui-input__field::placeholder {
   color: var(--color-text-tertiary);
 }
 
-.ds-input-label {
+.ui-input__label {
   font-family: var(--font-family-primary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -44,23 +50,23 @@
   margin-bottom: var(--spacing-1);
 }
 
-.ds-input-required {
+.ui-input__required {
   color: var(--color-error-500);
   margin-left: var(--spacing-1);
 }
 
-.ds-input-helper-text {
+.ui-input__helper-text {
   font-family: var(--font-family-primary);
   font-size: var(--font-size-xs);
   color: var(--color-text-tertiary);
   margin-top: var(--spacing-1);
 }
 
-.ds-input-error-text {
+.ui-input__helper-text--error {
   color: var(--color-error-500);
 }
 
-.ds-input-icon {
+.ui-input__icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,168 +75,240 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+  z-index: 1;
 }
 
-.ds-input-start-icon {
+.ui-input__icon--start {
   left: var(--spacing-3);
 }
 
-.ds-input-end-icon {
+.ui-input__icon--end {
   right: var(--spacing-3);
 }
 
-/* Input Sizes */
-.ds-input-small .ds-input {
+/* Input Sizes - these match the INPUT_SIZES constants in index.js */
+.ui-input--small .ui-input__field {
   padding: var(--spacing-1) var(--spacing-2);
   font-size: var(--font-size-xs);
   height: 2rem;
 }
 
-.ds-input-small .ds-input-icon {
+.ui-input--small .ui-input__icon {
   font-size: var(--font-size-md);
 }
 
-.ds-input-small .ds-input-start-icon ~ .ds-input {
+.ui-input--small .ui-input__container:has(.ui-input__icon--start) .ui-input__field {
   padding-left: var(--spacing-6);
 }
 
-.ds-input-small .ds-input-end-icon ~ .ds-input {
+.ui-input--small .ui-input__container:has(.ui-input__icon--end) .ui-input__field {
   padding-right: var(--spacing-6);
 }
 
-.ds-input-medium .ds-input {
+.ui-input--medium .ui-input__field {
   padding: var(--spacing-2) var(--spacing-3);
   font-size: var(--font-size-sm);
   height: 2.5rem;
 }
 
-.ds-input-medium .ds-input-icon {
+.ui-input--medium .ui-input__icon {
   font-size: var(--font-size-lg);
 }
 
-.ds-input-medium .ds-input-start-icon ~ .ds-input {
+.ui-input--medium .ui-input__container:has(.ui-input__icon--start) .ui-input__field {
   padding-left: var(--spacing-8);
 }
 
-.ds-input-medium .ds-input-end-icon ~ .ds-input {
+.ui-input--medium .ui-input__container:has(.ui-input__icon--end) .ui-input__field {
   padding-right: var(--spacing-8);
 }
 
-.ds-input-large .ds-input {
+.ui-input--large .ui-input__field {
   padding: var(--spacing-3) var(--spacing-4);
   font-size: var(--font-size-md);
   height: 3rem;
 }
 
-.ds-input-large .ds-input-icon {
+.ui-input--large .ui-input__icon {
   font-size: var(--font-size-xl);
 }
 
-.ds-input-large .ds-input-start-icon ~ .ds-input {
+.ui-input--large .ui-input__container:has(.ui-input__icon--start) .ui-input__field {
   padding-left: var(--spacing-10);
 }
 
-.ds-input-large .ds-input-end-icon ~ .ds-input {
+.ui-input--large .ui-input__container:has(.ui-input__icon--end) .ui-input__field {
   padding-right: var(--spacing-10);
 }
 
-/* Input Variants */
-.ds-input-default .ds-input {
+/* Input Variants - these match the INPUT_VARIANTS constants in index.js */
+.ui-input--default .ui-input__field {
   background-color: var(--color-background-secondary);
   border: 1px solid var(--color-border-medium);
 }
 
-.ds-input-filled .ds-input {
+.ui-input--filled .ui-input__field {
   background-color: var(--color-background-tertiary);
   border: 1px solid transparent;
 }
 
-.ds-input-filled .ds-input:focus {
+.ui-input--filled .ui-input__field:focus {
   background-color: var(--color-background-secondary);
   border-color: var(--color-brand-500);
 }
 
-.ds-input-outlined .ds-input {
+.ui-input--outlined .ui-input__field {
   background-color: transparent;
   border: 1px solid var(--color-border-medium);
 }
 
-/* Input States */
-.ds-input-success .ds-input {
+/* Input States - these match the INPUT_STATES constants in index.js */
+.ui-input--success .ui-input__field {
   border-color: var(--color-success-500);
 }
 
-.ds-input-success .ds-input:focus {
+.ui-input--success .ui-input__field:focus {
   box-shadow: 0 0 0 2px var(--color-success-100);
 }
 
-.ds-input-error .ds-input {
+.ui-input--error .ui-input__field {
   border-color: var(--color-error-500);
 }
 
-.ds-input-error .ds-input:focus {
+.ui-input--error .ui-input__field:focus {
   box-shadow: 0 0 0 2px var(--color-error-100);
 }
 
-.ds-input-warning .ds-input {
+.ui-input--warning .ui-input__field {
   border-color: var(--color-warning-500);
 }
 
-.ds-input-warning .ds-input:focus {
+.ui-input--warning .ui-input__field:focus {
   box-shadow: 0 0 0 2px var(--color-warning-100);
 }
 
 /* Disabled Input */
-.ds-input-disabled .ds-input {
+.ui-input--disabled .ui-input__field {
   background-color: var(--color-background-disabled);
   border-color: var(--color-border-light);
   color: var(--color-text-disabled);
   cursor: not-allowed;
 }
 
-.ds-input-disabled .ds-input-label,
-.ds-input-disabled .ds-input-helper-text,
-.ds-input-disabled .ds-input-icon {
+.ui-input--disabled .ui-input__label,
+.ui-input--disabled .ui-input__helper-text,
+.ui-input--disabled .ui-input__icon {
   color: var(--color-text-disabled);
 }
 
 /* Full Width Input */
-.ds-input-full-width {
+.ui-input--full-width {
   width: 100%;
 }
 
+/* Support for custom responsive styles */
+.ui-input-wrapper[style*="--responsive-styles"] {
+  /* This selector targets Input components with responsive styles */
+  /* The actual styles are applied via inline style in the component */
+  display: flex; /* Ensure the element maintains flex display */
+  flex-direction: column;
+}
+
+/* Additional Input Types */
+/* Password Input */
+.ui-input__field[type="password"] {
+  letter-spacing: 0.1em;
+}
+
+/* Number Input */
+.ui-input__field[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield;
+}
+
+.ui-input__field[type="number"]::-webkit-outer-spin-button,
+.ui-input__field[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+/* Search Input */
+.ui-input__field[type="search"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ui-input__field[type="search"]::-webkit-search-decoration,
+.ui-input__field[type="search"]::-webkit-search-cancel-button,
+.ui-input__field[type="search"]::-webkit-search-results-button,
+.ui-input__field[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 /* Dark Theme Adjustments */
-.theme-dark .ds-input {
+.theme-dark .ui-input__field {
   background-color: var(--color-background-secondary);
   color: var(--color-text-primary);
 }
 
-.theme-dark .ds-input-filled .ds-input {
+.theme-dark .ui-input--filled .ui-input__field {
   background-color: var(--color-background-tertiary);
 }
 
-.theme-dark .ds-input-filled .ds-input:focus {
+.theme-dark .ui-input--filled .ui-input__field:focus {
   background-color: var(--color-background-secondary);
 }
 
-.theme-dark .ds-input-disabled .ds-input {
+.theme-dark .ui-input--disabled .ui-input__field {
   background-color: var(--color-background-disabled);
   color: var(--color-text-disabled);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 600px) {
-  .ds-input-wrapper {
+/* Responsive Adjustments - using the same breakpoints as responsive-props.js */
+@media (max-width: 576px) { /* xs */
+  .ui-input-wrapper {
     margin-bottom: var(--spacing-3);
   }
   
-  .ds-input-medium .ds-input {
+  .ui-input--medium .ui-input__field {
     padding: var(--spacing-1) var(--spacing-2);
     height: 2.25rem;
   }
   
-  .ds-input-large .ds-input {
+  .ui-input--large .ui-input__field {
     padding: var(--spacing-2) var(--spacing-3);
     height: 2.5rem;
+  }
+  
+  .ui-input--responsive .ui-input__field {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-xs);
+    height: 2rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) { /* sm */
+  .ui-input--responsive-sm .ui-input__field {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-sm);
+    height: 2.25rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { /* md */
+  .ui-input--responsive-md .ui-input__field {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+    height: 2.5rem;
+  }
+}
+
+@media (min-width: 992px) { /* lg */
+  .ui-input--responsive-lg .ui-input__field {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-md);
+    height: 3rem;
   }
 }

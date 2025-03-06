@@ -1,15 +1,151 @@
 /**
  * Box Component Styles
+ * 
+ * This file contains styles for the Box component.
+ * The Box component is a fundamental building block for layouts.
  */
 
+/* Base Box styles */
 .ui-box {
   box-sizing: border-box;
-  display: block; /* Add a declaration to avoid empty ruleset */
+  position: relative;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .ui-box {
-    max-width: 100%; /* Add a declaration to avoid empty ruleset */
+/* Box modifiers - these match the BOX_MODIFIERS constants in index.js */
+.ui-box--full-width {
+  width: 100%;
+}
+
+.ui-box--full-height {
+  height: 100%;
+}
+
+.ui-box--flex {
+  display: flex;
+}
+
+.ui-box--inline {
+  display: inline-block;
+}
+
+.ui-box--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive container styles - using the same breakpoints as responsive-props.js */
+@media (max-width: 576px) { /* xs */
+  .ui-box--responsive {
+    width: 100%;
+    max-width: 100%;
   }
+}
+
+@media (min-width: 576px) { /* sm */
+  .ui-box--responsive {
+    max-width: 540px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) { /* md */
+  .ui-box--responsive {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 992px) { /* lg */
+  .ui-box--responsive {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1200px) { /* xl */
+  .ui-box--responsive {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1400px) { /* xxl */
+  .ui-box--responsive {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 576px) {
+  .ui-box--stack-on-mobile {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ui-box--hide-on-mobile {
+    display: none;
+  }
+}
+
+/* Support for custom responsive styles */
+.ui-box[style*="--responsive-styles"] {
+  /* This selector targets Box components with responsive styles */
+  /* The actual styles are applied via inline style in the component */
+  display: block; /* Ensure the element is a block element */
+}
+
+/* Support for common spacing patterns */
+.ui-box--gutter {
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+.ui-box--gutter-sm {
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+}
+
+.ui-box--gutter-lg {
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
+}
+
+.ui-box--margin {
+  margin: var(--spacing-md);
+}
+
+.ui-box--margin-sm {
+  margin: var(--spacing-sm);
+}
+
+.ui-box--margin-lg {
+  margin: var(--spacing-lg);
+}
+
+/* Support for common display patterns */
+.ui-box--block {
+  display: block;
+}
+
+.ui-box--hidden {
+  display: none;
+}
+
+.ui-box--relative {
+  position: relative;
+}
+
+.ui-box--absolute {
+  position: absolute;
+}
+
+.ui-box--fixed {
+  position: fixed;
+}
+
+.ui-box--sticky {
+  position: sticky;
+  top: 0;
 }

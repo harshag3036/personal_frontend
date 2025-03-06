@@ -1,14 +1,162 @@
 /**
  * Grid Component Styles
+ * 
+ * This file contains styles for the Grid component.
+ * The Grid component extends the Box component with grid-specific properties.
  */
 
+/* Base Grid styles */
 .ui-grid {
-  display: grid; /* Add a declaration to avoid empty ruleset */
+  display: grid;
+  box-sizing: border-box;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .ui-grid {
-    grid-template-columns: 1fr; /* Add a declaration to avoid empty ruleset */
+/* Grid modifiers - these match the GRID_MODIFIERS constants in index.js */
+.ui-grid--auto-fill {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.ui-grid--auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.ui-grid--equal-columns {
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+}
+
+.ui-grid--dense {
+  grid-auto-flow: dense;
+}
+
+/* Common grid layouts */
+.ui-grid--1-column {
+  grid-template-columns: 1fr;
+}
+
+.ui-grid--2-columns {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.ui-grid--3-columns {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ui-grid--4-columns {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.ui-grid--sidebar-content {
+  grid-template-columns: minmax(200px, 1fr) 3fr;
+}
+
+.ui-grid--content-sidebar {
+  grid-template-columns: 3fr minmax(200px, 1fr);
+}
+
+.ui-grid--header-content-footer {
+  grid-template-rows: auto 1fr auto;
+}
+
+/* Responsive adjustments - using the same breakpoints as responsive-props.js */
+@media (max-width: 576px) { /* xs */
+  .ui-grid--responsive {
+    grid-template-columns: 1fr;
+  }
+  
+  .ui-grid--2-columns,
+  .ui-grid--3-columns,
+  .ui-grid--4-columns,
+  .ui-grid--sidebar-content,
+  .ui-grid--content-sidebar {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) { /* sm */
+  .ui-grid--responsive-sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .ui-grid--3-columns,
+  .ui-grid--4-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { /* md */
+  .ui-grid--responsive-md {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .ui-grid--4-columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 992px) { /* lg */
+  .ui-grid--responsive-lg {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Gap modifiers */
+.ui-grid--gap-xs {
+  gap: var(--spacing-xs);
+}
+
+.ui-grid--gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.ui-grid--gap-md {
+  gap: var(--spacing-md);
+}
+
+.ui-grid--gap-lg {
+  gap: var(--spacing-lg);
+}
+
+.ui-grid--gap-xl {
+  gap: var(--spacing-xl);
+}
+
+/* Support for custom responsive styles */
+.ui-grid[style*="--responsive-styles"] {
+  /* This selector targets Grid components with responsive styles */
+  /* The actual styles are applied via inline style in the component */
+  display: grid; /* Ensure the element maintains grid display */
+}
+
+/* Common grid areas layouts */
+.ui-grid--areas-holy-grail {
+  grid-template-areas:
+    "header header header"
+    "nav content aside"
+    "footer footer footer";
+  grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: auto 1fr auto;
+}
+
+.ui-grid--areas-dashboard {
+  grid-template-areas:
+    "header header header"
+    "sidebar content content"
+    "sidebar content content";
+  grid-template-columns: 250px 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+}
+
+/* Responsive grid areas */
+@media (max-width: 576px) {
+  .ui-grid--areas-holy-grail,
+  .ui-grid--areas-dashboard {
+    grid-template-areas:
+      "header"
+      "nav"
+      "content"
+      "aside"
+      "footer";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto auto;
   }
 }

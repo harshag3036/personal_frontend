@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { polymorphicPropTypes, VALID_ELEMENTS } from '../../utilities/polymorphic';
+import { isResponsiveObject, createResponsiveStyles, layoutPropConfig } from '../../utilities/responsive-props';
 import './Box.css';
 
 /**
@@ -10,12 +12,27 @@ import './Box.css';
  * 
  * @example
  * ```jsx
+ * // Basic usage
  * <Box padding="md" background="background-surface">
  *   Content goes here
+ * </Box>
+ * 
+ * // As another element
+ * <Box as="section" padding="lg" background="background-primary">
+ *   Section content
+ * </Box>
+ * 
+ * // With responsive props
+ * <Box 
+ *   padding={{ base: 'sm', md: 'md', lg: 'lg' }}
+ *   display={{ base: 'block', md: 'flex' }}
+ * >
+ *   Responsive content
  * </Box>
  * ```
  */
 const Box = ({
+  as: Element = 'div',
   children,
   padding,
   margin,
@@ -32,43 +49,75 @@ const Box = ({
   style = {},
   ...restProps
 }) => {
+  // Process responsive props
+  const responsiveProps = {
+    padding,
+    margin,
+    width,
+    height,
+    display,
+    position,
+    overflow,
+  };
+  
+  // Generate responsive styles if needed
+  let responsiveStyles = '';
+  const hasResponsiveProps = Object.values(responsiveProps).some(isResponsiveObject);
+  
+  if (hasResponsiveProps) {
+    responsiveStyles = createResponsiveStyles(responsiveProps, layoutPropConfig);
+  }
+  
   // Combine all styles
   const combinedStyle = {
-    ...(padding && { padding: `var(--spacing-${padding})` }),
-    ...(margin && { margin: `var(--spacing-${margin})` }),
+    ...(padding && !isResponsiveObject(padding) && { padding: `var(--spacing-${padding})` }),
+    ...(margin && !isResponsiveObject(margin) && { margin: `var(--spacing-${margin})` }),
     ...(background && { backgroundColor: `var(--color-${background})` }),
     ...(border && { border: `1px solid var(--color-border-${border})` }),
     ...(borderRadius && { borderRadius: `var(--border-radius-${borderRadius})` }),
     ...(shadow && { boxShadow: `var(--shadow-${shadow})` }),
-    ...(width && { width }),
-    ...(height && { height }),
-    ...(display && { display }),
-    ...(position && { position }),
-    ...(overflow && { overflow }),
+    ...(width && !isResponsiveObject(width) && { width }),
+    ...(height && !isResponsiveObject(height) && { height }),
+    ...(display && !isResponsiveObject(display) && { display }),
+    ...(position && !isResponsiveObject(position) && { position }),
+    ...(overflow && !isResponsiveObject(overflow) && { overflow }),
     ...style,
   };
   
-  // Combine class names
+  // If we have responsive styles, add them as a data attribute
+  if (responsiveStyles) {
+    combinedStyle['--responsive-styles'] = responsiveStyles;
+  }
+  
+  // Combine class names using BEM convention
   const boxClasses = ['ui-box', className].filter(Boolean).join(' ');
   
   return (
-    <div 
+    <Element 
       className={boxClasses}
       style={combinedStyle}
       {...restProps}
     >
       {children}
-    </div>
+    </Element>
   );
 };
 
 Box.propTypes = {
+  /** Element to render the Box as */
+  ...polymorphicPropTypes,
   /** Box content */
   children: PropTypes.node,
-  /** Padding size (xs, sm, md, lg, xl) */
-  padding: PropTypes.string,
-  /** Margin size (xs, sm, md, lg, xl) */
-  margin: PropTypes.string,
+  /** Padding size (xs, sm, md, lg, xl) or responsive object */
+  padding: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  /** Margin size (xs, sm, md, lg, xl) or responsive object */
+  margin: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
   /** Background color from design tokens */
   background: PropTypes.string,
   /** Border color from design tokens */
@@ -77,20 +126,41 @@ Box.propTypes = {
   borderRadius: PropTypes.string,
   /** Box shadow (sm, md, lg) */
   shadow: PropTypes.string,
-  /** Width (any valid CSS width) */
-  width: PropTypes.string,
-  /** Height (any valid CSS height) */
-  height: PropTypes.string,
-  /** Display property (flex, block, inline, etc.) */
-  display: PropTypes.string,
-  /** Position property (relative, absolute, etc.) */
-  position: PropTypes.string,
-  /** Overflow property (hidden, auto, scroll, etc.) */
-  overflow: PropTypes.string,
+  /** Width (any valid CSS width) or responsive object */
+  width: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  /** Height (any valid CSS height) or responsive object */
+  height: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  /** Display property (flex, block, inline, etc.) or responsive object */
+  display: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  /** Position property (relative, absolute, etc.) or responsive object */
+  position: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  /** Overflow property (hidden, auto, scroll, etc.) or responsive object */
+  overflow: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
   /** Additional CSS class names */
   className: PropTypes.string,
   /** Additional inline styles */
   style: PropTypes.object,
+};
+
+Box.defaultProps = {
+  as: 'div',
+  className: '',
+  style: {},
 };
 
 export default Box;

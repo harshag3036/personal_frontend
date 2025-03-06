@@ -1,62 +1,71 @@
 /**
  * Input Component
  * 
- * A customizable input component with support for variants and extensions.
+ * A customizable input component with support for variants, sizes, states, and responsive props.
+ * 
+ * @example
+ * ```jsx
+ * // Basic usage
+ * <Input label="Username" placeholder="Enter your username" />
+ * 
+ * // With different variant and state
+ * <Input 
+ *   variant="filled" 
+ *   state="success" 
+ *   label="Email" 
+ *   helperText="Email is valid"
+ * />
+ * 
+ * // With responsive props
+ * <Input 
+ *   variant={{ base: "default", md: "filled" }}
+ *   size={{ base: "small", md: "medium", lg: "large" }}
+ *   fullWidth={{ base: true, md: false }}
+ *   label="Password"
+ *   type="password"
+ * />
+ * 
+ * // With icons
+ * <Input 
+ *   startIcon={<SearchIcon />}
+ *   endIcon={<ClearIcon />}
+ *   placeholder="Search..."
+ * />
+ * ```
  */
 
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import { componentExtension } from '../../utilities';
+import { isResponsiveObject, createResponsiveStyles } from '../../utilities/responsive-props';
+import { INPUT_CLASS, INPUT_VARIANTS, INPUT_SIZES, INPUT_STATES } from './index';
 import './Input.css';
-
-// Input variants
-export const INPUT_VARIANTS = {
-  DEFAULT: 'default',
-  FILLED: 'filled',
-  OUTLINED: 'outlined',
-};
-
-// Input sizes
-export const INPUT_SIZES = {
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
-};
-
-// Input states
-export const INPUT_STATES = {
-  DEFAULT: 'default',
-  SUCCESS: 'success',
-  ERROR: 'error',
-  WARNING: 'warning',
-};
 
 /**
  * Input Component
  * 
  * @param {Object} props - Component props
  * @param {string} [props.type='text'] - Input type
- * @param {string} [props.variant=INPUT_VARIANTS.DEFAULT] - Input variant
- * @param {string} [props.size=INPUT_SIZES.MEDIUM] - Input size
- * @param {string} [props.state=INPUT_STATES.DEFAULT] - Input state
+ * @param {string|Object} [props.variant='default'] - Input variant or responsive object
+ * @param {string|Object} [props.size='medium'] - Input size or responsive object
+ * @param {string|Object} [props.state='default'] - Input state or responsive object
  * @param {string} [props.label] - Input label
  * @param {string} [props.placeholder] - Input placeholder
  * @param {string} [props.helperText] - Helper text
  * @param {string} [props.errorText] - Error text (shown when state is ERROR)
- * @param {boolean} [props.disabled=false] - Whether the input is disabled
+ * @param {boolean|Object} [props.disabled=false] - Whether the input is disabled or responsive object
  * @param {boolean} [props.required=false] - Whether the input is required
- * @param {boolean} [props.fullWidth=false] - Whether the input should take full width
+ * @param {boolean|Object} [props.fullWidth=false] - Whether the input should take full width or responsive object
  * @param {React.ReactNode} [props.startIcon] - Icon to display at the start of the input
  * @param {React.ReactNode} [props.endIcon] - Icon to display at the end of the input
  * @param {string} [props.className=''] - Additional CSS class names
- * @param {Array<string>} [props.extensions=[]] - Extensions to apply to the input
+ * @param {Object} [props.style={}] - Additional inline styles
  * @returns {JSX.Element} Input component
  */
 const Input = forwardRef(({
   type = 'text',
-  variant = INPUT_VARIANTS.DEFAULT,
-  size = INPUT_SIZES.MEDIUM,
-  state = INPUT_STATES.DEFAULT,
+  variant = 'default',
+  size = 'medium',
+  state = 'default',
   label,
   placeholder,
   helperText,
@@ -67,141 +76,120 @@ const Input = forwardRef(({
   startIcon,
   endIcon,
   className = '',
-  extensions = [],
+  style = {},
   ...props
 }, ref) => {
-  // Error handling for invalid variants
-  if (variant && !Object.values(INPUT_VARIANTS).includes(variant)) {
-    console.warn(`Input: Invalid variant "${variant}". Falling back to DEFAULT.`);
-    variant = INPUT_VARIANTS.DEFAULT;
-  }
-
-  // Error handling for invalid sizes
-  if (size && !Object.values(INPUT_SIZES).includes(size)) {
-    console.warn(`Input: Invalid size "${size}". Falling back to MEDIUM.`);
-    size = INPUT_SIZES.MEDIUM;
-  }
-
-  // Error handling for invalid states
-  if (state && !Object.values(INPUT_STATES).includes(state)) {
-    console.warn(`Input: Invalid state "${state}". Falling back to DEFAULT.`);
-    state = INPUT_STATES.DEFAULT;
-  }
-
-  // Apply extensions with error handling
-  let extendedProps;
-  try {
-    extendedProps = componentExtension.applyComponentExtensions('Input', {
-      type,
-      variant,
-      size,
-      state,
-      label,
-      placeholder,
-      helperText,
-      errorText,
-      disabled,
-      required,
-      fullWidth,
-      startIcon,
-      endIcon,
-      className,
-      ...props,
-    }, extensions);
-  } catch (error) {
-    console.error('Input: Error applying extensions:', error);
-    // Fallback to original props if extension application fails
-    extendedProps = {
-      type,
-      variant,
-      size,
-      state,
-      label,
-      placeholder,
-      helperText,
-      errorText,
-      disabled,
-      required,
-      fullWidth,
-      startIcon,
-      endIcon,
-      className,
-      ...props,
-    };
+  // Process responsive props
+  const responsiveProps = {
+    variant,
+    size,
+    state,
+    disabled,
+    fullWidth,
+  };
+  
+  // Generate responsive styles if needed
+  let responsiveStyles = '';
+  const hasResponsiveProps = Object.values(responsiveProps).some(isResponsiveObject);
+  
+  if (hasResponsiveProps) {
+    // We'll handle these with classes, but we need to track if they're responsive
+    const responsiveClasses = {};
+    
+    if (isResponsiveObject(variant)) {
+      responsiveClasses.variant = variant;
+    }
+    
+    if (isResponsiveObject(size)) {
+      responsiveClasses.size = size;
+    }
+    
+    if (isResponsiveObject(state)) {
+      responsiveClasses.state = state;
+    }
+    
+    if (isResponsiveObject(disabled)) {
+      responsiveClasses.disabled = disabled;
+    }
+    
+    if (isResponsiveObject(fullWidth)) {
+      responsiveClasses.fullWidth = fullWidth;
+    }
+    
+    // Create a CSS string for responsive styles
+    responsiveStyles = JSON.stringify(responsiveClasses);
   }
   
-  // Extract props after extensions
-  const {
-    type: extendedType,
-    variant: extendedVariant,
-    size: extendedSize,
-    state: extendedState,
-    label: extendedLabel,
-    placeholder: extendedPlaceholder,
-    helperText: extendedHelperText,
-    errorText: extendedErrorText,
-    disabled: extendedDisabled,
-    required: extendedRequired,
-    fullWidth: extendedFullWidth,
-    startIcon: extendedStartIcon,
-    endIcon: extendedEndIcon,
-    className: extendedClassName,
-    ...restProps
-  } = extendedProps;
+  // Determine base classes based on non-responsive props
+  const baseVariantClass = !isResponsiveObject(variant) ? `${INPUT_CLASS}--${variant}` : '';
+  const baseSizeClass = !isResponsiveObject(size) ? `${INPUT_CLASS}--${size}` : '';
+  const baseStateClass = !isResponsiveObject(state) ? `${INPUT_CLASS}--${state}` : '';
+  const baseDisabledClass = !isResponsiveObject(disabled) && disabled ? `${INPUT_CLASS}--disabled` : '';
+  const baseFullWidthClass = !isResponsiveObject(fullWidth) && fullWidth ? `${INPUT_CLASS}--full-width` : '';
   
-  // Combine class names
+  // Combine class names for wrapper
   const inputWrapperClasses = [
-    'ds-input-wrapper',
-    `ds-input-${extendedVariant}`,
-    `ds-input-${extendedSize}`,
-    `ds-input-${extendedState}`,
-    extendedDisabled ? 'ds-input-disabled' : '',
-    extendedFullWidth ? 'ds-input-full-width' : '',
-    extendedClassName,
+    `${INPUT_CLASS}-wrapper`,
+    baseVariantClass,
+    baseSizeClass,
+    baseStateClass,
+    baseDisabledClass,
+    baseFullWidthClass,
+    className
   ].filter(Boolean).join(' ');
   
+  // Combine styles
+  const combinedStyle = {
+    ...style,
+  };
+  
+  // If we have responsive styles, add them as a data attribute
+  if (responsiveStyles) {
+    combinedStyle['--responsive-styles'] = responsiveStyles;
+  }
+  
   // Determine if we should show error text
-  const showErrorText = extendedState === INPUT_STATES.ERROR && extendedErrorText;
+  const showErrorText = state === 'error' && errorText;
   
   // Determine helper text to display
-  const displayHelperText = showErrorText ? extendedErrorText : extendedHelperText;
+  const displayHelperText = showErrorText ? errorText : helperText;
   
   return (
-    <div className={inputWrapperClasses}>
-      {extendedLabel && (
-        <label className="ds-input-label">
-          {extendedLabel}
-          {extendedRequired && <span className="ds-input-required">*</span>}
+    <div className={inputWrapperClasses} style={combinedStyle}>
+      {label && (
+        <label className={`${INPUT_CLASS}__label`}>
+          {label}
+          {required && <span className={`${INPUT_CLASS}__required`}>*</span>}
         </label>
       )}
       
-      <div className="ds-input-container">
-        {extendedStartIcon && (
-          <div className="ds-input-icon ds-input-start-icon">
-            {extendedStartIcon}
+      <div className={`${INPUT_CLASS}__container`}>
+        {startIcon && (
+          <div className={`${INPUT_CLASS}__icon ${INPUT_CLASS}__icon--start`}>
+            {startIcon}
           </div>
         )}
         
         <input
           ref={ref}
-          type={extendedType}
-          className="ds-input"
-          placeholder={extendedPlaceholder}
-          disabled={extendedDisabled}
-          required={extendedRequired}
-          aria-invalid={extendedState === INPUT_STATES.ERROR}
-          {...restProps}
+          type={type}
+          className={`${INPUT_CLASS}__field`}
+          placeholder={placeholder}
+          disabled={!isResponsiveObject(disabled) && disabled}
+          required={required}
+          aria-invalid={state === 'error'}
+          {...props}
         />
         
-        {extendedEndIcon && (
-          <div className="ds-input-icon ds-input-end-icon">
-            {extendedEndIcon}
+        {endIcon && (
+          <div className={`${INPUT_CLASS}__icon ${INPUT_CLASS}__icon--end`}>
+            {endIcon}
           </div>
         )}
       </div>
       
       {displayHelperText && (
-        <div className={`ds-input-helper-text ${showErrorText ? 'ds-input-error-text' : ''}`}>
+        <div className={`${INPUT_CLASS}__helper-text ${showErrorText ? `${INPUT_CLASS}__helper-text--error` : ''}`}>
           {displayHelperText}
         </div>
       )}
@@ -214,12 +202,21 @@ Input.displayName = 'Input';
 Input.propTypes = {
   /** Input type */
   type: PropTypes.string,
-  /** Input variant */
-  variant: PropTypes.oneOf(Object.values(INPUT_VARIANTS)),
-  /** Input size */
-  size: PropTypes.oneOf(Object.values(INPUT_SIZES)),
-  /** Input state */
-  state: PropTypes.oneOf(Object.values(INPUT_STATES)),
+  /** Input variant or responsive object */
+  variant: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(INPUT_VARIANTS)),
+    PropTypes.object,
+  ]),
+  /** Input size or responsive object */
+  size: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(INPUT_SIZES)),
+    PropTypes.object,
+  ]),
+  /** Input state or responsive object */
+  state: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(INPUT_STATES)),
+    PropTypes.object,
+  ]),
   /** Input label */
   label: PropTypes.string,
   /** Input placeholder */
@@ -228,20 +225,38 @@ Input.propTypes = {
   helperText: PropTypes.string,
   /** Error text (shown when state is ERROR) */
   errorText: PropTypes.string,
-  /** Whether the input is disabled */
-  disabled: PropTypes.bool,
+  /** Whether the input is disabled or responsive object */
+  disabled: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object,
+  ]),
   /** Whether the input is required */
   required: PropTypes.bool,
-  /** Whether the input should take full width */
-  fullWidth: PropTypes.bool,
+  /** Whether the input should take full width or responsive object */
+  fullWidth: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object,
+  ]),
   /** Icon to display at the start of the input */
   startIcon: PropTypes.node,
   /** Icon to display at the end of the input */
   endIcon: PropTypes.node,
   /** Additional CSS class names */
   className: PropTypes.string,
-  /** Extensions to apply to the input */
-  extensions: PropTypes.arrayOf(PropTypes.string),
+  /** Additional inline styles */
+  style: PropTypes.object,
+};
+
+Input.defaultProps = {
+  type: 'text',
+  variant: 'default',
+  size: 'medium',
+  state: 'default',
+  disabled: false,
+  required: false,
+  fullWidth: false,
+  className: '',
+  style: {},
 };
 
 export default Input;

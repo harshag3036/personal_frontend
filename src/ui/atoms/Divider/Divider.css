@@ -1,43 +1,92 @@
 /**
  * Divider Component Styles
+ * 
+ * This file contains styles for the Divider component.
+ * The Divider component is used to visually separate content.
  */
 
+/* Base Divider Styles */
 .ui-divider {
   border: none;
   margin: 0;
   padding: 0;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
-/* Horizontal divider */
-.ui-divider-horizontal {
+/* Divider Orientations */
+.ui-divider--horizontal {
   display: block;
+  width: 100%;
 }
 
-/* Vertical divider */
-.ui-divider-vertical {
+.ui-divider--vertical {
   display: inline-block;
   align-self: stretch;
+  height: 100%;
 }
 
 /* Divider with text */
-.ui-divider-with-text {
+.ui-divider--with-text {
   display: flex;
   align-items: center;
   text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
 }
 
-.ui-divider-with-text::before,
-.ui-divider-with-text::after {
+.ui-divider--with-text::before,
+.ui-divider--with-text::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid var(--color-border, #e0e0e0);
+  border-bottom: 1px solid var(--color-border-medium, #e0e0e0);
 }
 
-.ui-divider-with-text::before {
+.ui-divider--with-text::before {
   margin-right: var(--spacing-md, 1rem);
 }
 
-.ui-divider-with-text::after {
+.ui-divider--with-text::after {
   margin-left: var(--spacing-md, 1rem);
+}
+
+/* Support for custom responsive styles */
+.ui-divider[style*="--responsive-styles"] {
+  /* This selector targets Divider components with responsive styles */
+  /* The actual styles are applied via inline style in the component */
+  display: block; /* Ensure the element maintains proper display */
+}
+
+/* Responsive Adjustments - using the same breakpoints as responsive-props.js */
+@media (max-width: 576px) { /* xs */
+  .ui-divider--responsive {
+    /* Specific styles for extra small screens */
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) { /* sm */
+  .ui-divider--responsive-sm {
+    /* Specific styles for small screens */
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { /* md */
+  .ui-divider--responsive-md {
+    /* Specific styles for medium screens */
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 992px) { /* lg */
+  .ui-divider--responsive-lg {
+    /* Specific styles for large screens */
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
 }

@@ -1,9 +1,12 @@
 /**
  * Button Component Styles
+ * 
+ * This file contains styles for the Button component.
+ * The Button component is a fundamental building block for user interactions.
  */
 
 /* Base Button Styles */
-.ds-button {
+.ui-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -18,185 +21,202 @@
   outline: none;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
-.ds-button:focus {
+.ui-button:focus {
   box-shadow: var(--shadow-focus);
 }
 
-.ds-button:disabled {
+.ui-button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-/* Button Sizes */
-.ds-button-small {
+/* Button Sizes - these match the BUTTON_SIZES constants in index.js */
+.ui-button--small {
   padding: 8px 16px;
   font-size: var(--font-size-sm);
   height: 32px;
 }
 
-.ds-button-medium {
+.ui-button--medium {
   padding: 12px 24px;
   font-size: var(--font-size-md);
   height: 40px;
 }
 
-.ds-button-large {
+.ui-button--large {
   padding: 16px 32px;
   font-size: var(--font-size-lg);
   height: 48px;
 }
 
-/* Button Variants */
-.ds-button-primary {
+/* Button Variants - these match the BUTTON_VARIANTS constants in index.js */
+.ui-button--primary {
   background-color: var(--color-brand-500);
   color: white;
   box-shadow: var(--shadow-sm);
 }
 
-.ds-button-primary:hover:not(:disabled) {
+.ui-button--primary:hover:not(:disabled) {
   background-color: var(--color-brand-600);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.ds-button-primary:active:not(:disabled) {
+.ui-button--primary:active:not(:disabled) {
   background-color: var(--color-brand-700);
   transform: translateY(0);
   box-shadow: var(--shadow-sm);
 }
 
-.ds-button-secondary {
+.ui-button--secondary {
   background-color: var(--color-neutral-200);
   color: var(--color-text-primary);
   box-shadow: var(--shadow-sm);
 }
 
-.ds-button-secondary:hover:not(:disabled) {
+.ui-button--secondary:hover:not(:disabled) {
   background-color: var(--color-neutral-300);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.ds-button-secondary:active:not(:disabled) {
+.ui-button--secondary:active:not(:disabled) {
   background-color: var(--color-neutral-400);
   transform: translateY(0);
   box-shadow: var(--shadow-sm);
 }
 
-.ds-button-accent {
+.ui-button--accent {
   background-color: var(--color-accent-500);
   color: white;
   box-shadow: var(--shadow-sm);
 }
 
-.ds-button-accent:hover:not(:disabled) {
+.ui-button--accent:hover:not(:disabled) {
   background-color: var(--color-accent-600);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.ds-button-accent:active:not(:disabled) {
+.ui-button--accent:active:not(:disabled) {
   background-color: var(--color-accent-700);
   transform: translateY(0);
   box-shadow: var(--shadow-sm);
 }
 
-.ds-button-outline {
+.ui-button--outline {
   background-color: transparent;
   color: var(--color-brand-500);
   border: 1px solid var(--color-brand-500);
 }
 
-.ds-button-outline:hover:not(:disabled) {
+.ui-button--outline:hover:not(:disabled) {
   background-color: rgba(20, 66, 114, 0.05);
   transform: translateY(-2px);
 }
 
-.ds-button-outline:active:not(:disabled) {
+.ui-button--outline:active:not(:disabled) {
   background-color: rgba(20, 66, 114, 0.1);
   transform: translateY(0);
 }
 
-.ds-button-text {
+.ui-button--text {
   background-color: transparent;
   color: var(--color-brand-500);
   padding-left: 8px;
   padding-right: 8px;
 }
 
-.ds-button-text:hover:not(:disabled) {
+.ui-button--text:hover:not(:disabled) {
   background-color: rgba(20, 66, 114, 0.05);
 }
 
-.ds-button-text:active:not(:disabled) {
+.ui-button--text:active:not(:disabled) {
   background-color: rgba(20, 66, 114, 0.1);
 }
 
-.ds-button-danger {
+.ui-button--danger {
   background-color: var(--color-error-500);
   color: white;
   box-shadow: var(--shadow-sm);
 }
 
-.ds-button-danger:hover:not(:disabled) {
+.ui-button--danger:hover:not(:disabled) {
   background-color: var(--color-error-600);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.ds-button-danger:active:not(:disabled) {
+.ui-button--danger:active:not(:disabled) {
   background-color: var(--color-error-700);
   transform: translateY(0);
   box-shadow: var(--shadow-sm);
 }
 
-.ds-button-success {
+.ui-button--success {
   background-color: var(--color-success-500);
   color: white;
   box-shadow: var(--shadow-sm);
 }
 
-.ds-button-success:hover:not(:disabled) {
+.ui-button--success:hover:not(:disabled) {
   background-color: var(--color-success-600);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.ds-button-success:active:not(:disabled) {
+.ui-button--success:active:not(:disabled) {
   background-color: var(--color-success-700);
   transform: translateY(0);
   box-shadow: var(--shadow-sm);
 }
 
-/* Full Width Button */
-.ds-button-full-width {
-  width: 100%;
+.ui-button--info {
+  background-color: var(--color-info-500);
+  color: white;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Button with Icon */
-.ds-button-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.ui-button--info:hover:not(:disabled) {
+  background-color: var(--color-info-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-.ds-button-icon-left {
-  margin-right: 8px;
+.ui-button--info:active:not(:disabled) {
+  background-color: var(--color-info-700);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
-.ds-button-icon-right {
-  margin-left: 8px;
+.ui-button--warning {
+  background-color: var(--color-warning-500);
+  color: white;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Button Loading State */
-.ds-button-loading {
+.ui-button--warning:hover:not(:disabled) {
+  background-color: var(--color-warning-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.ui-button--warning:active:not(:disabled) {
+  background-color: var(--color-warning-700);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Button States - these match the BUTTON_STATES constants in index.js */
+.ui-button--loading {
   position: relative;
   color: transparent !important;
 }
 
-.ds-button-loading::after {
+.ui-button--loading::after {
   content: '';
   position: absolute;
   width: 16px;
@@ -217,46 +237,144 @@
   }
 }
 
+/* Button Modifiers */
+.ui-button--full-width {
+  width: 100%;
+}
+
+.ui-button--with-left-icon,
+.ui-button--with-right-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Button Icon Elements */
+.ui-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ui-button__icon--left {
+  margin-right: 8px;
+}
+
+.ui-button__icon--right {
+  margin-left: 8px;
+}
+
+/* Support for custom responsive styles */
+.ui-button[style*="--responsive-styles"] {
+  /* This selector targets Button components with responsive styles */
+  /* The actual styles are applied via inline style in the component */
+  display: inline-flex; /* Ensure the element maintains flex display */
+}
+
 /* Dark Theme Adjustments */
-.theme-dark .ds-button-secondary {
+.theme-dark .ui-button--secondary {
   background-color: var(--color-neutral-700);
   color: var(--color-text-primary);
 }
 
-.theme-dark .ds-button-secondary:hover:not(:disabled) {
+.theme-dark .ui-button--secondary:hover:not(:disabled) {
   background-color: var(--color-neutral-600);
 }
 
-.theme-dark .ds-button-secondary:active:not(:disabled) {
+.theme-dark .ui-button--secondary:active:not(:disabled) {
   background-color: var(--color-neutral-500);
 }
 
-.theme-dark .ds-button-outline {
+.theme-dark .ui-button--outline {
   border-color: var(--color-brand-300);
   color: var(--color-brand-300);
 }
 
-.theme-dark .ds-button-text {
+.theme-dark .ui-button--text {
   color: var(--color-brand-300);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 600px) {
-  .ds-button-small {
+/* Responsive Adjustments - using the same breakpoints as responsive-props.js */
+@media (max-width: 576px) { /* xs */
+  .ui-button--small {
     padding: 6px 12px;
     font-size: var(--font-size-xs);
     height: 28px;
   }
   
-  .ds-button-medium {
+  .ui-button--medium {
     padding: 10px 20px;
     font-size: var(--font-size-sm);
     height: 36px;
   }
   
-  .ds-button-large {
+  .ui-button--large {
     padding: 14px 28px;
     font-size: var(--font-size-md);
     height: 44px;
   }
+  
+  .ui-button--responsive {
+    padding: 8px 16px;
+    font-size: var(--font-size-sm);
+    height: 32px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) { /* sm */
+  .ui-button--responsive-sm {
+    padding: 10px 20px;
+    font-size: var(--font-size-sm);
+    height: 36px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { /* md */
+  .ui-button--responsive-md {
+    padding: 12px 24px;
+    font-size: var(--font-size-md);
+    height: 40px;
+  }
+}
+
+@media (min-width: 992px) { /* lg */
+  .ui-button--responsive-lg {
+    padding: 16px 32px;
+    font-size: var(--font-size-lg);
+    height: 48px;
+  }
+}
+
+/* Button Group Styles */
+.ui-button-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ui-button-group .ui-button:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.ui-button-group .ui-button:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Vertical Button Group */
+.ui-button-group--vertical {
+  flex-direction: column;
+}
+
+.ui-button-group--vertical .ui-button:not(:first-child) {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.ui-button-group--vertical .ui-button:not(:last-child) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
 }

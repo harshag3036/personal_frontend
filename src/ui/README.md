@@ -46,6 +46,7 @@ src/ui/
 ├── utilities/     # Utility functions
 │   ├── css-variables.js # CSS variable utilities
 │   ├── component-extension.js # Component extension utilities
+│   ├── responsive-props.js # Responsive props utilities
 │   ├── ToastService.js # Toast service
 │   ├── useToast.js # Toast hook
 │   └── index.js   # Utility exports
@@ -188,41 +189,100 @@ const ComponentWithToast = () => {
 };
 ```
 
-## Migration Strategy
+## UI Structure Upgrade Plan
 
-The UI component library is being developed as a replacement for the existing design-system components. The migration strategy involves:
+We are implementing a comprehensive upgrade plan to make the UI component library more manageable, modular, simple, and easy to change, add, upgrade, and debug.
 
-1. Moving design tokens, themes, and utilities from design-system to ui
-2. Creating adapter components that use the design-system components internally
-3. Gradually replacing design-system component usage with UI component usage
-4. Eventually deprecating the design-system components
+### Phase 1: Foundation Strengthening (2-3 weeks)
 
-Current migration status:
-- ✅ Design tokens moved from design-system/tokens to ui/tokens
-- ✅ Theme system moved from design-system/themes to ui/themes
-- ✅ Utilities moved from design-system/utilities to ui/utilities
-- ✅ Checkbox component moved from design-system/components to ui/molecules
-- ✅ Select component moved from design-system/components to ui/molecules
-- ✅ Textarea component moved from design-system/components to ui/molecules
-- ✅ Toast component moved from design-system/components to ui/molecules
-- ⏳ Other components still in progress
+#### 1. Complete Component Migration
+- ✅ Finish migrating remaining components from design-system to ui
+- ✅ Update all imports to use the new UI library
+- ✅ Remove the design-system directory once migration is complete
 
-See the [Migration Guide](./docs/migration-guide.md) for more details.
+#### 2. Standardize Component Structure
+- Implement consistent file structure for all components:
+  ```
+  ComponentName/
+  ├── ComponentName.js     # Main component implementation
+  ├── ComponentName.css    # Component styles
+  ├── ComponentName.test.js # Component tests
+  ├── ComponentName.stories.js # Storybook stories
+  └── index.js             # Export file
+  ```
+- Add proper PropTypes and documentation to all components
+- Create index files for better importing experience
 
-## Examples
+#### 3. Standardize Prop Patterns
+- Implement consistent prop patterns across all components
+- Ensure similar props work the same way across components
+- Add support for common props like margin, padding, etc.
 
-See the examples directory for examples of how to use the UI components:
+#### 4. Add Testing Infrastructure
+- Set up Jest and React Testing Library for component testing
+- Add basic tests for all components
+- Implement testing utilities for common testing patterns
 
-```jsx
-import { Examples } from '../ui';
+### Phase 2: Developer Experience Improvements (2-3 weeks)
 
-const App = () => (
-  <div>
-    <h1>Examples</h1>
-    <Examples.BasicLayout />
-  </div>
-);
-```
+#### 1. Implement Responsive Props System
+- Create a utility for handling responsive props
+- Add support for breakpoint-based styling
+- Implement responsive variants for all components
+
+#### 2. Enhance Component Composition
+- Improve component composition patterns
+- Add support for compound components
+- Implement render props pattern where appropriate
+
+#### 3. Implement Polymorphic Components
+- Add support for rendering components as different HTML elements
+- Implement the `as` prop pattern
+- Ensure proper type safety for polymorphic components
+
+#### 4. Add Storybook
+- Install and configure Storybook
+- Create stories for all components
+- Add documentation and examples to stories
+
+### Phase 3: Advanced Features (2-3 weeks)
+
+#### 1. Implement Visual Testing
+- Set up visual regression testing
+- Create baseline snapshots for all components
+- Integrate with CI/CD pipeline
+
+#### 2. Add Accessibility Testing
+- Implement accessibility testing
+- Add accessibility checks to CI/CD pipeline
+- Ensure all components meet WCAG standards
+
+#### 3. Add Performance Monitoring
+- Implement performance metrics for components
+- Add bundle size monitoring
+- Create performance benchmarks
+
+#### 4. Create Component Playground
+- Develop an interactive component playground
+- Add code examples and live editing
+- Include documentation and usage guidelines
+
+### Phase 4: Application Refactoring (Ongoing)
+
+#### 1. Create Migration Strategy
+- Identify high-impact components to migrate first
+- Create a dependency graph to understand migration order
+- Develop a phased approach to minimize disruption
+
+#### 2. Refactor Application Components
+- Start with shared components used across the application
+- Move to feature-specific components
+- Update imports and props as needed
+
+#### 3. Validate and Test
+- Ensure refactored components work as expected
+- Add tests for refactored components
+- Monitor performance and accessibility
 
 ## Design Principles
 
@@ -245,14 +305,11 @@ When adding new components to the library:
 5. Ensure the component is accessible
 6. Test the component thoroughly
 
-## Future Improvements
+## Documentation
 
-Future improvements to the UI component library include:
+For more detailed information, see the documentation files:
 
-1. Completing the migration of all design-system components
-2. Implementing more molecules (FormField, DataDisplay, etc.)
-3. Implementing more organisms (DataTable, Modal, etc.)
-4. Implementing templates (Dashboard, Settings, etc.)
-5. Adding a component playground for testing and documentation
-6. Implementing visual regression testing
-7. Adding more documentation and examples
+- [Integration Guide](./docs/integration-guide.md): How to integrate the UI library into your application
+- [Component API Guide](./docs/component-api-guide.md): Detailed documentation of component APIs
+- [Development Guide](./docs/development-guide.md): Guidelines for developing new components
+- [Roadmap](./docs/roadmap.md): Future plans for the UI library

@@ -1,35 +1,91 @@
 /**
  * Stack Component Styles
+ * 
+ * This file contains styles for the Stack component.
+ * The Stack component is a specialized version of Flex with a simpler API.
  */
 
+/* Base Stack Styles */
 .ui-stack {
   width: 100%;
+  box-sizing: border-box;
+}
+
+/* Stack Directions */
+.ui-stack--vertical {
+  /* Styles are inherited from Flex component */
+  flex-direction: column;
+}
+
+.ui-stack--horizontal {
+  /* Styles are inherited from Flex component */
+  flex-direction: row;
 }
 
 /* Dividers for vertical stack */
-.ui-stack-vertical.ui-stack-dividers > *:not(:last-child) {
-  border-bottom: 1px solid var(--color-border, #e0e0e0);
+.ui-stack--vertical.ui-stack--dividers > *:not(:last-child) {
+  border-bottom: 1px solid var(--color-border-medium, #e0e0e0);
   padding-bottom: var(--spacing-md, 1rem);
 }
 
 /* Dividers for horizontal stack */
-.ui-stack-horizontal.ui-stack-dividers > *:not(:last-child) {
-  border-right: 1px solid var(--color-border, #e0e0e0);
+.ui-stack--horizontal.ui-stack--dividers > *:not(:last-child) {
+  border-right: 1px solid var(--color-border-medium, #e0e0e0);
   padding-right: var(--spacing-md, 1rem);
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
+/* Support for custom responsive styles */
+.ui-stack[style*="--responsive-styles"] {
+  /* This selector targets Stack components with responsive styles */
+  /* The actual styles are applied via inline style in the component */
+  display: flex; /* Ensure the element maintains flex display */
+}
+
+/* Responsive Adjustments - using the same breakpoints as responsive-props.js */
+@media (max-width: 576px) { /* xs */
   /* Force horizontal stacks to become vertical on small screens */
-  .ui-stack-horizontal {
+  .ui-stack--horizontal {
     flex-direction: column;
   }
   
   /* Update dividers for responsive horizontal stacks */
-  .ui-stack-horizontal.ui-stack-dividers > *:not(:last-child) {
+  .ui-stack--horizontal.ui-stack--dividers > *:not(:last-child) {
     border-right: none;
     padding-right: 0;
-    border-bottom: 1px solid var(--color-border, #e0e0e0);
+    border-bottom: 1px solid var(--color-border-medium, #e0e0e0);
     padding-bottom: var(--spacing-md, 1rem);
+  }
+  
+  /* Responsive stack */
+  .ui-stack--responsive {
+    flex-direction: column;
+  }
+  
+  .ui-stack--responsive.ui-stack--dividers > *:not(:last-child) {
+    border-right: none;
+    padding-right: 0;
+    border-bottom: 1px solid var(--color-border-medium, #e0e0e0);
+    padding-bottom: var(--spacing-md, 1rem);
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) { /* sm */
+  .ui-stack--responsive-sm {
+    /* Specific styles for small screens */
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { /* md */
+  .ui-stack--responsive-md {
+    /* Specific styles for medium screens */
+    gap: var(--spacing-md);
+  }
+}
+
+@media (min-width: 992px) { /* lg */
+  .ui-stack--responsive-lg {
+    /* Specific styles for large screens */
+    gap: var(--spacing-lg);
   }
 }

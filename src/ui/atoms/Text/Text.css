@@ -1,13 +1,18 @@
 /**
  * Text Component Styles
+ * 
+ * This file contains styles for the Text component.
+ * The Text component is a fundamental building block for typography.
  */
 
+/* Base Text styles */
 .ui-text {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-/* Typography variants */
+/* Typography variants - these match the TEXT_VARIANTS constants in index.js */
 .ui-text-h1 {
   font-size: var(--font-size-h1, 2.5rem);
   font-weight: var(--font-weight-bold, 700);
@@ -92,8 +97,77 @@
   letter-spacing: 0.1em;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
+/* Text modifiers - these match the TEXT_MODIFIERS constants in index.js */
+.ui-text--italic {
+  font-style: italic;
+}
+
+.ui-text--truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.ui-text--nowrap {
+  white-space: nowrap;
+}
+
+.ui-text--wrap {
+  white-space: normal;
+}
+
+.ui-text--center {
+  text-align: center;
+}
+
+.ui-text--right {
+  text-align: right;
+}
+
+.ui-text--left {
+  text-align: left;
+}
+
+.ui-text--justify {
+  text-align: justify;
+}
+
+/* Font weight modifiers */
+.ui-text--normal {
+  font-weight: var(--font-weight-normal, 400);
+}
+
+.ui-text--medium {
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.ui-text--bold {
+  font-weight: var(--font-weight-bold, 700);
+}
+
+/* Text transform modifiers */
+.ui-text--uppercase {
+  text-transform: uppercase;
+}
+
+.ui-text--lowercase {
+  text-transform: lowercase;
+}
+
+.ui-text--capitalize {
+  text-transform: capitalize;
+}
+
+/* Support for custom responsive styles */
+.ui-text[style*="--responsive-styles"] {
+  /* This selector targets Text components with responsive styles */
+  /* The actual styles are applied via inline style in the component */
+  display: block; /* Ensure the element is a block element */
+}
+
+/* Responsive adjustments - using the same breakpoints as responsive-props.js */
+@media (max-width: 576px) { /* xs */
   .ui-text-h1 {
     font-size: calc(var(--font-size-h1, 2.5rem) * 0.85);
   }
@@ -105,4 +179,64 @@
   .ui-text-h3 {
     font-size: calc(var(--font-size-h3, 1.75rem) * 0.85);
   }
+  
+  .ui-text--responsive {
+    font-size: calc(var(--font-size-body1, 1rem) * 0.9);
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) { /* sm */
+  .ui-text--responsive-sm {
+    font-size: calc(var(--font-size-body1, 1rem) * 0.95);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { /* md */
+  .ui-text--responsive-md {
+    font-size: var(--font-size-body1, 1rem);
+  }
+}
+
+@media (min-width: 992px) { /* lg */
+  .ui-text--responsive-lg {
+    font-size: calc(var(--font-size-body1, 1rem) * 1.05);
+  }
+}
+
+/* Common text color modifiers */
+.ui-text--primary {
+  color: var(--color-primary);
+}
+
+.ui-text--secondary {
+  color: var(--color-secondary);
+}
+
+.ui-text--success {
+  color: var(--color-success);
+}
+
+.ui-text--warning {
+  color: var(--color-warning);
+}
+
+.ui-text--error {
+  color: var(--color-error);
+}
+
+.ui-text--info {
+  color: var(--color-info);
+}
+
+/* Common text decoration modifiers */
+.ui-text--underline {
+  text-decoration: underline;
+}
+
+.ui-text--line-through {
+  text-decoration: line-through;
+}
+
+.ui-text--no-decoration {
+  text-decoration: none;
 }

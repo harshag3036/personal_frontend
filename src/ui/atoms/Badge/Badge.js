@@ -1,131 +1,162 @@
 /**
  * Badge Component
  * 
- * A customizable badge component with support for variants and extensions.
+ * A customizable badge component with support for variants, sizes, and responsive props.
+ * This component can be rendered as different HTML elements using the `as` prop.
+ * 
+ * @example
+ * ```jsx
+ * // Basic usage
+ * <Badge variant="primary" size="medium">New</Badge>
+ * 
+ * // As a different element
+ * <Badge as="div" variant="success">Completed</Badge>
+ * 
+ * // With responsive props
+ * <Badge 
+ *   variant={{ base: "primary", md: "outline" }}
+ *   size={{ base: "small", md: "medium" }}
+ * >
+ *   Responsive Badge
+ * </Badge>
+ * 
+ * // With pill shape
+ * <Badge pill variant="warning">Alert</Badge>
+ * ```
  */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { componentExtension } from '../../utilities';
+import { polymorphicPropTypes } from '../../utilities/polymorphic';
+import { isResponsiveObject, createResponsiveStyles } from '../../utilities/responsive-props';
+import { BADGE_CLASS, BADGE_VARIANTS, BADGE_SIZES } from './index';
 import './Badge.css';
-
-// Badge variants
-export const BADGE_VARIANTS = {
-  DEFAULT: 'default',
-  PRIMARY: 'primary',
-  SUCCESS: 'success',
-  WARNING: 'warning',
-  ERROR: 'error',
-  INFO: 'info',
-  OUTLINE: 'outline',
-};
-
-// Badge sizes
-export const BADGE_SIZES = {
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
-};
 
 /**
  * Badge Component
  * 
  * @param {Object} props - Component props
+ * @param {React.ElementType} [props.as='span'] - Element to render the Badge as
  * @param {React.ReactNode} props.children - Badge content
- * @param {string} [props.variant=BADGE_VARIANTS.DEFAULT] - Badge variant
- * @param {string} [props.size=BADGE_SIZES.MEDIUM] - Badge size
- * @param {boolean} [props.pill=false] - Whether the badge should have pill shape
+ * @param {string|Object} [props.variant='default'] - Badge variant or responsive object
+ * @param {string|Object} [props.size='medium'] - Badge size or responsive object
+ * @param {boolean|Object} [props.pill=false] - Whether the badge should have pill shape or responsive object
  * @param {string} [props.className=''] - Additional CSS class names
- * @param {Array<string>} [props.extensions=[]] - Extensions to apply to the badge
+ * @param {Object} [props.style={}] - Additional inline styles
  * @returns {JSX.Element} Badge component
  */
 const Badge = ({
+  as = 'span',
   children,
-  variant = BADGE_VARIANTS.DEFAULT,
-  size = BADGE_SIZES.MEDIUM,
+  variant = 'default',
+  size = 'medium',
   pill = false,
   className = '',
-  extensions = [],
+  style = {},
   ...props
 }) => {
-  // Error handling for invalid variants
-  if (variant && !Object.values(BADGE_VARIANTS).includes(variant)) {
-    console.warn(`Badge: Invalid variant "${variant}". Falling back to DEFAULT.`);
-    variant = BADGE_VARIANTS.DEFAULT;
-  }
-
-  // Error handling for invalid sizes
-  if (size && !Object.values(BADGE_SIZES).includes(size)) {
-    console.warn(`Badge: Invalid size "${size}". Falling back to MEDIUM.`);
-    size = BADGE_SIZES.MEDIUM;
-  }
-
-  // Apply extensions with error handling
-  let extendedProps;
-  try {
-    extendedProps = componentExtension.applyComponentExtensions('Badge', {
-      children,
-      variant,
-      size,
-      pill,
-      className,
-      ...props,
-    }, extensions);
-  } catch (error) {
-    console.error('Badge: Error applying extensions:', error);
-    // Fallback to original props if extension application fails
-    extendedProps = {
-      children,
-      variant,
-      size,
-      pill,
-      className,
-      ...props,
-    };
+  // Process responsive props
+  const responsiveProps = {
+    variant,
+    size,
+    pill,
+  };
+  
+  // Generate responsive styles if needed
+  let responsiveStyles = '';
+  const hasResponsiveProps = Object.values(responsiveProps).some(isResponsiveObject);
+  
+  if (hasResponsiveProps) {
+    // We'll handle these with classes, but we need to track if they're responsive
+    const responsiveClasses = {};
+    
+    if (isResponsiveObject(variant)) {
+      responsiveClasses.variant = variant;
+    }
+    
+    if (isResponsiveObject(size)) {
+      responsiveClasses.size = size;
+    }
+    
+    if (isResponsiveObject(pill)) {
+      responsiveClasses.pill = pill;
+    }
+    
+    // Create a CSS string for responsive styles
+    responsiveStyles = JSON.stringify(responsiveClasses);
   }
   
-  // Extract props after extensions
-  const {
-    children: extendedChildren,
-    variant: extendedVariant,
-    size: extendedSize,
-    pill: extendedPill,
-    className: extendedClassName,
-    ...restProps
-  } = extendedProps;
+  // Determine base classes based on non-responsive props
+  const baseVariantClass = !isResponsiveObject(variant) ? `${BADGE_CLASS}--${variant}` : '';
+  const baseSizeClass = !isResponsiveObject(size) ? `${BADGE_CLASS}--${size}` : '';
+  const basePillClass = !isResponsiveObject(pill) && pill ? `${BADGE_CLASS}--pill` : '';
   
   // Combine class names
   const badgeClasses = [
-    'ds-badge',
-    `ds-badge-${extendedVariant}`,
-    `ds-badge-${extendedSize}`,
-    extendedPill ? 'ds-badge-pill' : '',
-    extendedClassName,
+    BADGE_CLASS,
+    baseVariantClass,
+    baseSizeClass,
+    basePillClass,
+    className
   ].filter(Boolean).join(' ');
   
+  // Combine styles
+  const combinedStyle = {
+    ...style,
+  };
+  
+  // If we have responsive styles, add them as a data attribute
+  if (responsiveStyles) {
+    combinedStyle['--responsive-styles'] = responsiveStyles;
+  }
+  
+  // Determine the element to render
+  const Element = as;
+  
   return (
-    <span
+    <Element
       className={badgeClasses}
-      {...restProps}
+      style={combinedStyle}
+      {...props}
     >
-      {extendedChildren || ''}
-    </span>
+      {children || ''}
+    </Element>
   );
 };
 
 Badge.propTypes = {
+  /** Element to render the Badge as */
+  ...polymorphicPropTypes,
   /** Badge content */
-  children: PropTypes.node.isRequired,
-  /** Badge variant */
-  variant: PropTypes.oneOf(Object.values(BADGE_VARIANTS)),
-  /** Badge size */
-  size: PropTypes.oneOf(Object.values(BADGE_SIZES)),
-  /** Whether the badge should have pill shape */
-  pill: PropTypes.bool,
+  children: PropTypes.node,
+  /** Badge variant or responsive object */
+  variant: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(BADGE_VARIANTS)),
+    PropTypes.object,
+  ]),
+  /** Badge size or responsive object */
+  size: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(BADGE_SIZES)),
+    PropTypes.object,
+  ]),
+  /** Whether the badge should have pill shape or responsive object */
+  pill: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object,
+  ]),
   /** Additional CSS class names */
   className: PropTypes.string,
-  /** Extensions to apply to the badge */
-  extensions: PropTypes.arrayOf(PropTypes.string),
+  /** Additional inline styles */
+  style: PropTypes.object,
+};
+
+Badge.defaultProps = {
+  as: 'span',
+  variant: 'default',
+  size: 'medium',
+  pill: false,
+  className: '',
+  style: {},
 };
 
 export default Badge;
