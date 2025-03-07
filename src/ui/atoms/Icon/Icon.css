@@ -1,0 +1,206 @@
+/* Icon Component Styles */
+
+.ui-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  vertical-align: middle;
+  /* Default to using font icons, but can be overridden for SVG or other methods */
+  font-family: var(--icon-font-family, 'Material Icons');
+  font-weight: normal;
+  font-style: normal;
+  font-size: var(--icon-size-md);
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+  
+  /* Default color if not specified */
+  color: var(--color-text-primary);
+  
+  /* Prevent text selection */
+  user-select: none;
+}
+
+/* Size Variants */
+.ui-icon--size-xs {
+  font-size: var(--icon-size-xs, 0.75rem); /* 12px */
+  width: var(--icon-size-xs, 0.75rem);
+  height: var(--icon-size-xs, 0.75rem);
+}
+
+.ui-icon--size-sm {
+  font-size: var(--icon-size-sm, 1rem); /* 16px */
+  width: var(--icon-size-sm, 1rem);
+  height: var(--icon-size-sm, 1rem);
+}
+
+.ui-icon--size-md {
+  font-size: var(--icon-size-md, 1.5rem); /* 24px */
+  width: var(--icon-size-md, 1.5rem);
+  height: var(--icon-size-md, 1.5rem);
+}
+
+.ui-icon--size-lg {
+  font-size: var(--icon-size-lg, 2rem); /* 32px */
+  width: var(--icon-size-lg, 2rem);
+  height: var(--icon-size-lg, 2rem);
+}
+
+.ui-icon--size-xl {
+  font-size: var(--icon-size-xl, 3rem); /* 48px */
+  width: var(--icon-size-xl, 3rem);
+  height: var(--icon-size-xl, 3rem);
+}
+
+/* Icon content via CSS content property */
+.ui-icon::before {
+  content: attr(data-icon);
+}
+
+/* Common icon mappings - these would be expanded based on the icon font or SVG system used */
+.ui-icon--user::before {
+  content: "person";
+}
+
+.ui-icon--home::before {
+  content: "home";
+}
+
+.ui-icon--settings::before {
+  content: "settings";
+}
+
+.ui-icon--menu::before {
+  content: "menu";
+}
+
+.ui-icon--close::before {
+  content: "close";
+}
+
+.ui-icon--check::before {
+  content: "check";
+}
+
+.ui-icon--star::before {
+  content: "star";
+}
+
+.ui-icon--warning::before {
+  content: "warning";
+}
+
+.ui-icon--error::before {
+  content: "error";
+}
+
+.ui-icon--info::before {
+  content: "info";
+}
+
+.ui-icon--search::before {
+  content: "search";
+}
+
+.ui-icon--edit::before {
+  content: "edit";
+}
+
+.ui-icon--delete::before {
+  content: "delete";
+}
+
+.ui-icon--add::before {
+  content: "add";
+}
+
+.ui-icon--remove::before {
+  content: "remove";
+}
+
+.ui-icon--calendar::before {
+  content: "calendar_today";
+}
+
+.ui-icon--notification::before {
+  content: "notifications";
+}
+
+.ui-icon--message::before {
+  content: "message";
+}
+
+.ui-icon--share::before {
+  content: "share";
+}
+
+.ui-icon--bookmark::before {
+  content: "bookmark";
+}
+
+/* Community-specific icons */
+.ui-icon--activity::before {
+  content: "local_activity";
+}
+
+.ui-icon--group::before {
+  content: "group";
+}
+
+.ui-icon--milestone::before {
+  content: "flag";
+}
+
+.ui-icon--comment::before {
+  content: "comment";
+}
+
+.ui-icon--timeline::before {
+  content: "timeline";
+}
+
+.ui-icon--analytics::before {
+  content: "analytics";
+}
+
+.ui-icon--feedback::before {
+  content: "feedback";
+}
+
+.ui-icon--archive::before {
+  content: "archive";
+}
+
+/* Accessibility */
+.ui-icon[aria-label] {
+  position: relative;
+}
+
+/* Animation support */
+.ui-icon--animated {
+  transition: transform 0.3s ease;
+}
+
+.ui-icon--spin {
+  animation: icon-spin 2s infinite linear;
+}
+
+@keyframes icon-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}

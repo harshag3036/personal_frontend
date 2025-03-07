@@ -1,10 +1,30 @@
 # UI Component Library Integration Guide
 
-This guide provides instructions for integrating the UI component library into your application.
+This guide provides instructions for integrating the UI component library into your application, with a special focus on community components.
 
 ## Getting Started
 
 The UI component library is designed to be easy to integrate into your application. It provides a set of reusable, composable components that can be used to build consistent user interfaces.
+
+## Application-Specific Priorities
+
+Based on analysis of the application codebase, particularly the community components, we've identified the following high-priority integration needs:
+
+1. **Community Component Integration**: The community components (CircleView, ActivityDetailView, ActivityLifecycleView, etc.) are complex and would benefit significantly from using the UI library components.
+
+2. **Specialized Components**: Several specialized components are needed for the community features:
+   - Timeline Component for activity timelines
+   - StatusBadge Component for activity statuses
+   - CommentThread Component for nested comments
+   - MetricCard Component for displaying metrics
+
+3. **Complex Visualizations**: Components for visualizing dependencies, milestones, and activity lifecycles are needed.
+
+4. **Tabbed Interfaces**: Many community components use tabbed interfaces that could be standardized.
+
+5. **Modal Dialogs**: Several components use modal dialogs for detailed views and forms.
+
+These priorities guide the integration strategy outlined in this document.
 
 ## Installation
 
@@ -130,6 +150,107 @@ const ToastExample = () => {
 };
 ```
 
+### Using Planned Community-Specific Components
+
+The following components are planned specifically for community features:
+
+```jsx
+// Using Tabs for ActivityDetailView
+import { Tabs, Box, Text } from '../ui';
+
+const ActivityTabs = ({ activity }) => (
+  <Tabs defaultTab="details">
+    <Tabs.List>
+      <Tabs.Tab id="details">Details</Tabs.Tab>
+      <Tabs.Tab id="participants">Participants</Tabs.Tab>
+      <Tabs.Tab id="milestones">Milestones</Tabs.Tab>
+      <Tabs.Tab id="comments">Comments</Tabs.Tab>
+    </Tabs.List>
+    
+    <Tabs.Panel id="details">
+      <Box padding="md">
+        <Text variant="body1">{activity.description}</Text>
+      </Box>
+    </Tabs.Panel>
+    
+    <Tabs.Panel id="participants">
+      {/* Participants content */}
+    </Tabs.Panel>
+    
+    <Tabs.Panel id="milestones">
+      {/* Milestones content */}
+    </Tabs.Panel>
+    
+    <Tabs.Panel id="comments">
+      {/* Comments content */}
+    </Tabs.Panel>
+  </Tabs>
+);
+
+// Using Timeline for ActivityLifecycleView
+import { Timeline, Badge, Text } from '../ui';
+
+const ActivityTimeline = ({ events }) => (
+  <Timeline>
+    {events.map(event => (
+      <Timeline.Item 
+        key={event.id}
+        date={event.date} 
+        title={event.title}
+        type={event.type}
+      >
+        <Box padding="sm">
+          <Badge variant={event.status}>{event.status}</Badge>
+          <Text variant="body2">{event.description}</Text>
+        </Box>
+      </Timeline.Item>
+    ))}
+  </Timeline>
+);
+
+// Using StatusBadge for activity statuses
+import { StatusBadge } from '../ui';
+
+const ActivityStatus = ({ status }) => (
+  <StatusBadge 
+    status={status} 
+    showIcon={true}
+    size="md"
+  />
+);
+
+// Using MetricCard for ActivityInsights
+import { MetricCard, Grid } from '../ui';
+
+const ActivityMetrics = ({ metrics }) => (
+  <Grid columns={{ base: 1, md: 2, lg: 4 }} gap="md">
+    <MetricCard
+      title="Participants"
+      value={metrics.participantCount}
+      trend={metrics.participantTrend}
+      icon="users"
+    />
+    <MetricCard
+      title="Comments"
+      value={metrics.commentCount}
+      trend={metrics.commentTrend}
+      icon="comments"
+    />
+    <MetricCard
+      title="Milestones"
+      value={`${metrics.completedMilestones}/${metrics.totalMilestones}`}
+      progress={metrics.completedMilestones / metrics.totalMilestones}
+      icon="milestone"
+    />
+    <MetricCard
+      title="Days Active"
+      value={metrics.daysActive}
+      icon="calendar"
+    />
+  </Grid>
+);
+```
+
 ### Using Organisms
 
 Organisms are complex components:
@@ -170,6 +291,68 @@ const MyComponent = () => (
       </>
     )}
   </Form>
+);
+```
+
+### Using Planned Community-Specific Organisms
+
+The following organism components are planned specifically for community features:
+
+```jsx
+// Using ActivityCard organism
+import { ActivityCard } from '../ui';
+
+const ActivityList = ({ activities }) => (
+  <Stack spacing="md">
+    {activities.map(activity => (
+      <ActivityCard
+        key={activity.id}
+        title={activity.title}
+        type={activity.type}
+        status={activity.status}
+        createdAt={activity.createdAt}
+        participants={activity.participants}
+        progress={activity.progress}
+        onClick={() => handleActivityClick(activity.id)}
+      />
+    ))}
+  </Stack>
+);
+
+// Using MilestoneTracker organism
+import { MilestoneTracker } from '../ui';
+
+const ActivityMilestones = ({ milestones }) => (
+  <MilestoneTracker
+    milestones={milestones}
+    currentMilestoneId={currentMilestone.id}
+    onMilestoneClick={handleMilestoneClick}
+  />
+);
+
+// Using DependencyGraph organism
+import { DependencyGraph } from '../ui';
+
+const MilestoneDependencies = ({ milestones, dependencies }) => (
+  <DependencyGraph
+    nodes={milestones}
+    edges={dependencies}
+    layout="horizontal"
+    onNodeClick={handleNodeClick}
+  />
+);
+
+// Using CommentSection organism
+import { CommentSection } from '../ui';
+
+const ActivityComments = ({ activityId, comments }) => (
+  <CommentSection
+    activityId={activityId}
+    comments={comments}
+    onCommentAdded={handleCommentAdded}
+    allowReplies={true}
+    allowReactions={true}
+  />
 );
 ```
 
@@ -333,6 +516,111 @@ const ToastComponent = () => {
 
 For a more complex example, see the [ComponentUsage](../examples/ComponentUsage.js) example.
 
+## Integration Strategy
+
+To ensure smooth integration of the UI library into the application, we recommend the following approach:
+
+1. **Start with Atomic Components**: Begin by replacing basic HTML elements with atomic components like Box, Text, and Button.
+
+2. **Move to Molecular Components**: Replace simple component combinations with molecular components like Card, Tabs, and Modal.
+
+3. **Implement Organism Components**: Replace complex component combinations with organism components like Form, ActivityCard, and CommentSection.
+
+4. **Refactor Page by Page**: Start with simpler pages and move to more complex ones.
+
+5. **Use Codemods for Bulk Changes**: Create codemods to automate repetitive changes.
+
+### Example Integration: ActivityDetailView
+
+Here's an example of how the ActivityDetailView component could be refactored to use the UI library:
+
+```jsx
+// Before
+<div className="activity-detail-view">
+  <div className="detail-header">
+    <div className="header-content">
+      <div className="type-status">
+        <span className={`activity-type ${activity.type}`}>
+          {activity.type}
+        </span>
+        <span className={`activity-status ${activity.status}`}>
+          {activity.status}
+        </span>
+      </div>
+      <h2>{activity.title}</h2>
+      <p className="creation-date">
+        Created {new Date(activity.createdAt).toLocaleDateString()}
+      </p>
+    </div>
+    <button 
+      className="close-button"
+      onClick={onClose}
+    >
+      ×
+    </button>
+  </div>
+
+  <div className="tab-navigation">
+    {tabs.map(tab => (
+      <button
+        key={tab.id}
+        className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+        onClick={() => setActiveTab(tab.id)}
+      >
+        {tab.label}
+      </button>
+    ))}
+  </div>
+
+  <div className="detail-content">
+    {/* Tab content */}
+  </div>
+</div>
+
+// After
+<Box className="activity-detail-view">
+  <Flex justifyContent="space-between" alignItems="center" className="detail-header">
+    <Box className="header-content">
+      <Flex gap="sm" className="type-status">
+        <Badge variant={activity.type}>{activity.type}</Badge>
+        <Badge variant={activity.status}>{activity.status}</Badge>
+      </Flex>
+      <Text variant="h2">{activity.title}</Text>
+      <Text variant="caption" className="creation-date">
+        Created {new Date(activity.createdAt).toLocaleDateString()}
+      </Text>
+    </Box>
+    <Button 
+      variant="icon"
+      onClick={onClose}
+      aria-label="Close"
+    >
+      <Icon name="close" />
+    </Button>
+  </Flex>
+
+  <Tabs activeTab={activeTab} onChange={setActiveTab}>
+    <Tabs.List>
+      {tabs.map(tab => (
+        <Tabs.Tab key={tab.id} id={tab.id}>
+          {tab.label}
+        </Tabs.Tab>
+      ))}
+    </Tabs.List>
+    
+    <Tabs.Panel id="description">
+      {/* Description content */}
+    </Tabs.Panel>
+    
+    <Tabs.Panel id="details">
+      {/* Details content */}
+    </Tabs.Panel>
+    
+    {/* Other tab panels */}
+  </Tabs>
+</Box>
+```
+
 ## Component Organization
 
 The UI component library follows atomic design principles, organizing components into these categories:
@@ -377,6 +665,10 @@ import {
 4. **Use Semantic Components**: Use semantic components like `Text` instead of raw HTML elements.
 5. **Use Responsive Design**: Use responsive props like `columns` in `Grid` to create responsive layouts.
 6. **Use Accessibility**: Ensure your components are accessible by using semantic HTML and ARIA attributes.
+7. **Prioritize Community Components**: Focus on integrating the UI library with community components first.
+8. **Maintain Consistency**: Use the same patterns and components across the application.
+9. **Document Integration**: Document how components are integrated for future reference.
+10. **Test Thoroughly**: Test integrated components thoroughly to ensure they work as expected.
 
 ## Examples
 
@@ -420,6 +712,22 @@ If your components don't look right, make sure you're using the correct props:
 <Box padding="md">...</Box>
 ```
 
+### Integration Issues
+
+If you're having trouble integrating a component, try breaking it down into smaller parts:
+
+```jsx
+// Instead of this
+<ComplexComponent {...props} />
+
+// Try this
+<Box>
+  <Header>...</Header>
+  <Content>...</Content>
+  <Footer>...</Footer>
+</Box>
+```
+
 ## Contributing
 
 When adding new components to the library:
@@ -435,9 +743,26 @@ When adding new components to the library:
 
 Future improvements to the UI component library include:
 
-1. Implementing more molecules (FormField, DataDisplay, etc.)
-2. Implementing more organisms (DataTable, Modal, etc.)
-3. Implementing templates (Dashboard, Settings, etc.)
-4. Adding a component playground for testing and documentation
-5. Implementing visual regression testing
-6. Adding more documentation and examples
+1. **Community-Specific Components**:
+   - Timeline Component for activity timelines
+   - StatusBadge Component for activity statuses
+   - CommentThread Component for nested comments
+   - MetricCard Component for displaying metrics
+
+2. **Community-Specific Organisms**:
+   - ActivityCard Organism for displaying activities
+   - MilestoneTracker Organism for tracking milestones
+   - DependencyGraph Organism for visualizing dependencies
+   - CommentSection Organism for comments and discussions
+
+3. **Advanced Features**:
+   - Visual testing implementation
+   - Accessibility testing
+   - Performance monitoring
+   - Component playground
+
+4. **Application Refactoring**:
+   - Migration strategy
+   - Component refactoring
+   - Performance optimization
+   - Accessibility enhancements

@@ -29,7 +29,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { isResponsiveObject, createResponsiveStyles } from '../../utilities/responsive-props';
-import { BADGE_CLASS, BADGE_VARIANTS, BADGE_SIZES } from './index';
+import { BADGE_CLASS, BADGE_VARIANTS, BADGE_SIZES } from './constants';
 import './Badge.css';
 
 /**

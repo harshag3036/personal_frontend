@@ -1,0 +1,172 @@
+/* Link Component Styles */
+
+.ui-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: var(--font-family, inherit);
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, text-decoration 0.2s ease;
+  color: var(--color-accent-primary, #0d6efd);
+  gap: 0.5rem;
+  position: relative;
+  outline: none;
+}
+
+/* Size Variants */
+.ui-link--size-sm {
+  font-size: var(--font-size-sm, 0.875rem);
+  padding: 0.25rem 0;
+}
+
+.ui-link--size-md {
+  font-size: var(--font-size-md, 1rem);
+  padding: 0.375rem 0;
+}
+
+.ui-link--size-lg {
+  font-size: var(--font-size-lg, 1.25rem);
+  padding: 0.5rem 0;
+}
+
+/* Variant Styles */
+.ui-link--default {
+  /* Default styles already applied */
+  display: inline-flex;
+}
+
+.ui-link--button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-md, 4px);
+  background-color: var(--color-accent-primary-light, #e6f0ff);
+  border: 1px solid transparent;
+  justify-content: center;
+}
+
+.ui-link--button:hover {
+  background-color: var(--color-accent-primary-lighter, #f0f7ff);
+}
+
+.ui-link--text {
+  color: var(--color-text-primary, #212529);
+}
+
+.ui-link--nav {
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius-sm, 2px);
+}
+
+.ui-link--nav:hover {
+  background-color: var(--color-background-hover, #f8f9fa);
+}
+
+.ui-link--breadcrumb {
+  color: var(--color-text-muted, #6c757d);
+}
+
+.ui-link--breadcrumb:hover {
+  color: var(--color-text-primary, #212529);
+}
+
+/* Underline Styles */
+.ui-link--underline {
+  text-decoration: none;
+  position: relative;
+}
+
+.ui-link--underline::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+}
+
+.ui-link--underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Default underline for default variant */
+.ui-link--default.ui-link--underline {
+  text-decoration: underline;
+}
+
+.ui-link--default.ui-link--underline::after {
+  display: none;
+}
+
+/* States */
+.ui-link:hover {
+  color: var(--color-accent-primary-dark, #0a58ca);
+}
+
+.ui-link:focus-visible {
+  outline: 2px solid var(--color-accent-primary, #0d6efd);
+  outline-offset: 2px;
+}
+
+.ui-link:active {
+  color: var(--color-accent-primary-darker, #084298);
+}
+
+.ui-link--disabled {
+  opacity: 0.65;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* External Link Indicator */
+.ui-link--external {
+  position: relative;
+}
+
+.ui-link--external::after {
+  content: '↗';
+  display: inline-block;
+  margin-left: 0.25rem;
+  font-size: 0.75em;
+  vertical-align: super;
+}
+
+/* Community-specific link styles */
+.ui-link--community {
+  color: var(--color-community-primary, #6200ee);
+}
+
+.ui-link--community:hover {
+  color: var(--color-community-primary-dark, #3700b3);
+}
+
+.ui-link--activity {
+  font-weight: 500;
+}
+
+.ui-link--milestone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+}
+
+.ui-link--milestone::before {
+  content: '🏆';
+  font-size: 0.875em;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .ui-link {
+    transition: none;
+  }
+  
+  .ui-link--underline::after {
+    transition: none;
+  }
+}

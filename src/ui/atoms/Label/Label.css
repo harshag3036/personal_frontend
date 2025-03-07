@@ -1,0 +1,127 @@
+/* Label Component Styles */
+
+.ui-label {
+  display: inline-block;
+  font-family: var(--font-family, inherit);
+  font-weight: 500;
+  color: var(--color-text-primary, #212529);
+  margin-bottom: 0.5rem;
+  cursor: default;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Size Variants */
+.ui-label--size-sm {
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+.ui-label--size-md {
+  font-size: var(--font-size-md, 1rem);
+}
+
+.ui-label--size-lg {
+  font-size: var(--font-size-lg, 1.25rem);
+}
+
+/* Variant Styles */
+.ui-label--default {
+  /* Default styles already applied */
+  display: inline-block;
+}
+
+.ui-label--floating {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: var(--color-background, #ffffff);
+  padding: 0 0.25rem;
+  font-size: 0.75rem;
+  z-index: 1;
+}
+
+.ui-label--inline {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0;
+  margin-right: 1rem;
+}
+
+.ui-label--tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm, 2px);
+  background-color: var(--color-background-muted, #f8f9fa);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.ui-label--badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-pill, 999px);
+  background-color: var(--color-accent-primary, #0d6efd);
+  color: var(--color-text-on-color, #ffffff);
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+/* Required indicator */
+.ui-label--required::after {
+  content: '*';
+  color: var(--color-error, #dc3545);
+  margin-left: 0.25rem;
+}
+
+/* Disabled state */
+.ui-label--disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Label with icon */
+.ui-label:has(> .ui-icon) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Community-specific label styles */
+.ui-label--community {
+  color: var(--color-community-primary, #6200ee);
+}
+
+.ui-label--activity {
+  font-weight: 600;
+}
+
+.ui-label--milestone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 600;
+  color: var(--color-success, #28a745);
+}
+
+.ui-label--milestone::before {
+  content: '🏆';
+  font-size: 0.875em;
+}
+
+/* Form field label styles */
+.ui-form-field .ui-label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .ui-label {
+    transition: none;
+  }
+}

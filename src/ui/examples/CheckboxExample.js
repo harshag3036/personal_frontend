@@ -5,7 +5,8 @@
  */
 
 import React, { useState } from 'react';
-import { Checkbox, Stack, Box, Text } from '../index';
+import { Checkbox } from '../molecules';
+import { Stack, Box, Text } from '../atoms';
 
 /**
  * CheckboxExample Component

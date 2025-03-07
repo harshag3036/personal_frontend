@@ -344,3 +344,5 @@ Toast.defaultProps = {
   style: {},
   extensions: [],
 };
+
+export default Toast;

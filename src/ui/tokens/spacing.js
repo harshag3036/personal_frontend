@@ -1,19 +1,18 @@
 /**
- * Spacing Tokens
+ * Spacing tokens for the UI library
  * 
- * This file defines the spacing tokens for the design system.
- * Spacing tokens are used for margins, paddings, gaps, and other spatial measurements.
- * 
- * The spacing scale follows a consistent pattern with each step being approximately
- * 1.5 times larger than the previous step, providing a harmonious visual rhythm.
+ * This file defines all spacing-related design tokens including:
+ * - Base spacing unit
+ * - Spacing scale
+ * - Insets (padding)
+ * - Gaps (margins)
  */
 
-/**
- * Spacing Scale
- * 
- * The spacing scale is based on a base unit of 4px (0.25rem).
- */
-export const spacingScale = {
+// Base spacing unit in pixels
+export const baseSpacingUnit = 4;
+
+// Spacing scale (in rem for accessibility)
+export const spacing = {
   '0': '0',
   '0.5': '0.125rem', // 2px
   '1': '0.25rem',    // 4px
@@ -50,39 +49,72 @@ export const spacingScale = {
   '96': '24rem',     // 384px
 };
 
-/**
- * Semantic Spacing
- * 
- * Semantic spacing tokens provide meaningful names for common spacing values.
- */
-export const spacing = {
+// Semantic spacing aliases
+export const spacingAliases = {
   // Component spacing
-  none: spacingScale['0'],
-  xs: spacingScale['1'],
-  sm: spacingScale['2'],
-  md: spacingScale['4'],
-  lg: spacingScale['6'],
-  xl: spacingScale['8'],
-  '2xl': spacingScale['12'],
-  '3xl': spacingScale['16'],
-  '4xl': spacingScale['20'],
-  '5xl': spacingScale['24'],
+  componentXS: spacing['1'],
+  componentSM: spacing['2'],
+  componentMD: spacing['3'],
+  componentLG: spacing['4'],
+  componentXL: spacing['6'],
   
   // Layout spacing
-  pageMargin: spacingScale['6'],
-  sectionMargin: spacingScale['12'],
-  containerPadding: spacingScale['6'],
+  layoutXS: spacing['4'],
+  layoutSM: spacing['6'],
+  layoutMD: spacing['8'],
+  layoutLG: spacing['12'],
+  layoutXL: spacing['16'],
   
-  // Component-specific spacing
-  buttonPadding: `${spacingScale['3']} ${spacingScale['6']}`,
-  cardPadding: spacingScale['6'],
-  inputPadding: `${spacingScale['3']} ${spacingScale['5']}`,
-  badgePadding: `${spacingScale['1']} ${spacingScale['2']}`,
-  
-  // Grid spacing
-  gridGap: spacingScale['4'],
-  gridGapSm: spacingScale['2'],
-  gridGapLg: spacingScale['6'],
+  // Content spacing
+  contentXS: spacing['2'],
+  contentSM: spacing['4'],
+  contentMD: spacing['6'],
+  contentLG: spacing['8'],
+  contentXL: spacing['12'],
 };
 
-export default spacing;
+// Insets (padding presets)
+export const insets = {
+  // Square insets (equal padding on all sides)
+  squareNone: { padding: spacing['0'] },
+  squareXS: { padding: spacing['1'] },
+  squareSM: { padding: spacing['2'] },
+  squareMD: { padding: spacing['3'] },
+  squareLG: { padding: spacing['4'] },
+  squareXL: { padding: spacing['6'] },
+  
+  // Symmetric insets (equal padding on top/bottom and left/right)
+  squishXS: { paddingTop: spacing['1'], paddingBottom: spacing['1'], paddingLeft: spacing['2'], paddingRight: spacing['2'] },
+  squishSM: { paddingTop: spacing['2'], paddingBottom: spacing['2'], paddingLeft: spacing['3'], paddingRight: spacing['3'] },
+  squishMD: { paddingTop: spacing['3'], paddingBottom: spacing['3'], paddingLeft: spacing['4'], paddingRight: spacing['4'] },
+  squishLG: { paddingTop: spacing['4'], paddingBottom: spacing['4'], paddingLeft: spacing['6'], paddingRight: spacing['6'] },
+  squishXL: { paddingTop: spacing['6'], paddingBottom: spacing['6'], paddingLeft: spacing['8'], paddingRight: spacing['8'] },
+  
+  // Asymmetric insets (different padding on top/bottom)
+  stretchXS: { paddingTop: spacing['2'], paddingBottom: spacing['1'], paddingLeft: spacing['2'], paddingRight: spacing['2'] },
+  stretchSM: { paddingTop: spacing['3'], paddingBottom: spacing['2'], paddingLeft: spacing['3'], paddingRight: spacing['3'] },
+  stretchMD: { paddingTop: spacing['4'], paddingBottom: spacing['3'], paddingLeft: spacing['4'], paddingRight: spacing['4'] },
+  stretchLG: { paddingTop: spacing['6'], paddingBottom: spacing['4'], paddingLeft: spacing['6'], paddingRight: spacing['6'] },
+  stretchXL: { paddingTop: spacing['8'], paddingBottom: spacing['6'], paddingLeft: spacing['8'], paddingRight: spacing['8'] },
+};
+
+// Gaps (margin presets for layouts)
+export const gaps = {
+  none: spacing['0'],
+  xs: spacing['1'],
+  sm: spacing['2'],
+  md: spacing['4'],
+  lg: spacing['6'],
+  xl: spacing['8'],
+  '2xl': spacing['12'],
+  '3xl': spacing['16'],
+  '4xl': spacing['24'],
+};
+
+export default {
+  baseSpacingUnit,
+  spacing,
+  spacingAliases,
+  insets,
+  gaps,
+};

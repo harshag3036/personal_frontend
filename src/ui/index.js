@@ -19,8 +19,34 @@ export * from './tokens';
 // Export themes
 export * from './themes';
 
-// Export utilities
-export * from './utilities';
+// Export utilities - use named imports to avoid conflicts with tokens
+import * as utilityExports from './utilities';
+// Re-export everything except breakpoints which would conflict with tokens.breakpoints
+export const {
+  cssVariables,
+  componentExtension,
+  toastService,
+  useToast,
+  responsiveProps,
+  polymorphic,
+  // Exclude breakpoints from utilities to avoid conflict with tokens
+} = utilityExports;
+// Re-export specific exports from responsive-props
+export const {
+  breakpointKeys,
+  isResponsiveObject,
+  getValueForBreakpoint,
+  createResponsiveStyles,
+  createResponsiveClassNames,
+  createResponsiveVariantStyles,
+  layoutPropConfig,
+  flexPropConfig,
+  gridPropConfig,
+} = utilityExports;
+// Re-export specific exports from polymorphic
+export const {
+  forwardRefWithAs,
+} = utilityExports;
 
 // Export examples
 export * as Examples from './examples';

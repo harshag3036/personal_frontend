@@ -299,3 +299,5 @@ ToastContainer.defaultProps = {
   className: '',
   style: {},
 };
+
+export default ToastContainer;

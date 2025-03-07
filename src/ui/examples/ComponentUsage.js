@@ -14,10 +14,10 @@ import {
   Divider,
   Button,
   Badge,
-  Input,
-  Card,
-  Form
-} from '..';
+  Input
+} from '../atoms';
+import { Card } from '../molecules';
+import { Form } from '../organisms';
 
 /**
  * UserProfileForm Component

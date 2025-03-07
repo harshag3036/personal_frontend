@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Grid, Text, Stack, Divider } from '../';
+import { Box, Flex, Grid, Text, Stack, Divider } from '../atoms';
 
 /**
  * BasicLayout Example

@@ -1,0 +1,149 @@
+/* Tooltip Component Styles */
+
+.ui-tooltip {
+  position: absolute;
+  z-index: 1000;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius-md, 4px);
+  pointer-events: none;
+  opacity: 0.98;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+  font-size: var(--font-size-sm, 0.875rem);
+  line-height: 1.4;
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-word;
+  transition: opacity 0.15s ease-in-out;
+}
+
+/* Arrow styles */
+.ui-tooltip--arrow::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+}
+
+/* Placement styles */
+.ui-tooltip--top {
+  margin-bottom: 8px;
+}
+
+.ui-tooltip--top.ui-tooltip--arrow::before {
+  bottom: -12px;
+  left: 50%;
+  margin-left: -6px;
+  border-top-color: inherit;
+  border-bottom: 0;
+}
+
+.ui-tooltip--bottom {
+  margin-top: 8px;
+}
+
+.ui-tooltip--bottom.ui-tooltip--arrow::before {
+  top: -12px;
+  left: 50%;
+  margin-left: -6px;
+  border-bottom-color: inherit;
+  border-top: 0;
+}
+
+.ui-tooltip--left {
+  margin-right: 8px;
+}
+
+.ui-tooltip--left.ui-tooltip--arrow::before {
+  right: -12px;
+  top: 50%;
+  margin-top: -6px;
+  border-left-color: inherit;
+  border-right: 0;
+}
+
+.ui-tooltip--right {
+  margin-left: 8px;
+}
+
+.ui-tooltip--right.ui-tooltip--arrow::before {
+  left: -12px;
+  top: 50%;
+  margin-top: -6px;
+  border-right-color: inherit;
+  border-left: 0;
+}
+
+/* Variant styles */
+.ui-tooltip--default {
+  background-color: var(--color-gray-800, #2d3748);
+  color: var(--color-white, #ffffff);
+  border-color: var(--color-gray-800, #2d3748);
+}
+
+.ui-tooltip--light {
+  background-color: var(--color-white, #ffffff);
+  color: var(--color-gray-800, #2d3748);
+  border: 1px solid var(--color-gray-200, #e2e8f0);
+  border-color: var(--color-gray-200, #e2e8f0);
+}
+
+.ui-tooltip--dark {
+  background-color: var(--color-gray-900, #1a202c);
+  color: var(--color-white, #ffffff);
+  border-color: var(--color-gray-900, #1a202c);
+}
+
+.ui-tooltip--info {
+  background-color: var(--color-blue-600, #3182ce);
+  color: var(--color-white, #ffffff);
+  border-color: var(--color-blue-600, #3182ce);
+}
+
+.ui-tooltip--success {
+  background-color: var(--color-green-600, #38a169);
+  color: var(--color-white, #ffffff);
+  border-color: var(--color-green-600, #38a169);
+}
+
+.ui-tooltip--warning {
+  background-color: var(--color-yellow-500, #ecc94b);
+  color: var(--color-gray-900, #1a202c);
+  border-color: var(--color-yellow-500, #ecc94b);
+}
+
+.ui-tooltip--error {
+  background-color: var(--color-red-600, #e53e3e);
+  color: var(--color-white, #ffffff);
+  border-color: var(--color-red-600, #e53e3e);
+}
+
+/* Size styles */
+.ui-tooltip--sm {
+  padding: 0.25rem 0.5rem;
+  font-size: var(--font-size-xs, 0.75rem);
+}
+
+.ui-tooltip--md {
+  padding: 0.5rem 0.75rem;
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+.ui-tooltip--lg {
+  padding: 0.75rem 1rem;
+  font-size: var(--font-size-md, 1rem);
+}
+
+/* Community-specific styles */
+.ui-tooltip--community {
+  background-color: var(--color-community-700, #6200ee);
+  color: var(--color-white, #ffffff);
+  border-color: var(--color-community-700, #6200ee);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .ui-tooltip {
+    transition: none;
+  }
+}

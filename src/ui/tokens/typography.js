@@ -1,55 +1,49 @@
 /**
- * Typography Tokens
+ * Typography tokens for the UI library
  * 
- * This file defines the typography tokens for the design system.
- * Typography tokens include font families, sizes, weights, line heights, and letter spacing.
+ * This file defines all typography-related design tokens including:
+ * - Font families
+ * - Font weights
+ * - Font sizes
+ * - Line heights
+ * - Letter spacing
  */
 
-/**
- * Font Families
- */
+// Font families
 export const fontFamilies = {
-  primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-  code: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
+  // System font stack for cross-platform consistency
+  base: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+  heading: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+  mono: 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
 };
 
-/**
- * Font Sizes
- * 
- * Font sizes follow a scale with consistent increments.
- */
-export const fontSizes = {
-  xs: '0.75rem',     // 12px
-  sm: '0.875rem',    // 14px
-  md: '1rem',        // 16px
-  lg: '1.125rem',    // 18px
-  xl: '1.25rem',     // 20px
-  '2xl': '1.5rem',   // 24px
-  '3xl': '1.875rem', // 30px
-  '4xl': '2.25rem',  // 36px
-  '5xl': '3rem',     // 48px
-  '6xl': '3.75rem',  // 60px
-  '7xl': '4.5rem',   // 72px
-};
-
-/**
- * Font Weights
- */
+// Font weights
 export const fontWeights = {
-  thin: 100,
-  extralight: 200,
   light: 300,
-  normal: 400,
+  regular: 400,
   medium: 500,
   semibold: 600,
   bold: 700,
-  extrabold: 800,
-  black: 900,
 };
 
-/**
- * Line Heights
- */
+// Font sizes (in rem for accessibility)
+export const fontSizes = {
+  xs: '0.75rem',    // 12px
+  sm: '0.875rem',   // 14px
+  md: '1rem',       // 16px
+  lg: '1.125rem',   // 18px
+  xl: '1.25rem',    // 20px
+  '2xl': '1.5rem',  // 24px
+  '3xl': '1.875rem', // 30px
+  '4xl': '2.25rem', // 36px
+  '5xl': '3rem',    // 48px
+  '6xl': '3.75rem', // 60px
+  '7xl': '4.5rem',  // 72px
+  '8xl': '6rem',    // 96px
+  '9xl': '8rem',    // 128px
+};
+
+// Line heights
 export const lineHeights = {
   none: 1,
   tight: 1.25,
@@ -59,10 +53,8 @@ export const lineHeights = {
   loose: 2,
 };
 
-/**
- * Letter Spacing
- */
-export const letterSpacing = {
+// Letter spacing
+export const letterSpacings = {
   tighter: '-0.05em',
   tight: '-0.025em',
   normal: '0',
@@ -71,102 +63,99 @@ export const letterSpacing = {
   widest: '0.1em',
 };
 
-/**
- * Text Styles
- * 
- * Predefined text styles for common use cases.
- */
+// Text styles - combinations of the above tokens
 export const textStyles = {
   h1: {
-    fontFamily: fontFamilies.primary,
-    fontSize: fontSizes['5xl'],
-    fontWeight: fontWeights.bold,
-    lineHeight: lineHeights.tight,
-    letterSpacing: letterSpacing.tight,
-  },
-  h2: {
-    fontFamily: fontFamilies.primary,
+    fontFamily: fontFamilies.heading,
     fontSize: fontSizes['4xl'],
     fontWeight: fontWeights.bold,
     lineHeight: lineHeights.tight,
-    letterSpacing: letterSpacing.tight,
+    letterSpacing: letterSpacings.tight,
+  },
+  h2: {
+    fontFamily: fontFamilies.heading,
+    fontSize: fontSizes['3xl'],
+    fontWeight: fontWeights.bold,
+    lineHeight: lineHeights.tight,
+    letterSpacing: letterSpacings.tight,
   },
   h3: {
-    fontFamily: fontFamilies.primary,
-    fontSize: fontSizes['3xl'],
-    fontWeight: fontWeights.semibold,
-    lineHeight: lineHeights.snug,
-    letterSpacing: letterSpacing.tight,
-  },
-  h4: {
-    fontFamily: fontFamilies.primary,
+    fontFamily: fontFamilies.heading,
     fontSize: fontSizes['2xl'],
     fontWeight: fontWeights.semibold,
-    lineHeight: lineHeights.snug,
-    letterSpacing: letterSpacing.normal,
+    lineHeight: lineHeights.tight,
+    letterSpacing: letterSpacings.normal,
   },
-  h5: {
-    fontFamily: fontFamilies.primary,
+  h4: {
+    fontFamily: fontFamilies.heading,
     fontSize: fontSizes.xl,
     fontWeight: fontWeights.semibold,
-    lineHeight: lineHeights.normal,
-    letterSpacing: letterSpacing.normal,
+    lineHeight: lineHeights.tight,
+    letterSpacing: letterSpacings.normal,
   },
-  h6: {
-    fontFamily: fontFamilies.primary,
+  h5: {
+    fontFamily: fontFamilies.heading,
     fontSize: fontSizes.lg,
     fontWeight: fontWeights.semibold,
-    lineHeight: lineHeights.normal,
-    letterSpacing: letterSpacing.normal,
+    lineHeight: lineHeights.tight,
+    letterSpacing: letterSpacings.normal,
   },
-  body1: {
-    fontFamily: fontFamilies.primary,
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.relaxed,
-    letterSpacing: letterSpacing.normal,
-  },
-  body2: {
-    fontFamily: fontFamilies.primary,
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.relaxed,
-    letterSpacing: letterSpacing.normal,
-  },
-  caption: {
-    fontFamily: fontFamilies.primary,
-    fontSize: fontSizes.xs,
-    fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
-    letterSpacing: letterSpacing.normal,
-  },
-  button: {
-    fontFamily: fontFamilies.primary,
+  h6: {
+    fontFamily: fontFamilies.heading,
     fontSize: fontSizes.md,
     fontWeight: fontWeights.semibold,
-    lineHeight: lineHeights.none,
-    letterSpacing: letterSpacing.wide,
+    lineHeight: lineHeights.tight,
+    letterSpacing: letterSpacings.normal,
   },
-  overline: {
-    fontFamily: fontFamilies.primary,
-    fontSize: fontSizes.xs,
-    fontWeight: fontWeights.medium,
+  body: {
+    fontFamily: fontFamilies.base,
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.regular,
     lineHeight: lineHeights.normal,
-    letterSpacing: letterSpacing.wider,
-    textTransform: 'uppercase',
+    letterSpacing: letterSpacings.normal,
+  },
+  bodyLarge: {
+    fontFamily: fontFamilies.base,
+    fontSize: fontSizes.lg,
+    fontWeight: fontWeights.regular,
+    lineHeight: lineHeights.normal,
+    letterSpacing: letterSpacings.normal,
+  },
+  bodySmall: {
+    fontFamily: fontFamilies.base,
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.regular,
+    lineHeight: lineHeights.normal,
+    letterSpacing: letterSpacings.normal,
+  },
+  caption: {
+    fontFamily: fontFamilies.base,
+    fontSize: fontSizes.xs,
+    fontWeight: fontWeights.regular,
+    lineHeight: lineHeights.normal,
+    letterSpacing: letterSpacings.wide,
+  },
+  button: {
+    fontFamily: fontFamilies.base,
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.medium,
+    lineHeight: lineHeights.none,
+    letterSpacing: letterSpacings.wide,
+  },
+  code: {
+    fontFamily: fontFamilies.mono,
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.regular,
+    lineHeight: lineHeights.normal,
+    letterSpacing: letterSpacings.normal,
   },
 };
 
-/**
- * Typography Tokens
- */
-const typography = {
+export default {
   fontFamilies,
-  fontSizes,
   fontWeights,
+  fontSizes,
   lineHeights,
-  letterSpacing,
+  letterSpacings,
   textStyles,
 };
-
-export default typography;
