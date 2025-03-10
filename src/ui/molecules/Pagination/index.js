@@ -1,28 +1,9 @@
 import Pagination from './Pagination';
 
+// Re-export constants from constants.js
+export { PAGINATION_VARIANTS, PAGINATION_SIZES, PAGINATION_SHAPES } from './constants';
+
 // Export pagination variants as constants
-export const PAGINATION_VARIANTS = {
-  DEFAULT: 'default',
-  OUTLINE: 'outline',
-  GHOST: 'ghost',
-  MINIMAL: 'minimal',
-};
-
-// Export pagination sizes as constants
-export const PAGINATION_SIZES = {
-  SMALL: 'sm',
-  MEDIUM: 'md',
-  LARGE: 'lg',
-};
-
-// Export pagination shapes as constants
-export const PAGINATION_SHAPES = {
-  ROUNDED: 'rounded',
-  SQUARE: 'square',
-  PILL: 'pill',
-};
-
-// Export component
 export { Pagination };
 
 // Default export

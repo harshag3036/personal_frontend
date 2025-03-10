@@ -31,7 +31,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { isResponsiveObject, createResponsiveStyles } from '../../utilities/responsive-props';
-import { BUTTON_CLASS, BUTTON_VARIANTS, BUTTON_SIZES, BUTTON_STATES } from './index';
+import { BUTTON_CLASS, BUTTON_VARIANTS, BUTTON_SIZES, BUTTON_STATES } from './constants';
 import './Button.css';
 
 /**

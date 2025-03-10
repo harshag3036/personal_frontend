@@ -1,3 +1,4 @@
+import { MODAL_SIZES, MODAL_VARIANTS } from './constants';
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';

@@ -1,3 +1,4 @@
+import { LINK_MODIFIERS, LINK_VARIANTS, LINK_SIZES, LINK_CLASS } from './constants';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';

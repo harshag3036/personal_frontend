@@ -1,3 +1,4 @@
+import { PAGINATION_VARIANTS, PAGINATION_SIZES, PAGINATION_SHAPES } from './constants';
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Flex, Button, Text, Icon } from '../../atoms';

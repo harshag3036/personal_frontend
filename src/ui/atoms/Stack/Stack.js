@@ -45,7 +45,7 @@ import PropTypes from 'prop-types';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { isResponsiveObject } from '../../utilities/responsive-props';
 import Flex from '../Flex';
-import { STACK_CLASS, STACK_DIRECTIONS } from './index';
+import { STACK_CLASS, STACK_DIRECTIONS } from './constants';
 import './Stack.css';
 
 /**

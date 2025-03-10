@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
+import { ACCORDION_VARIANTS, ACCORDION_SIZES } from './constants';
 import './Accordion.css';
 
 /**
@@ -11,8 +12,8 @@ export const AccordionContext = createContext({
   expandedItems: [],
   toggleItem: () => {},
   allowMultiple: false,
-  variant: 'default',
-  size: 'md',
+  variant: ACCORDION_VARIANTS.DEFAULT,
+  size: ACCORDION_SIZES.MEDIUM,
 });
 
 /**
@@ -39,8 +40,8 @@ const Accordion = ({
   children,
   defaultIndex = [],
   allowMultiple = false,
-  variant = 'default',
-  size = 'md',
+  variant = ACCORDION_VARIANTS.DEFAULT,
+  size = ACCORDION_SIZES.MEDIUM,
   className = '',
   ...restProps
 }) => {
@@ -117,9 +118,9 @@ Accordion.propTypes = {
   /** Whether multiple items can be expanded at the same time */
   allowMultiple: PropTypes.bool,
   /** Visual variant of the accordion */
-  variant: PropTypes.oneOf(['default', 'outline', 'filled', 'subtle']),
+  variant: PropTypes.oneOf(Object.values(ACCORDION_VARIANTS)),
   /** Size of the accordion */
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  size: PropTypes.oneOf(Object.values(ACCORDION_SIZES)),
   /** Additional CSS class */
   className: PropTypes.string,
 };

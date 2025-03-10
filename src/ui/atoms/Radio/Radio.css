@@ -1,0 +1,215 @@
+/**
+ * Radio Component Styles
+ * 
+ * This file contains styles for the Radio component.
+ */
+
+/* Import design tokens */
+@import '../../../styles/design-tokens.css';
+
+/* Base radio styles */
+.ui-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Hide the default radio input */
+.ui-radio__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+/* Radio control (outer circle) */
+.ui-radio__control {
+  position: relative;
+  display: inline-block;
+  width: var(--radio-size, 20px);
+  height: var(--radio-size, 20px);
+  background-color: var(--color-white);
+  border: 2px solid var(--color-neutral-400);
+  border-radius: 50%;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Radio dot (inner circle) */
+.ui-radio__dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--radio-size, 20px) / 2);
+  height: calc(var(--radio-size, 20px) / 2);
+  background-color: var(--color-white);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Radio label */
+.ui-radio__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-left: var(--spacing-xs);
+}
+
+/* Label position */
+.ui-radio--label-left {
+  flex-direction: row-reverse;
+}
+
+.ui-radio--label-left .ui-radio__label {
+  margin-left: 0;
+  margin-right: var(--spacing-xs);
+}
+
+/* Checked state */
+.ui-radio__input:checked + .ui-radio__control {
+  border-color: var(--color-primary);
+  background-color: var(--color-white);
+}
+
+.ui-radio__input:checked + .ui-radio__control .ui-radio__dot {
+  background-color: var(--color-primary);
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Focus state */
+.ui-radio__input:focus + .ui-radio__control {
+  box-shadow: 0 0 0 2px var(--color-focus);
+}
+
+/* Disabled state */
+.ui-radio--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Radio sizes */
+.ui-radio--small {
+  --radio-size: 16px;
+}
+
+.ui-radio--medium {
+  --radio-size: 20px;
+}
+
+.ui-radio--large {
+  --radio-size: 24px;
+}
+
+/* Radio variants */
+.ui-radio--primary .ui-radio__input:checked + .ui-radio__control {
+  border-color: var(--color-primary);
+}
+
+.ui-radio--primary .ui-radio__input:checked + .ui-radio__control .ui-radio__dot {
+  background-color: var(--color-primary);
+}
+
+.ui-radio--secondary .ui-radio__input:checked + .ui-radio__control {
+  border-color: var(--color-secondary);
+}
+
+.ui-radio--secondary .ui-radio__input:checked + .ui-radio__control .ui-radio__dot {
+  background-color: var(--color-secondary);
+}
+
+.ui-radio--accent .ui-radio__input:checked + .ui-radio__control {
+  border-color: var(--color-accent);
+}
+
+.ui-radio--accent .ui-radio__input:checked + .ui-radio__control .ui-radio__dot {
+  background-color: var(--color-accent);
+}
+
+.ui-radio--success .ui-radio__input:checked + .ui-radio__control {
+  border-color: var(--color-success);
+}
+
+.ui-radio--success .ui-radio__input:checked + .ui-radio__control .ui-radio__dot {
+  background-color: var(--color-success);
+}
+
+.ui-radio--warning .ui-radio__input:checked + .ui-radio__control {
+  border-color: var(--color-warning);
+}
+
+.ui-radio--warning .ui-radio__input:checked + .ui-radio__control .ui-radio__dot {
+  background-color: var(--color-warning);
+}
+
+.ui-radio--error .ui-radio__input:checked + .ui-radio__control {
+  border-color: var(--color-error);
+}
+
+.ui-radio--error .ui-radio__input:checked + .ui-radio__control .ui-radio__dot {
+  background-color: var(--color-error);
+}
+
+.ui-radio--info .ui-radio__input:checked + .ui-radio__control {
+  border-color: var(--color-info);
+}
+
+.ui-radio--info .ui-radio__input:checked + .ui-radio__control .ui-radio__dot {
+  background-color: var(--color-info);
+}
+
+.ui-radio--neutral .ui-radio__input:checked + .ui-radio__control {
+  border-color: var(--color-neutral-600);
+}
+
+.ui-radio--neutral .ui-radio__input:checked + .ui-radio__control .ui-radio__dot {
+  background-color: var(--color-neutral-600);
+}
+
+/* Hover state */
+@media (hover: hover) {
+  .ui-radio:hover .ui-radio__control:not(.ui-radio--disabled .ui-radio__control) {
+    border-color: var(--color-neutral-500);
+  }
+  
+  .ui-radio:hover .ui-radio__input:checked + .ui-radio__control:not(.ui-radio--disabled .ui-radio__control) {
+    border-color: var(--color-primary-dark);
+  }
+  
+  .ui-radio--primary:hover .ui-radio__input:checked + .ui-radio__control:not(.ui-radio--disabled .ui-radio__control) {
+    border-color: var(--color-primary-dark);
+  }
+  
+  .ui-radio--secondary:hover .ui-radio__input:checked + .ui-radio__control:not(.ui-radio--disabled .ui-radio__control) {
+    border-color: var(--color-secondary-dark);
+  }
+  
+  .ui-radio--accent:hover .ui-radio__input:checked + .ui-radio__control:not(.ui-radio--disabled .ui-radio__control) {
+    border-color: var(--color-accent-dark);
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .ui-radio__control {
+    background-color: var(--color-neutral-800);
+    border-color: var(--color-neutral-600);
+  }
+  
+  .ui-radio__input:checked + .ui-radio__control {
+    background-color: var(--color-neutral-800);
+  }
+  
+  .ui-radio__label {
+    color: var(--color-text-primary-dark);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 576px) {
+  .ui-radio--responsive {
+    --radio-size: 16px;
+  }
+}

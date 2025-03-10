@@ -37,7 +37,7 @@
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { isResponsiveObject, createResponsiveStyles } from '../../utilities/responsive-props';
-import { INPUT_CLASS, INPUT_VARIANTS, INPUT_SIZES, INPUT_STATES } from './index';
+import { INPUT_CLASS, INPUT_VARIANTS, INPUT_SIZES, INPUT_STATES } from './constants';
 import './Input.css';
 
 /**

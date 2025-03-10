@@ -1,3 +1,4 @@
+import { AVATAR_MODIFIERS, AVATAR_STATUS, AVATAR_SHAPES, AVATAR_SIZES, AVATAR_CLASS, AVATAR_GROUP_CLASS } from './constants';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { polymorphicPropTypes, VALID_ELEMENTS } from '../../utilities/polymorphic';

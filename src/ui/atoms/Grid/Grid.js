@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Box, { BOX_CLASS } from '../Box';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { isResponsiveObject, createResponsiveStyles, gridPropConfig } from '../../utilities/responsive-props';
-import { GRID_CLASS } from './index';
+import { GRID_CLASS } from './constants';
 import './Grid.css';
 
 /**

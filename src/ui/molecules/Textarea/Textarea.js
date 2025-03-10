@@ -95,7 +95,7 @@ import {
   TEXTAREA_STATES,
   TEXTAREA_MODIFIERS, 
   TEXTAREA_BREAKPOINTS 
-} from './index';
+} from './constants';
 import './Textarea.css';
 
 /**

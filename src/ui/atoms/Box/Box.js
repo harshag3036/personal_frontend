@@ -1,3 +1,4 @@
+import { BOX_MODIFIERS, BOX_CLASS, BOX_BREAKPOINTS } from './constants';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { polymorphicPropTypes, VALID_ELEMENTS } from '../../utilities/polymorphic';

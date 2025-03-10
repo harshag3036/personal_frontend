@@ -1,3 +1,4 @@
+import { ICON_MODIFIERS, ICON_NAMES, ICON_CLASS } from './constants';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { polymorphicPropTypes, VALID_ELEMENTS } from '../../utilities/polymorphic';

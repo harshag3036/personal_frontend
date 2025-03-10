@@ -93,7 +93,7 @@ import {
   SELECT_STATES, 
   SELECT_MODIFIERS, 
   SELECT_BREAKPOINTS 
-} from './index';
+} from './constants';
 import './Select.css';
 
 /**

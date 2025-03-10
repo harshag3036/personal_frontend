@@ -31,7 +31,7 @@ import PropTypes from 'prop-types';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { isResponsiveObject } from '../../utilities/responsive-props';
 import Box from '../Box';
-import { DIVIDER_CLASS, DIVIDER_ORIENTATIONS } from './index';
+import { DIVIDER_CLASS, DIVIDER_ORIENTATIONS } from './constants';
 import './Divider.css';
 
 /**

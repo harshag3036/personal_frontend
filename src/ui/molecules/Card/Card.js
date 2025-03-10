@@ -36,7 +36,7 @@ import { isResponsiveObject } from '../../utilities/responsive-props';
 import { componentExtension } from '../../utilities';
 import Box from '../../atoms/Box';
 import Stack from '../../atoms/Stack';
-import { CARD_CLASS, CARD_VARIANTS } from './index';
+import { CARD_CLASS, CARD_VARIANTS } from './constants';
 import './Card.css';
 
 /**

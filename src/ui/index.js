@@ -4,6 +4,9 @@
  * This file exports all UI components organized by category.
  */
 
+// Import utilities - use named imports to avoid conflicts with tokens
+import * as utilityExports from './utilities';
+
 // Export atoms (basic building blocks)
 export * from './atoms';
 
@@ -18,9 +21,6 @@ export * from './tokens';
 
 // Export themes
 export * from './themes';
-
-// Export utilities - use named imports to avoid conflicts with tokens
-import * as utilityExports from './utilities';
 // Re-export everything except breakpoints which would conflict with tokens.breakpoints
 export const {
   cssVariables,

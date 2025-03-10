@@ -14,3 +14,4 @@ export { default as AtomsGuide } from './atoms-guide.md';
 export { default as MoleculesOrganismsGuide } from './molecules-organisms-guide.md';
 export { default as ThemingGuide } from './theming-guide.md';
 export { default as UtilitiesGuide } from './utilities-guide.md';
+export { default as ComponentStructureGuide } from './component-structure-guide.md';

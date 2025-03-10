@@ -47,12 +47,12 @@ import PropTypes from 'prop-types';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { isResponsiveObject } from '../../utilities/responsive-props';
 import Box from '../../atoms/Box';
+import ToastItem from './ToastItem';
 import { 
-  TOAST_CLASS, 
   TOAST_POSITIONS, 
   TOAST_CONTAINER_CLASS, 
   TOAST_GROUP_CLASS 
-} from './index';
+} from './constants';
 import './ToastContainer.css';
 
 /**
@@ -191,61 +191,20 @@ const ToastContainer = ({
               ...toastProps
             } = toast;
 
-            // Safe close handler with error boundary
-            const handleClose = () => {
-              handleRemove(id);
-              
-              if (onClose) {
-                try {
-                  onClose(id);
-                } catch (error) {
-                  console.error('ToastContainer: Error in toast onClose handler:', error);
-                }
-              }
-            };
-
-            // Auto-dismiss effect
-            useEffect(() => {
-              let timer;
-              if (duration && duration > 0) {
-                timer = setTimeout(() => {
-                  handleClose();
-                }, duration);
-              }
-              return () => {
-                if (timer) clearTimeout(timer);
-              };
-            }, [id, duration]);
-
             return (
-              <div
+              <ToastItem
                 key={id}
-                className={`${TOAST_CLASS} ${TOAST_CLASS}-${variant || 'default'} ${TOAST_CLASS}-${pos}`}
-                role="alert"
-                aria-live="polite"
+                id={id}
+                content={content}
+                variant={variant}
+                position={pos}
+                duration={duration}
+                icon={icon}
+                showCloseButton={showCloseButton}
+                onClose={onClose}
+                handleRemove={handleRemove}
                 {...toastProps}
-              >
-                {icon && (
-                  <div className={`${TOAST_CLASS}-icon`}>
-                    {icon}
-                  </div>
-                )}
-                
-                <div className={`${TOAST_CLASS}-content`}>
-                  {content || 'Notification'}
-                </div>
-                
-                {showCloseButton && (
-                  <button
-                    className={`${TOAST_CLASS}-close`}
-                    onClick={handleClose}
-                    aria-label="Close notification"
-                    type="button"
-                  >
-                    <span aria-hidden="true">×</span>
-                  </button>
-                )}
-              </div>
+              />
             );
           })}
         </div>

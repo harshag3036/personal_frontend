@@ -79,7 +79,7 @@ import {
   TOAST_POSITIONS, 
   TOAST_MODIFIERS,
   TOAST_BREAKPOINTS
-} from './index';
+} from './constants';
 import './Toast.css';
 
 /**

@@ -1,0 +1,122 @@
+/**
+ * StatusBadge Component Styles
+ */
+
+/* Base styles */
+.ui-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Status-specific styles */
+.ui-status-badge--not-started {
+  border-color: var(--status-color, #6c757d);
+}
+
+.ui-status-badge--in-progress {
+  border-color: var(--status-color, #007bff);
+}
+
+.ui-status-badge--on-hold {
+  border-color: var(--status-color, #ffc107);
+}
+
+.ui-status-badge--completed {
+  border-color: var(--status-color, #28a745);
+}
+
+.ui-status-badge--cancelled {
+  border-color: var(--status-color, #dc3545);
+}
+
+/* Icon styles */
+.ui-status-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Label styles */
+.ui-status-badge__label {
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Size variations */
+.ui-badge.ui-badge--small .ui-status-badge__icon {
+  font-size: 0.75rem;
+}
+
+.ui-badge.ui-badge--medium .ui-status-badge__icon {
+  font-size: 0.875rem;
+}
+
+.ui-badge.ui-badge--large .ui-status-badge__icon {
+  font-size: 1rem;
+}
+
+/* Responsive styles */
+.ui-status-badge--responsive {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Media queries for responsive badges */
+@media (min-width: 576px) {
+  .ui-status-badge--responsive {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .ui-status-badge--responsive {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .ui-status-badge--responsive {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ui-status-badge--responsive {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Hover effects */
+.ui-status-badge:hover {
+  opacity: 0.9;
+}
+
+/* Focus styles */
+.ui-status-badge:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--status-color, #6c757d), 0.25);
+}
+
+/* Animation for status changes */
+@keyframes status-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.ui-status-badge--animate {
+  animation: status-pulse 0.5s ease-in-out;
+}

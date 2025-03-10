@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Box, { BOX_CLASS } from '../Box';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { isResponsiveObject, createResponsiveStyles } from '../../utilities/responsive-props';
-import { TEXT_CLASS, TEXT_VARIANTS, TEXT_WEIGHTS, TEXT_TRANSFORMS, TEXT_ALIGNS } from './index';
+import { TEXT_CLASS, TEXT_VARIANTS, TEXT_WEIGHTS, TEXT_TRANSFORMS, TEXT_ALIGNS } from './constants';
 import './Text.css';
 
 /**

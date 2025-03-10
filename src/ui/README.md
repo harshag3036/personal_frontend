@@ -201,17 +201,18 @@ We are implementing a comprehensive upgrade plan to make the UI component librar
 - ✅ Remove the design-system directory once migration is complete
 
 #### 2. Standardize Component Structure
-- Implement consistent file structure for all components:
+- ✅ Implement consistent file structure for all components:
   ```
   ComponentName/
   ├── ComponentName.js     # Main component implementation
   ├── ComponentName.css    # Component styles
   ├── ComponentName.test.js # Component tests
   ├── ComponentName.stories.js # Storybook stories
-  └── index.js             # Export file
+  ├── constants.js         # Component constants
+  └── index.js             # Re-exports component and constants
   ```
 - Add proper PropTypes and documentation to all components
-- Create index files for better importing experience
+- ✅ Create index files for better importing experience
 
 #### 3. Standardize Prop Patterns
 - Implement consistent prop patterns across all components
@@ -311,5 +312,9 @@ For more detailed information, see the documentation files:
 
 - [Integration Guide](./docs/integration-guide.md): How to integrate the UI library into your application
 - [Component API Guide](./docs/component-api-guide.md): Detailed documentation of component APIs
+- [Component Structure Guide](./docs/component-structure-guide.md): Guidelines for component file structure and organization
 - [Development Guide](./docs/development-guide.md): Guidelines for developing new components
-- [Roadmap](./docs/roadmap.md): Future plans for the UI library
+- [Atoms Guide](./docs/atoms-guide.md): Documentation for atom components
+- [Molecules & Organisms Guide](./docs/molecules-organisms-guide.md): Documentation for molecule and organism components
+- [Theming Guide](./docs/theming-guide.md): Documentation for theming system
+- [Utilities Guide](./docs/utilities-guide.md): Documentation for utility functions

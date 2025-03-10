@@ -3,22 +3,10 @@ import TabList from './TabList';
 import Tab from './Tab';
 import TabPanel from './TabPanel';
 
+// Re-export constants from constants.js
+export { TAB_VARIANTS, TAB_SIZES } from './constants';
+
 // Export tab variants as constants
-export const TAB_VARIANTS = {
-  DEFAULT: 'default',
-  PILLS: 'pills',
-  UNDERLINE: 'underline',
-  CONTAINED: 'contained',
-};
-
-// Export tab sizes as constants
-export const TAB_SIZES = {
-  SMALL: 'sm',
-  MEDIUM: 'md',
-  LARGE: 'lg',
-};
-
-// Export components
 export { Tabs, TabList, Tab, TabPanel };
 
 // Default export

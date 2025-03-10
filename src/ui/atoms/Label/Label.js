@@ -1,3 +1,4 @@
+import { LABEL_MODIFIERS, LABEL_VARIANTS, LABEL_SIZES, LABEL_CLASS } from './constants';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { polymorphicPropTypes, VALID_ELEMENTS } from '../../utilities/polymorphic';

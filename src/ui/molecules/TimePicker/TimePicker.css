@@ -1,0 +1,199 @@
+.ui-timepicker {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.ui-timepicker-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ui-timepicker-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  transition: all var(--transition-duration-base) var(--transition-timing-function-base);
+}
+
+.ui-timepicker-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-alpha);
+}
+
+.ui-timepicker-input:disabled {
+  background-color: var(--color-background-disabled);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.ui-timepicker-icon {
+  position: absolute;
+  right: var(--spacing-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.ui-timepicker-clear-button {
+  color: var(--color-danger);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  margin-right: var(--spacing-md);
+}
+
+.ui-timepicker-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: var(--z-index-dropdown);
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  margin-top: var(--spacing-xs);
+}
+
+.ui-timepicker-section {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+}
+
+.ui-timepicker-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60px;
+}
+
+.ui-timepicker-column-header {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.ui-timepicker-column-value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 150px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.ui-timepicker-column-value::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ui-timepicker-column-value::-webkit-scrollbar-track {
+  background: var(--color-background-secondary);
+}
+
+.ui-timepicker-column-value::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+}
+
+.ui-timepicker-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 2px 0;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-duration-base) var(--transition-timing-function-base);
+}
+
+.ui-timepicker-item:hover {
+  background-color: var(--color-background-hover);
+}
+
+.ui-timepicker-item-selected {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.ui-timepicker-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.ui-timepicker-now-button {
+  color: var(--color-primary);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+/* Variants */
+.ui-timepicker-variant-primary .ui-timepicker-input {
+  border-color: var(--color-primary);
+}
+
+.ui-timepicker-variant-secondary .ui-timepicker-input {
+  border-color: var(--color-secondary);
+}
+
+.ui-timepicker-variant-minimal .ui-timepicker-input {
+  border-color: transparent;
+  background-color: var(--color-background-secondary);
+}
+
+/* Sizes */
+.ui-timepicker-size-small .ui-timepicker-input {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+.ui-timepicker-size-large .ui-timepicker-input {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-size-lg);
+}
+
+/* Error state */
+.ui-timepicker-error .ui-timepicker-input {
+  border-color: var(--color-danger);
+}
+
+.ui-timepicker-error .ui-timepicker-input:focus {
+  box-shadow: 0 0 0 2px var(--color-danger-alpha);
+}
+
+.ui-timepicker-error-message {
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-xs);
+}
+
+/* Disabled state */
+.ui-timepicker-disabled .ui-timepicker-input {
+  background-color: var(--color-background-disabled);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+/* Read-only state */
+.ui-timepicker-readonly .ui-timepicker-input {
+  background-color: var(--color-background-secondary);
+  cursor: default;
+}

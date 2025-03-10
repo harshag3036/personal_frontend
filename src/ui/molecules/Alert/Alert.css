@@ -1,0 +1,123 @@
+/**
+ * Alert Component Styles
+ */
+
+.ui-alert {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  border-width: 1px;
+  border-style: solid;
+  position: relative;
+}
+
+/* Variants */
+.ui-alert--info {
+  background-color: var(--color-info-light);
+  border-color: var(--color-info);
+  color: var(--color-info-dark);
+}
+
+.ui-alert--success {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+  color: var(--color-success-dark);
+}
+
+.ui-alert--warning {
+  background-color: var(--color-warning-light);
+  border-color: var(--color-warning);
+  color: var(--color-warning-dark);
+}
+
+.ui-alert--error {
+  background-color: var(--color-error-light);
+  border-color: var(--color-error);
+  color: var(--color-error-dark);
+}
+
+/* Sizes */
+.ui-alert--small {
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+.ui-alert--medium {
+  padding: var(--spacing-md);
+  font-size: var(--font-size-md);
+}
+
+.ui-alert--large {
+  padding: var(--spacing-lg);
+  font-size: var(--font-size-lg);
+}
+
+/* Icon positioning */
+.ui-alert__icon {
+  flex-shrink: 0;
+  margin-right: var(--spacing-sm);
+}
+
+.ui-alert--icon-right .ui-alert__icon {
+  margin-right: 0;
+  margin-left: var(--spacing-sm);
+  order: 1;
+}
+
+/* Content */
+.ui-alert__content {
+  flex: 1;
+}
+
+.ui-alert__title {
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.ui-alert__description {
+  margin: 0;
+}
+
+/* Close button */
+.ui-alert__close {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  color: currentColor;
+  opacity: 0.7;
+  transition: opacity var(--transition-duration) var(--transition-timing-function);
+}
+
+.ui-alert__close:hover {
+  opacity: 1;
+}
+
+/* Responsive styles */
+@media (max-width: 576px) {
+  .ui-alert {
+    flex-direction: column;
+  }
+  
+  .ui-alert__icon {
+    margin-right: 0;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .ui-alert--icon-right .ui-alert__icon {
+    margin-left: 0;
+    margin-bottom: var(--spacing-sm);
+    order: 0;
+  }
+  
+  .ui-alert__close {
+    position: absolute;
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
+  }
+}

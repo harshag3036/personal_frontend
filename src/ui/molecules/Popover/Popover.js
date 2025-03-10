@@ -1,3 +1,4 @@
+import { POPOVER_VARIANTS, POPOVER_SIZES, POPOVER_PLACEMENTS } from './constants';
 import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Popover.css';

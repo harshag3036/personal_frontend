@@ -1,0 +1,184 @@
+/**
+ * Image Component Styles
+ * 
+ * This file contains styles for the Image component.
+ */
+
+/* Import design tokens */
+@import '../../../styles/design-tokens.css';
+
+/* Base image styles */
+.ui-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Object fit options */
+.ui-image--fit-fill {
+  object-fit: fill;
+}
+
+.ui-image--fit-contain {
+  object-fit: contain;
+}
+
+.ui-image--fit-cover {
+  object-fit: cover;
+}
+
+.ui-image--fit-none {
+  object-fit: none;
+}
+
+.ui-image--fit-scale-down {
+  object-fit: scale-down;
+}
+
+/* Object position options */
+.ui-image--position-center {
+  object-position: center;
+}
+
+.ui-image--position-top {
+  object-position: top;
+}
+
+.ui-image--position-right {
+  object-position: right;
+}
+
+.ui-image--position-bottom {
+  object-position: bottom;
+}
+
+.ui-image--position-left {
+  object-position: left;
+}
+
+.ui-image--position-top-left {
+  object-position: top left;
+}
+
+.ui-image--position-top-right {
+  object-position: top right;
+}
+
+.ui-image--position-bottom-left {
+  object-position: bottom left;
+}
+
+.ui-image--position-bottom-right {
+  object-position: bottom right;
+}
+
+/* Image shapes */
+.ui-image--square {
+  border-radius: 0;
+}
+
+.ui-image--rounded {
+  border-radius: var(--border-radius-md);
+}
+
+.ui-image--circle {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* Image sizes */
+.ui-image--small {
+  width: 64px;
+  height: 64px;
+}
+
+.ui-image--medium {
+  width: 128px;
+  height: 128px;
+}
+
+.ui-image--large {
+  width: 256px;
+  height: 256px;
+}
+
+.ui-image--full {
+  width: 100%;
+  height: auto;
+}
+
+/* Responsive styles */
+@media (max-width: 576px) {
+  .ui-image--small-sm {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .ui-image--medium-sm {
+    width: 96px;
+    height: 96px;
+  }
+  
+  .ui-image--large-sm {
+    width: 192px;
+    height: 192px;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .ui-image--small-md {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .ui-image--medium-md {
+    width: 112px;
+    height: 112px;
+  }
+  
+  .ui-image--large-md {
+    width: 224px;
+    height: 224px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .ui-image--small-lg {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .ui-image--medium-lg {
+    width: 128px;
+    height: 128px;
+  }
+  
+  .ui-image--large-lg {
+    width: 256px;
+    height: 256px;
+  }
+}
+
+@media (min-width: 993px) {
+  .ui-image--small-xl {
+    width: 72px;
+    height: 72px;
+  }
+  
+  .ui-image--medium-xl {
+    width: 144px;
+    height: 144px;
+  }
+  
+  .ui-image--large-xl {
+    width: 288px;
+    height: 288px;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .ui-image {
+    filter: brightness(0.9);
+  }
+}

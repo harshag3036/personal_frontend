@@ -1,3 +1,4 @@
+import { TOOLTIP_VARIANTS, TOOLTIP_SIZES, TOOLTIP_PLACEMENTS } from './constants';
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';

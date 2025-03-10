@@ -1,3 +1,4 @@
+import { MENU_VARIANTS, MENU_SIZES } from './constants';
 import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Menu.css';

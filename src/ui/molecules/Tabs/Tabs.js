@@ -1,3 +1,4 @@
+import { TAB_VARIANTS, TAB_SIZES } from './constants';
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Tabs.css';

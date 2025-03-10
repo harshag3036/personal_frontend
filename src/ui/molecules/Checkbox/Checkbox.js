@@ -52,7 +52,7 @@ import { componentExtension } from '../../utilities';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import Box from '../../atoms/Box';
 import Text from '../../atoms/Text';
-import { CHECKBOX_CLASS, CHECKBOX_SIZES, CHECKBOX_MODIFIERS } from './index';
+import { CHECKBOX_CLASS, CHECKBOX_SIZES, CHECKBOX_MODIFIERS } from './constants';
 import './Checkbox.css';
 
 /**

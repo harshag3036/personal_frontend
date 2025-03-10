@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Box, { BOX_CLASS } from '../Box';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { isResponsiveObject, createResponsiveStyles, flexPropConfig } from '../../utilities/responsive-props';
-import { FLEX_CLASS, FLEX_DIRECTIONS, FLEX_ALIGNMENTS, FLEX_JUSTIFICATIONS, FLEX_WRAPS, FLEX_GAP_SIZES } from './index';
+import { FLEX_CLASS, FLEX_DIRECTIONS, FLEX_ALIGNMENTS, FLEX_JUSTIFICATIONS, FLEX_WRAPS, FLEX_GAP_SIZES } from './constants';
 import './Flex.css';
 
 /**

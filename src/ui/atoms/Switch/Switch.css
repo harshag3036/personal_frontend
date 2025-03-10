@@ -1,0 +1,171 @@
+/**
+ * Switch Component Styles
+ * 
+ * This file contains styles for the Switch component.
+ */
+
+/* Import design tokens */
+@import '../../../styles/design-tokens.css';
+
+/* Base switch styles */
+.ui-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Hide the default checkbox input */
+.ui-switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+/* Switch track (background) */
+.ui-switch__track {
+  position: relative;
+  display: inline-block;
+  width: var(--switch-width, 40px);
+  height: var(--switch-height, 20px);
+  background-color: var(--color-neutral-300);
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+/* Switch thumb (circle) */
+.ui-switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(var(--switch-height, 20px) - 4px);
+  height: calc(var(--switch-height, 20px) - 4px);
+  background-color: var(--color-white);
+  border-radius: 50%;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Switch label */
+.ui-switch__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-left: var(--spacing-xs);
+}
+
+/* Label position */
+.ui-switch--label-left {
+  flex-direction: row-reverse;
+}
+
+.ui-switch--label-left .ui-switch__label {
+  margin-left: 0;
+  margin-right: var(--spacing-xs);
+}
+
+/* Checked state */
+.ui-switch__input:checked + .ui-switch__track {
+  background-color: var(--color-primary);
+}
+
+.ui-switch__input:checked + .ui-switch__track .ui-switch__thumb {
+  transform: translateX(calc(var(--switch-width, 40px) - var(--switch-height, 20px)));
+}
+
+/* Focus state */
+.ui-switch__input:focus + .ui-switch__track {
+  box-shadow: 0 0 0 2px var(--color-focus);
+}
+
+/* Disabled state */
+.ui-switch--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Switch sizes */
+.ui-switch--small {
+  --switch-width: 32px;
+  --switch-height: 16px;
+}
+
+.ui-switch--medium {
+  --switch-width: 40px;
+  --switch-height: 20px;
+}
+
+.ui-switch--large {
+  --switch-width: 48px;
+  --switch-height: 24px;
+}
+
+/* Switch variants */
+.ui-switch--primary .ui-switch__input:checked + .ui-switch__track {
+  background-color: var(--color-primary);
+}
+
+.ui-switch--secondary .ui-switch__input:checked + .ui-switch__track {
+  background-color: var(--color-secondary);
+}
+
+.ui-switch--accent .ui-switch__input:checked + .ui-switch__track {
+  background-color: var(--color-accent);
+}
+
+.ui-switch--success .ui-switch__input:checked + .ui-switch__track {
+  background-color: var(--color-success);
+}
+
+.ui-switch--warning .ui-switch__input:checked + .ui-switch__track {
+  background-color: var(--color-warning);
+}
+
+.ui-switch--error .ui-switch__input:checked + .ui-switch__track {
+  background-color: var(--color-error);
+}
+
+.ui-switch--info .ui-switch__input:checked + .ui-switch__track {
+  background-color: var(--color-info);
+}
+
+.ui-switch--neutral .ui-switch__input:checked + .ui-switch__track {
+  background-color: var(--color-neutral-600);
+}
+
+/* Hover state */
+@media (hover: hover) {
+  .ui-switch:hover .ui-switch__track:not(.ui-switch--disabled .ui-switch__track) {
+    background-color: var(--color-neutral-400);
+  }
+  
+  .ui-switch:hover .ui-switch__input:checked + .ui-switch__track:not(.ui-switch--disabled .ui-switch__track) {
+    filter: brightness(0.9);
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .ui-switch__track {
+    background-color: var(--color-neutral-600);
+  }
+  
+  .ui-switch__thumb {
+    background-color: var(--color-neutral-100);
+  }
+  
+  .ui-switch:hover .ui-switch__track:not(.ui-switch--disabled .ui-switch__track) {
+    background-color: var(--color-neutral-500);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 576px) {
+  .ui-switch--responsive {
+    --switch-width: 32px;
+    --switch-height: 16px;
+  }
+}

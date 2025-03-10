@@ -1,0 +1,115 @@
+/**
+ * Breadcrumb Component Styles
+ */
+
+.ui-breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: var(--ui-font-family-base);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-breadcrumb__item {
+  display: flex;
+  align-items: center;
+  color: var(--ui-color-text-subtle);
+  transition: color var(--ui-transition-fast);
+}
+
+.ui-breadcrumb__item:last-child {
+  color: var(--ui-color-text-default);
+  font-weight: var(--ui-font-weight-semibold);
+}
+
+.ui-breadcrumb__link {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--ui-transition-fast);
+}
+
+.ui-breadcrumb__link:hover {
+  color: var(--ui-color-primary);
+  text-decoration: underline;
+}
+
+.ui-breadcrumb__separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 var(--ui-spacing-xs);
+  color: var(--ui-color-text-subtle);
+}
+
+/* Variants */
+.ui-breadcrumb--default {
+  font-size: var(--ui-font-size-sm);
+}
+
+.ui-breadcrumb--compact {
+  font-size: var(--ui-font-size-xs);
+}
+
+.ui-breadcrumb--expanded {
+  font-size: var(--ui-font-size-md);
+}
+
+/* Sizes */
+.ui-breadcrumb--small .ui-breadcrumb__separator {
+  margin: 0 var(--ui-spacing-2xs);
+}
+
+.ui-breadcrumb--medium .ui-breadcrumb__separator {
+  margin: 0 var(--ui-spacing-xs);
+}
+
+.ui-breadcrumb--large .ui-breadcrumb__separator {
+  margin: 0 var(--ui-spacing-sm);
+}
+
+/* Separator types */
+.ui-breadcrumb__separator--slash::before {
+  content: '/';
+}
+
+.ui-breadcrumb__separator--chevron::before {
+  content: '›';
+}
+
+.ui-breadcrumb__separator--arrow::before {
+  content: '→';
+}
+
+.ui-breadcrumb__separator--dot::before {
+  content: '•';
+}
+
+/* Collapsed items */
+.ui-breadcrumb__collapsed {
+  display: flex;
+  align-items: center;
+  color: var(--ui-color-text-subtle);
+  cursor: pointer;
+}
+
+.ui-breadcrumb__collapsed:hover {
+  color: var(--ui-color-primary);
+}
+
+/* Home icon */
+.ui-breadcrumb__home-icon {
+  margin-right: var(--ui-spacing-2xs);
+}
+
+/* Responsive styles */
+@media (max-width: 576px) {
+  .ui-breadcrumb {
+    font-size: var(--ui-font-size-xs);
+  }
+  
+  .ui-breadcrumb__separator {
+    margin: 0 var(--ui-spacing-2xs);
+  }
+}

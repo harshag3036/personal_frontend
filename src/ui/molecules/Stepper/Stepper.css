@@ -1,0 +1,300 @@
+/**
+ * Stepper Component Styles
+ * 
+ * This file contains styles for the Stepper component and its related components:
+ * - Stepper: The main container
+ * - Step: Individual step container
+ * - StepLabel: The label for a step
+ * - StepIcon: The icon/indicator for a step
+ * - StepContent: The content associated with a step
+ * - StepConnector: The connector between steps
+ */
+
+/* Base Stepper Styles */
+.ui-stepper {
+  display: flex;
+  width: 100%;
+  position: relative;
+  padding: var(--spacing-md) 0;
+}
+
+/* Stepper Variants */
+.ui-stepper--default {
+  flex-direction: row;
+  align-items: center;
+}
+
+.ui-stepper--compact {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.ui-stepper--vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ui-stepper--numbered {
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Stepper Sizes */
+.ui-stepper--small {
+  gap: var(--spacing-sm);
+}
+
+.ui-stepper--medium {
+  gap: var(--spacing-md);
+}
+
+.ui-stepper--large {
+  gap: var(--spacing-lg);
+}
+
+/* Alternative Labels (labels below icons) */
+.ui-stepper--alternative-labels {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.ui-stepper--alternative-labels .ui-step-label {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Non-linear Stepper */
+.ui-stepper--non-linear .ui-step {
+  cursor: pointer;
+}
+
+/* Step Styles */
+.ui-step {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.ui-stepper--default .ui-step,
+.ui-stepper--compact .ui-step,
+.ui-stepper--numbered .ui-step {
+  flex-direction: column;
+}
+
+.ui-stepper--vertical .ui-step {
+  flex-direction: row;
+  width: 100%;
+}
+
+/* Step Label Styles */
+.ui-step-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.ui-stepper--vertical .ui-step-label {
+  flex-direction: row;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Step Icon Styles */
+.ui-step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--transition-medium);
+  position: relative;
+  z-index: 1;
+}
+
+.ui-stepper--small .ui-step-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+
+.ui-stepper--medium .ui-step-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.ui-stepper--large .ui-step-icon {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+}
+
+/* Step Icon States */
+.ui-step-icon--inactive {
+  background-color: var(--color-neutral-100);
+  border: 1px solid var(--color-neutral-300);
+  color: var(--color-neutral-600);
+}
+
+.ui-step-icon--active {
+  background-color: var(--color-primary-50);
+  border: 1px solid var(--color-primary-500);
+  color: var(--color-primary-700);
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-step-icon--completed {
+  background-color: var(--color-success-100);
+  border: 1px solid var(--color-success-500);
+  color: var(--color-success-700);
+}
+
+.ui-step-icon--error {
+  background-color: var(--color-error-100);
+  border: 1px solid var(--color-error-500);
+  color: var(--color-error-700);
+}
+
+.ui-step-icon--disabled {
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-200);
+  color: var(--color-neutral-400);
+  cursor: not-allowed;
+}
+
+/* Step Text Styles */
+.ui-step-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ui-step-label-text {
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-medium);
+}
+
+.ui-step-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+/* Step Text States */
+.ui-step--inactive .ui-step-label-text {
+  color: var(--color-neutral-700);
+}
+
+.ui-step--active .ui-step-label-text {
+  color: var(--color-primary-700);
+}
+
+.ui-step--completed .ui-step-label-text {
+  color: var(--color-success-700);
+}
+
+.ui-step--error .ui-step-label-text {
+  color: var(--color-error-700);
+}
+
+.ui-step--disabled .ui-step-label-text {
+  color: var(--color-neutral-400);
+}
+
+.ui-step--disabled .ui-step-description {
+  color: var(--color-neutral-400);
+}
+
+/* Step Content Styles */
+.ui-step-content {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-left: 1px solid var(--color-neutral-300);
+  margin-left: calc(var(--spacing-md) + 16px);
+}
+
+.ui-stepper--vertical .ui-step-content {
+  flex: 1;
+}
+
+/* Step Connector Styles */
+.ui-step-connector {
+  flex: 1;
+  height: 1px;
+  margin: 0 var(--spacing-xs);
+  z-index: 0;
+  position: relative;
+}
+
+.ui-stepper--default .ui-step-connector,
+.ui-stepper--compact .ui-step-connector,
+.ui-stepper--numbered .ui-step-connector {
+  position: absolute;
+  top: calc(var(--spacing-md) + 16px);
+  left: calc(50% + 16px);
+  right: calc(50% - 16px);
+}
+
+.ui-stepper--vertical .ui-step-connector {
+  position: absolute;
+  top: 40px;
+  left: 16px;
+  height: calc(100% - 40px);
+  width: 1px;
+}
+
+/* Connector Types */
+.ui-step-connector--line {
+  background-color: var(--color-neutral-300);
+}
+
+.ui-step-connector--dashed {
+  background: repeating-linear-gradient(
+    to right,
+    var(--color-neutral-300),
+    var(--color-neutral-300) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+.ui-stepper--vertical .ui-step-connector--dashed {
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-neutral-300),
+    var(--color-neutral-300) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+.ui-step-connector--dotted {
+  background: repeating-linear-gradient(
+    to right,
+    var(--color-neutral-300),
+    var(--color-neutral-300) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+.ui-stepper--vertical .ui-step-connector--dotted {
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-neutral-300),
+    var(--color-neutral-300) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+/* Connector States */
+.ui-step-connector--completed {
+  background-color: var(--color-success-500);
+}
+
+.ui-step-connector--active {
+  background-color: var(--color-primary-500);
+}
+
+.ui-step-connector--error {
+  background-color: var(--color-error-500);
+}
