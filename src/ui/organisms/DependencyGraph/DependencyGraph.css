@@ -1,0 +1,377 @@
+/**
+ * DependencyGraph Component Styles
+ * 
+ * This file contains styles for the DependencyGraph component and its sub-components.
+ */
+
+/* Base DependencyGraph Styles */
+.ui-dependency-graph {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  font-family: var(--font-family-base);
+  overflow: hidden;
+}
+
+/* DependencyGraph Header */
+.ui-dependency-graph-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-4);
+}
+
+.ui-dependency-graph-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+  margin-bottom: var(--spacing-1);
+}
+
+.ui-dependency-graph-subtitle {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* DependencyGraph Body */
+.ui-dependency-graph-body {
+  flex: 1;
+  position: relative;
+  min-height: 400px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background-subtle);
+  overflow: hidden;
+}
+
+/* DependencyGraph Canvas */
+.ui-dependency-graph-canvas {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* DependencyGraph Node */
+.ui-dependency-graph-node {
+  position: absolute;
+  background-color: var(--color-background-primary);
+  border: 2px solid var(--color-border-medium);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-3);
+  min-width: 150px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-default);
+  z-index: 2;
+  cursor: pointer;
+}
+
+.ui-dependency-graph-node:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.ui-dependency-graph-node-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.ui-dependency-graph-node-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+  margin-bottom: var(--spacing-1);
+}
+
+.ui-dependency-graph-node-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* DependencyGraph Edge */
+.ui-dependency-graph-edge {
+  position: absolute;
+  height: 2px;
+  background-color: var(--color-border-medium);
+  z-index: 1;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.ui-dependency-graph-edge::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -4px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 8px solid var(--color-border-medium);
+}
+
+/* DependencyGraph Controls */
+.ui-dependency-graph-controls {
+  position: absolute;
+  top: var(--spacing-3);
+  right: var(--spacing-3);
+  display: flex;
+  gap: var(--spacing-2);
+  z-index: 3;
+}
+
+/* DependencyGraph Legend */
+.ui-dependency-graph-legend {
+  position: absolute;
+  bottom: var(--spacing-3);
+  right: var(--spacing-3);
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-3);
+  box-shadow: var(--shadow-sm);
+  z-index: 3;
+}
+
+/* DependencyGraph Footer */
+.ui-dependency-graph-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--spacing-4);
+}
+
+/* DependencyGraph Actions */
+.ui-dependency-graph-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+/* Node Status Styles */
+.ui-dependency-graph-node[data-status="not-started"] {
+  background-color: var(--color-background-primary);
+  border-color: var(--color-border-medium);
+}
+
+.ui-dependency-graph-node[data-status="in-progress"] {
+  background-color: var(--color-info-100);
+  border-color: var(--color-info-500);
+}
+
+.ui-dependency-graph-node[data-status="completed"] {
+  background-color: var(--color-success-100);
+  border-color: var(--color-success-500);
+}
+
+.ui-dependency-graph-node[data-status="blocked"] {
+  background-color: var(--color-danger-100);
+  border-color: var(--color-danger-500);
+}
+
+.ui-dependency-graph-node[data-status="error"] {
+  background-color: var(--color-danger-100);
+  border-color: var(--color-danger-700);
+}
+
+.ui-dependency-graph-node[data-status="warning"] {
+  background-color: var(--color-warning-100);
+  border-color: var(--color-warning-500);
+}
+
+/* Edge Type Styles */
+.ui-dependency-graph-edge[data-type="required"] {
+  background-color: var(--color-border-dark);
+}
+
+.ui-dependency-graph-edge[data-type="required"]::after {
+  border-left-color: var(--color-border-dark);
+}
+
+.ui-dependency-graph-edge[data-type="optional"] {
+  background-color: var(--color-border-medium);
+  border-top: 1px dashed var(--color-border-medium);
+  border-bottom: 1px dashed var(--color-border-medium);
+  height: 0;
+}
+
+.ui-dependency-graph-edge[data-type="optional"]::after {
+  border-left-color: var(--color-border-medium);
+}
+
+.ui-dependency-graph-edge[data-type="bidirectional"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -4px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 8px solid var(--color-border-medium);
+}
+
+.ui-dependency-graph-edge[data-type="weak"] {
+  background-color: var(--color-border-light);
+  opacity: 0.7;
+}
+
+.ui-dependency-graph-edge[data-type="weak"]::after {
+  border-left-color: var(--color-border-light);
+}
+
+.ui-dependency-graph-edge[data-type="strong"] {
+  background-color: var(--color-accent-primary);
+  height: 3px;
+}
+
+.ui-dependency-graph-edge[data-type="strong"]::after {
+  border-left-color: var(--color-accent-primary);
+}
+
+/* DependencyGraph Variants */
+.ui-dependency-graph--default {
+  /* Default styles already applied */
+}
+
+.ui-dependency-graph--compact .ui-dependency-graph-node {
+  padding: var(--spacing-2);
+  min-width: 120px;
+}
+
+.ui-dependency-graph--detailed .ui-dependency-graph-node {
+  padding: var(--spacing-4);
+  min-width: 200px;
+}
+
+.ui-dependency-graph--hierarchical .ui-dependency-graph-canvas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ui-dependency-graph--force-directed .ui-dependency-graph-canvas {
+  /* Force-directed layout handled by JavaScript */
+}
+
+/* DependencyGraph Sizes */
+.ui-dependency-graph--small .ui-dependency-graph-body {
+  min-height: 300px;
+}
+
+.ui-dependency-graph--small .ui-dependency-graph-node {
+  padding: var(--spacing-2);
+  min-width: 100px;
+}
+
+.ui-dependency-graph--large .ui-dependency-graph-body {
+  min-height: 600px;
+}
+
+.ui-dependency-graph--large .ui-dependency-graph-node {
+  padding: var(--spacing-4);
+  min-width: 200px;
+}
+
+/* DependencyGraph Modifiers */
+.ui-dependency-graph--interactive .ui-dependency-graph-node {
+  cursor: pointer;
+}
+
+.ui-dependency-graph--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.ui-dependency-graph--loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.ui-dependency-graph--loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-background-muted),
+    transparent
+  );
+  animation: dependency-graph-shimmer 1.5s infinite;
+}
+
+@keyframes dependency-graph-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.ui-dependency-graph--readonly .ui-dependency-graph-node {
+  cursor: default;
+}
+
+.ui-dependency-graph--readonly .ui-dependency-graph-node:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-dependency-graph--editable .ui-dependency-graph-node {
+  cursor: move;
+}
+
+.ui-dependency-graph--zoomable .ui-dependency-graph-canvas {
+  transform-origin: center center;
+}
+
+/* Dark Theme Adjustments */
+.theme-dark .ui-dependency-graph-body {
+  background-color: var(--color-background-tertiary);
+  border-color: var(--color-border-dark);
+}
+
+.theme-dark .ui-dependency-graph-node {
+  background-color: var(--color-background-secondary);
+  border-color: var(--color-border-medium);
+}
+
+.theme-dark .ui-dependency-graph-legend {
+  background-color: var(--color-background-secondary);
+  border-color: var(--color-border-dark);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .ui-dependency-graph-body {
+    min-height: 300px;
+  }
+  
+  .ui-dependency-graph-controls,
+  .ui-dependency-graph-legend {
+    position: static;
+    margin-top: var(--spacing-3);
+  }
+  
+  .ui-dependency-graph-legend {
+    width: 100%;
+  }
+}
+
+/* Accessibility Focus Styles */
+.ui-dependency-graph:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.ui-dependency-graph-node:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}

@@ -8,6 +8,18 @@
 import React, { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { componentExtension } from '../../utilities';
+import { 
+  FORM_CLASS, 
+  FORM_GROUP_CLASS, 
+  FORM_LABEL_CLASS, 
+  FORM_CONTROL_CLASS,
+  FORM_FEEDBACK_CLASS,
+  FORM_TEXT_CLASS,
+  FORM_SUBMIT_CLASS,
+  FORM_REQUIRED_CLASS,
+  FORM_FEEDBACK_TYPES,
+  FORM_VARIANTS
+} from './constants';
 import './Form.css';
 
 // Create a context for the form
@@ -167,8 +179,8 @@ const Form = ({
   
   // Combine class names
   const formClasses = [
-    'ds-form',
-    extendedDisabled ? 'ds-form-disabled' : '',
+    FORM_CLASS,
+    extendedDisabled ? `${FORM_CLASS}--disabled` : '',
     extendedClassName,
   ].filter(Boolean).join(' ');
   
@@ -228,7 +240,7 @@ const FormGroup = ({
   ...props
 }) => {
   const groupClasses = [
-    'ds-form-group',
+    FORM_GROUP_CLASS,
     className,
   ].filter(Boolean).join(' ');
   
@@ -266,8 +278,8 @@ const FormLabel = ({
   const { disabled } = useFormContext();
   
   const labelClasses = [
-    'ds-form-label',
-    disabled ? 'ds-form-label-disabled' : '',
+    FORM_LABEL_CLASS,
+    disabled ? `${FORM_LABEL_CLASS}--disabled` : '',
     className,
   ].filter(Boolean).join(' ');
   
@@ -278,7 +290,7 @@ const FormLabel = ({
       {...props}
     >
       {children}
-      {required && <span className="ds-form-required">*</span>}
+      {required && <span className={FORM_REQUIRED_CLASS}>*</span>}
     </label>
   );
 };
@@ -342,9 +354,9 @@ const FormControl = ({
   };
   
   const controlClasses = [
-    'ds-form-control',
-    isInvalid ? 'ds-form-control-invalid' : '',
-    isDisabled ? 'ds-form-control-disabled' : '',
+    FORM_CONTROL_CLASS,
+    isInvalid ? `${FORM_CONTROL_CLASS}--invalid` : '',
+    isDisabled ? `${FORM_CONTROL_CLASS}--disabled` : '',
     className,
   ].filter(Boolean).join(' ');
   
@@ -402,8 +414,8 @@ const FormFeedback = ({
   ...props
 }) => {
   const feedbackClasses = [
-    'ds-form-feedback',
-    `ds-form-feedback-${type}`,
+    FORM_FEEDBACK_CLASS,
+    `${FORM_FEEDBACK_CLASS}--${type}`,
     className,
   ].filter(Boolean).join(' ');
   
@@ -419,7 +431,7 @@ const FormFeedback = ({
 
 FormFeedback.propTypes = {
   /** Feedback type (valid or invalid) */
-  type: PropTypes.oneOf(['valid', 'invalid']),
+  type: PropTypes.oneOf(Object.values(FORM_FEEDBACK_TYPES)),
   /** Additional CSS class names */
   className: PropTypes.string,
   /** Feedback content */
@@ -440,7 +452,7 @@ const FormText = ({
   ...props
 }) => {
   const textClasses = [
-    'ds-form-text',
+    FORM_TEXT_CLASS,
     className,
   ].filter(Boolean).join(' ');
   
@@ -479,8 +491,8 @@ const FormSubmit = ({
   const isDisabled = formDisabled || formState.isSubmitting || props.disabled;
   
   const submitClasses = [
-    'ds-form-submit',
-    isDisabled ? 'ds-form-submit-disabled' : '',
+    FORM_SUBMIT_CLASS,
+    isDisabled ? `${FORM_SUBMIT_CLASS}--disabled` : '',
     className,
   ].filter(Boolean).join(' ');
   

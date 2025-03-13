@@ -1,0 +1,226 @@
+/**
+ * Header Component Styles
+ * 
+ * This file contains all the styles for the Header component.
+ */
+
+/* Base styles */
+.ui-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: var(--z-index-header);
+  transition: var(--transition-standard);
+}
+
+/* Container for header content */
+.ui-header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 var(--spacing-md);
+  box-sizing: border-box;
+  height: 100%;
+}
+
+/* Logo area */
+.ui-header__logo {
+  display: flex;
+  align-items: center;
+  margin-right: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+/* Navigation area */
+.ui-header__navigation {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  height: 100%;
+}
+
+/* Actions area (right side) */
+.ui-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-left: auto;
+}
+
+/* Search area */
+.ui-header__search {
+  display: flex;
+  align-items: center;
+  margin-right: var(--spacing-md);
+}
+
+/* User menu area */
+.ui-header__user-menu {
+  display: flex;
+  align-items: center;
+  margin-left: var(--spacing-sm);
+}
+
+/* Notifications area */
+.ui-header__notifications {
+  display: flex;
+  align-items: center;
+  margin-left: var(--spacing-sm);
+}
+
+/* Mobile toggle button */
+.ui-header__mobile-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin-left: var(--spacing-sm);
+  cursor: pointer;
+}
+
+/* Mobile menu */
+.ui-header__mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-background);
+  z-index: var(--z-index-modal);
+  overflow-y: auto;
+  padding: var(--spacing-md);
+  box-sizing: border-box;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.ui-header__mobile-menu--open {
+  transform: translateX(0);
+}
+
+/* Header variants */
+.ui-header--default {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  height: 64px;
+}
+
+.ui-header--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  height: 64px;
+}
+
+.ui-header--secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text-on-secondary);
+  height: 64px;
+}
+
+.ui-header--transparent {
+  background-color: transparent;
+  color: var(--color-text);
+  height: 64px;
+}
+
+.ui-header--compact {
+  height: 48px;
+}
+
+/* Header sizes */
+.ui-header--sm {
+  height: 48px;
+}
+
+.ui-header--md {
+  height: 64px;
+}
+
+.ui-header--lg {
+  height: 80px;
+}
+
+/* Header positions */
+.ui-header--fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.ui-header--sticky {
+  position: sticky;
+  top: 0;
+}
+
+.ui-header--absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.ui-header--relative {
+  position: relative;
+}
+
+/* Header states */
+.ui-header--expanded {
+  height: auto;
+}
+
+.ui-header--collapsed {
+  height: 0;
+  overflow: hidden;
+}
+
+.ui-header--hidden {
+  transform: translateY(-100%);
+}
+
+/* Header modifiers */
+.ui-header--with-border {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ui-header--with-shadow {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .ui-header__navigation {
+    display: none;
+  }
+
+  .ui-header__mobile-toggle {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .ui-header__container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .ui-header__search {
+    display: none;
+  }
+
+  .ui-header__actions {
+    gap: var(--spacing-xs);
+  }
+}
+
+@media (max-width: 576px) {
+  .ui-header__logo {
+    margin-right: var(--spacing-sm);
+  }
+
+  .ui-header__user-menu,
+  .ui-header__notifications {
+    margin-left: var(--spacing-xs);
+  }
+}

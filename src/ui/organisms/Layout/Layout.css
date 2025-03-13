@@ -1,0 +1,234 @@
+/**
+ * Layout Component Styles
+ * 
+ * This file contains all the styles for the Layout component.
+ */
+
+/* Base styles */
+.ui-layout {
+  display: grid;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Default layout (header, main, footer) */
+.ui-layout--default {
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+}
+
+/* Dashboard layout (header, sidebar, main, footer) */
+.ui-layout--dashboard {
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+    "footer footer";
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: auto 1fr;
+}
+
+/* Admin layout (header, sidebar, main, aside, footer) */
+.ui-layout--admin {
+  grid-template-areas:
+    "header header header"
+    "sidebar main aside"
+    "footer footer footer";
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: auto 1fr auto;
+}
+
+/* Content layout (header, main, footer) with centered content */
+.ui-layout--content {
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Landing layout (header, main, footer) with full width */
+.ui-layout--landing {
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+}
+
+/* Layout sizes */
+.ui-layout--sm {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.ui-layout--md {
+  max-width: 992px;
+  margin: 0 auto;
+}
+
+.ui-layout--lg {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ui-layout--full {
+  max-width: 100%;
+}
+
+/* Layout areas */
+.ui-layout__header {
+  grid-area: header;
+  width: 100%;
+  z-index: var(--z-index-header);
+}
+
+.ui-layout__sidebar {
+  grid-area: sidebar;
+  z-index: var(--z-index-sidebar);
+}
+
+.ui-layout__main {
+  grid-area: main;
+  width: 100%;
+  min-height: 0; /* Prevents overflow in grid layouts */
+}
+
+.ui-layout__footer {
+  grid-area: footer;
+  width: 100%;
+  z-index: var(--z-index-footer);
+}
+
+.ui-layout__aside {
+  grid-area: aside;
+  z-index: var(--z-index-aside);
+}
+
+.ui-layout__content {
+  padding: var(--spacing-md);
+}
+
+.ui-layout__container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+  box-sizing: border-box;
+}
+
+/* Layout modifiers */
+.ui-layout--fixed-header .ui-layout__header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.ui-layout--fixed-sidebar .ui-layout__sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: 100vh;
+}
+
+.ui-layout--fixed-footer .ui-layout__footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.ui-layout--sticky-header .ui-layout__header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-index-sticky);
+}
+
+.ui-layout--sticky-sidebar .ui-layout__sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.ui-layout--sticky-footer .ui-layout__footer {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-index-sticky);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .ui-layout--dashboard,
+  .ui-layout--admin {
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr;
+  }
+
+  .ui-layout__sidebar,
+  .ui-layout__aside {
+    display: none;
+  }
+
+  .ui-layout--with-sidebar .ui-layout__sidebar,
+  .ui-layout--with-aside .ui-layout__aside {
+    display: block;
+    position: fixed;
+    z-index: var(--z-index-overlay);
+  }
+}
+
+@media (max-width: 768px) {
+  .ui-layout__content {
+    padding: var(--spacing-sm);
+  }
+
+  .ui-layout__container {
+    padding: 0 var(--spacing-sm);
+  }
+}
+
+/* Utility classes for spacing adjustments when using fixed elements */
+.ui-layout--fixed-header .ui-layout__main {
+  padding-top: var(--header-height, 64px);
+}
+
+.ui-layout--fixed-footer .ui-layout__main {
+  padding-bottom: var(--footer-height, 64px);
+}
+
+.ui-layout--fixed-sidebar .ui-layout__main {
+  margin-left: var(--sidebar-width, 240px);
+}
+
+/* Backdrop for mobile sidebar/aside */
+.ui-layout__backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--z-index-overlay) - 1);
+}
+
+.ui-layout--with-sidebar .ui-layout__backdrop,
+.ui-layout--with-aside .ui-layout__backdrop {
+  display: block;
+}

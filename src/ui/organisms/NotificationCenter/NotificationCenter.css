@@ -1,0 +1,445 @@
+/**
+ * NotificationCenter Component Styles
+ * 
+ * This file contains all the styles for the NotificationCenter component.
+ */
+
+/* Base styles */
+.ui-notification-center {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  transition: var(--transition-standard);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-radius: var(--border-radius-md);
+  max-height: 100%;
+  overflow: hidden;
+}
+
+/* Container for notification center content */
+.ui-notification-center__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+/* Header section */
+.ui-notification-center__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Title */
+.ui-notification-center__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+/* Counter */
+.ui-notification-center__counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--spacing-xs);
+  border-radius: 10px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  margin-left: var(--spacing-xs);
+}
+
+/* Filters section */
+.ui-notification-center__filters {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+  gap: var(--spacing-xs);
+}
+
+/* Filter */
+.ui-notification-center__filter {
+  display: flex;
+  align-items: center;
+}
+
+/* Filter button */
+.ui-notification-center__filter-button {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  transition: var(--transition-standard);
+}
+
+.ui-notification-center__filter-button:hover {
+  background-color: var(--color-background-hover);
+}
+
+.ui-notification-center__filter-button[aria-selected="true"] {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Search section */
+.ui-notification-center__search {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Search input */
+.ui-notification-center__search-input {
+  width: 100%;
+}
+
+/* Tabs section */
+.ui-notification-center__tabs {
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Tab */
+.ui-notification-center__tab {
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: var(--transition-standard);
+}
+
+.ui-notification-center__tab[aria-selected="true"] {
+  border-bottom-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* List section */
+.ui-notification-center__list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* Group */
+.ui-notification-center__group {
+  margin: 0;
+  padding: 0;
+}
+
+/* Group title */
+.ui-notification-center__group-title {
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-light);
+  margin: 0;
+}
+
+/* Item */
+.ui-notification-center__item {
+  display: flex;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  transition: var(--transition-standard);
+  cursor: pointer;
+  position: relative;
+}
+
+.ui-notification-center__item:hover {
+  background-color: var(--color-background-hover);
+}
+
+.ui-notification-center__item[data-state="unread"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+}
+
+.ui-notification-center__item[data-state="unread"] {
+  background-color: var(--color-background-light);
+}
+
+.ui-notification-center__item[data-state="pinned"] {
+  border-left: 3px solid var(--color-primary);
+}
+
+/* Item icon */
+.ui-notification-center__item-icon {
+  margin-right: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Item content */
+.ui-notification-center__item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Item title */
+.ui-notification-center__item-title {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Item message */
+.ui-notification-center__item-message {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+  word-break: break-word;
+}
+
+/* Item meta */
+.ui-notification-center__item-meta {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+/* Item time */
+.ui-notification-center__item-time {
+  margin-right: var(--spacing-sm);
+}
+
+/* Item actions */
+.ui-notification-center__item-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: var(--spacing-xs);
+}
+
+/* Item action */
+.ui-notification-center__item-action {
+  background: none;
+  border: none;
+  padding: var(--spacing-xs);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: var(--transition-standard);
+  border-radius: var(--border-radius-sm);
+}
+
+.ui-notification-center__item-action:hover {
+  background-color: var(--color-background-hover);
+  color: var(--color-text);
+}
+
+/* Empty state */
+.ui-notification-center__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--color-text-secondary);
+  height: 100%;
+}
+
+/* Empty icon */
+.ui-notification-center__empty-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-tertiary);
+}
+
+/* Empty title */
+.ui-notification-center__empty-title {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Empty message */
+.ui-notification-center__empty-message {
+  font-size: var(--font-size-sm);
+}
+
+/* Loading state */
+.ui-notification-center__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  height: 100%;
+}
+
+/* Error state */
+.ui-notification-center__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--color-error);
+  height: 100%;
+}
+
+/* Footer section */
+.ui-notification-center__footer {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Actions section */
+.ui-notification-center__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Action */
+.ui-notification-center__action {
+  font-size: var(--font-size-sm);
+}
+
+/* NotificationCenter variants */
+.ui-notification-center--default {
+  max-width: 400px;
+  max-height: 600px;
+}
+
+.ui-notification-center--compact {
+  max-width: 320px;
+  max-height: 480px;
+}
+
+.ui-notification-center--expanded {
+  max-width: 500px;
+  max-height: 700px;
+}
+
+.ui-notification-center--inline {
+  max-height: none;
+  border-radius: 0;
+}
+
+.ui-notification-center--dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: var(--z-index-dropdown);
+  box-shadow: var(--shadow-lg);
+  max-height: 400px;
+  min-width: 320px;
+}
+
+/* NotificationCenter sizes */
+.ui-notification-center--sm {
+  font-size: var(--font-size-sm);
+}
+
+.ui-notification-center--sm .ui-notification-center__title {
+  font-size: var(--font-size-md);
+}
+
+.ui-notification-center--sm .ui-notification-center__item {
+  padding: var(--spacing-sm);
+}
+
+.ui-notification-center--md {
+  /* Default size styles already applied */
+}
+
+.ui-notification-center--lg {
+  font-size: var(--font-size-md);
+}
+
+.ui-notification-center--lg .ui-notification-center__title {
+  font-size: var(--font-size-xl);
+}
+
+.ui-notification-center--lg .ui-notification-center__item {
+  padding: var(--spacing-lg);
+}
+
+/* NotificationCenter modifiers */
+.ui-notification-center--with-border {
+  border: 1px solid var(--color-border);
+}
+
+.ui-notification-center--with-shadow {
+  box-shadow: var(--shadow-md);
+}
+
+/* Notification types */
+.ui-notification-center__item[data-type="info"] .ui-notification-center__item-icon {
+  color: var(--color-info);
+}
+
+.ui-notification-center__item[data-type="success"] .ui-notification-center__item-icon {
+  color: var(--color-success);
+}
+
+.ui-notification-center__item[data-type="warning"] .ui-notification-center__item-icon {
+  color: var(--color-warning);
+}
+
+.ui-notification-center__item[data-type="error"] .ui-notification-center__item-icon {
+  color: var(--color-error);
+}
+
+.ui-notification-center__item[data-type="system"] .ui-notification-center__item-icon {
+  color: var(--color-primary);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .ui-notification-center--default,
+  .ui-notification-center--expanded,
+  .ui-notification-center--dropdown {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .ui-notification-center__filters {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .ui-notification-center__item {
+    padding: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 576px) {
+  .ui-notification-center__header,
+  .ui-notification-center__footer {
+    padding: var(--spacing-sm);
+  }
+  
+  .ui-notification-center__empty,
+  .ui-notification-center__loading,
+  .ui-notification-center__error {
+    padding: var(--spacing-lg);
+  }
+}

@@ -1,0 +1,260 @@
+/**
+ * Dashboard Component Styles
+ * 
+ * This file contains styles for the Dashboard component.
+ */
+
+/* Base styles */
+.ui-dashboard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Dashboard variants */
+.ui-dashboard--default {
+  background-color: var(--color-background);
+}
+
+.ui-dashboard--compact {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ui-dashboard--expanded {
+  min-height: 100vh;
+}
+
+.ui-dashboard--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: var(--spacing-md);
+}
+
+.ui-dashboard--list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dashboard sizes */
+.ui-dashboard--sm {
+  max-width: 768px;
+}
+
+.ui-dashboard--md {
+  max-width: 1024px;
+}
+
+.ui-dashboard--lg {
+  max-width: 1280px;
+}
+
+.ui-dashboard--xl {
+  max-width: 1440px;
+}
+
+.ui-dashboard--full {
+  max-width: 100%;
+}
+
+/* Dashboard layouts */
+.ui-dashboard--fixed {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ui-dashboard--fluid {
+  width: 100%;
+  padding: 0 var(--spacing-md);
+}
+
+.ui-dashboard--responsive {
+  width: 100%;
+  padding: 0 var(--spacing-md);
+}
+
+.ui-dashboard--custom {
+  /* Custom layout styles will be applied via inline styles */
+  display: block;
+}
+
+/* Dashboard sections */
+.ui-dashboard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  background-color: var(--color-background-light);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ui-dashboard__sidebar {
+  width: 250px;
+  background-color: var(--color-background-light);
+  border-right: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  overflow-y: auto;
+}
+
+.ui-dashboard__main {
+  flex: 1;
+  padding: var(--spacing-md);
+  overflow-y: auto;
+}
+
+.ui-dashboard__widgets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+.ui-dashboard__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  background-color: var(--color-background-light);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Dashboard layout with sidebar */
+.ui-dashboard--with-sidebar {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.ui-dashboard--with-sidebar .ui-dashboard__main {
+  flex: 1;
+}
+
+/* Dashboard widget */
+.ui-dashboard__widget {
+  background-color: var(--color-background-light);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.ui-dashboard__widget--with-border {
+  border: 1px solid var(--color-border);
+}
+
+.ui-dashboard__widget--with-shadow {
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-dashboard__widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ui-dashboard__widget-title {
+  font-weight: 600;
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}
+
+.ui-dashboard__widget-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.ui-dashboard__widget-content {
+  padding: var(--spacing-md);
+}
+
+.ui-dashboard__widget-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Dashboard loading state */
+.ui-dashboard--loading {
+  position: relative;
+}
+
+.ui-dashboard__loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 10;
+}
+
+/* Dashboard error state */
+.ui-dashboard__error {
+  padding: var(--spacing-md);
+  background-color: var(--color-error-light);
+  color: var(--color-error);
+  border-radius: var(--border-radius-md);
+  margin: var(--spacing-md);
+}
+
+/* Dashboard empty state */
+.ui-dashboard__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  text-align: center;
+}
+
+.ui-dashboard__empty-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.ui-dashboard__empty-message {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .ui-dashboard--with-sidebar {
+    flex-direction: column;
+  }
+
+  .ui-dashboard__sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .ui-dashboard__widgets {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .ui-dashboard__header,
+  .ui-dashboard__footer,
+  .ui-dashboard__main,
+  .ui-dashboard__sidebar {
+    padding: var(--spacing-sm);
+  }
+
+  .ui-dashboard__widget-header,
+  .ui-dashboard__widget-content,
+  .ui-dashboard__widget-footer {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}

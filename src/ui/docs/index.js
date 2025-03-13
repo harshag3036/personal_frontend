@@ -10,6 +10,8 @@ export { default as IntegrationGuide } from './integration-guide.md';
 export { default as ComponentApiGuide } from './component-api-guide.md';
 export { default as DevelopmentGuide } from './development-guide.md';
 export { default as ImplementationPlan } from './implementation-plan.md';
+export { default as ImplementationProgress } from './implementation-progress.md';
+export { default as CurrentStatus } from './current-status.md';
 export { default as AtomsGuide } from './atoms-guide.md';
 export { default as MoleculesOrganismsGuide } from './molecules-organisms-guide.md';
 export { default as ThemingGuide } from './theming-guide.md';

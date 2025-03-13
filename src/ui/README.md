@@ -310,6 +310,9 @@ When adding new components to the library:
 
 For more detailed information, see the documentation files:
 
+- [Current Status](./docs/current-status.md): Current status of the UI library and next steps
+- [Implementation Progress](./docs/implementation-progress.md): Detailed progress tracking of the UI library implementation
+- [UI Structure](./docs/UI-structure.md): Overview of the UI component library structure
 - [Integration Guide](./docs/integration-guide.md): How to integrate the UI library into your application
 - [Component API Guide](./docs/component-api-guide.md): Detailed documentation of component APIs
 - [Component Structure Guide](./docs/component-structure-guide.md): Guidelines for component file structure and organization

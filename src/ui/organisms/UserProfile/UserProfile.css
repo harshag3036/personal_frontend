@@ -1,0 +1,359 @@
+/**
+ * UserProfile Component Styles
+ * 
+ * This file contains all the styles for the UserProfile component.
+ */
+
+/* Base styles */
+.ui-user-profile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  transition: var(--transition-standard);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-radius: var(--border-radius-md);
+}
+
+/* Container for user profile content */
+.ui-user-profile__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header section */
+.ui-user-profile__header {
+  position: relative;
+  width: 100%;
+}
+
+/* Cover image */
+.ui-user-profile__cover {
+  width: 100%;
+  height: 150px;
+  background-color: var(--color-primary-light);
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: var(--border-radius-md);
+  border-top-right-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.ui-user-profile--lg .ui-user-profile__cover {
+  height: 200px;
+}
+
+.ui-user-profile--sm .ui-user-profile__cover {
+  height: 100px;
+}
+
+/* Avatar */
+.ui-user-profile__avatar {
+  position: relative;
+  margin-top: -40px;
+  margin-left: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  z-index: 1;
+}
+
+.ui-user-profile--with-cover .ui-user-profile__avatar {
+  margin-top: -50px;
+}
+
+.ui-user-profile--lg .ui-user-profile__avatar {
+  margin-top: -60px;
+}
+
+.ui-user-profile--sm .ui-user-profile__avatar {
+  margin-top: -30px;
+}
+
+/* Info section */
+.ui-user-profile__info {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.ui-user-profile--with-avatar .ui-user-profile__info {
+  padding-top: 0;
+}
+
+/* Name */
+.ui-user-profile__name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Username */
+.ui-user-profile__username {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Title */
+.ui-user-profile__title {
+  font-size: var(--font-size-md);
+  margin: var(--spacing-xs) 0;
+}
+
+/* Bio */
+.ui-user-profile__bio {
+  margin: var(--spacing-sm) 0;
+  line-height: 1.5;
+}
+
+/* Stats section */
+.ui-user-profile__stats {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Individual stat */
+.ui-user-profile__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Stat value */
+.ui-user-profile__stat-value {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Stat label */
+.ui-user-profile__stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Contact section */
+.ui-user-profile__contact {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Contact item */
+.ui-user-profile__contact-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Social section */
+.ui-user-profile__social {
+  padding: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* Social item */
+.ui-user-profile__social-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--color-background-light);
+  color: var(--color-text);
+  transition: var(--transition-standard);
+}
+
+.ui-user-profile__social-item:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+/* Actions section */
+.ui-user-profile__actions {
+  padding: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* Badges section */
+.ui-user-profile__badges {
+  padding: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* Badge */
+.ui-user-profile__badge {
+  display: inline-flex;
+}
+
+/* Tabs section */
+.ui-user-profile__tabs {
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Content section */
+.ui-user-profile__content {
+  padding: var(--spacing-md);
+}
+
+/* Footer section */
+.ui-user-profile__footer {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* UserProfile variants */
+.ui-user-profile--default {
+  /* Default styles already applied */
+}
+
+.ui-user-profile--compact {
+  max-width: 400px;
+}
+
+.ui-user-profile--compact .ui-user-profile__info,
+.ui-user-profile--compact .ui-user-profile__stats,
+.ui-user-profile--compact .ui-user-profile__contact,
+.ui-user-profile--compact .ui-user-profile__social,
+.ui-user-profile--compact .ui-user-profile__actions,
+.ui-user-profile--compact .ui-user-profile__badges,
+.ui-user-profile--compact .ui-user-profile__content,
+.ui-user-profile--compact .ui-user-profile__footer {
+  padding: var(--spacing-sm);
+}
+
+.ui-user-profile--expanded {
+  max-width: 800px;
+}
+
+.ui-user-profile--card {
+  box-shadow: var(--shadow-md);
+  max-width: 500px;
+}
+
+.ui-user-profile--inline {
+  flex-direction: row;
+  align-items: center;
+  padding: var(--spacing-sm);
+}
+
+.ui-user-profile--inline .ui-user-profile__avatar {
+  margin: 0 var(--spacing-sm) 0 0;
+}
+
+.ui-user-profile--inline .ui-user-profile__info {
+  padding: 0;
+  flex: 1;
+}
+
+.ui-user-profile--inline .ui-user-profile__stats,
+.ui-user-profile--inline .ui-user-profile__contact,
+.ui-user-profile--inline .ui-user-profile__bio,
+.ui-user-profile--inline .ui-user-profile__social,
+.ui-user-profile--inline .ui-user-profile__badges,
+.ui-user-profile--inline .ui-user-profile__tabs,
+.ui-user-profile--inline .ui-user-profile__content,
+.ui-user-profile--inline .ui-user-profile__footer {
+  display: none;
+}
+
+.ui-user-profile--inline .ui-user-profile__actions {
+  padding: 0;
+  margin-left: auto;
+}
+
+/* UserProfile sizes */
+.ui-user-profile--sm {
+  font-size: var(--font-size-sm);
+}
+
+.ui-user-profile--sm .ui-user-profile__name {
+  font-size: var(--font-size-lg);
+}
+
+.ui-user-profile--sm .ui-user-profile__username,
+.ui-user-profile--sm .ui-user-profile__title {
+  font-size: var(--font-size-sm);
+}
+
+.ui-user-profile--sm .ui-user-profile__stat-value {
+  font-size: var(--font-size-md);
+}
+
+.ui-user-profile--sm .ui-user-profile__stat-label {
+  font-size: var(--font-size-xs);
+}
+
+.ui-user-profile--md {
+  /* Default size styles already applied */
+}
+
+.ui-user-profile--lg {
+  font-size: var(--font-size-lg);
+}
+
+.ui-user-profile--lg .ui-user-profile__name {
+  font-size: var(--font-size-xxl);
+}
+
+.ui-user-profile--lg .ui-user-profile__username,
+.ui-user-profile--lg .ui-user-profile__title {
+  font-size: var(--font-size-lg);
+}
+
+.ui-user-profile--lg .ui-user-profile__stat-value {
+  font-size: var(--font-size-xl);
+}
+
+.ui-user-profile--lg .ui-user-profile__stat-label {
+  font-size: var(--font-size-md);
+}
+
+/* UserProfile modifiers */
+.ui-user-profile--with-border {
+  border: 1px solid var(--color-border);
+}
+
+.ui-user-profile--with-shadow {
+  box-shadow: var(--shadow-md);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .ui-user-profile__stats {
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .ui-user-profile__actions {
+    flex-direction: column;
+  }
+  
+  .ui-user-profile__actions > * {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .ui-user-profile__social {
+    justify-content: center;
+  }
+  
+  .ui-user-profile--expanded {
+    max-width: 100%;
+  }
+}

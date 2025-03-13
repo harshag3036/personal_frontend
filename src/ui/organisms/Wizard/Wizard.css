@@ -1,0 +1,294 @@
+/**
+ * Wizard Component Styles
+ * 
+ * This file contains all the styles for the Wizard component.
+ */
+
+/* Base styles */
+.ui-wizard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  transition: var(--transition-standard);
+}
+
+/* Container for wizard content */
+.ui-wizard__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header section */
+.ui-wizard__header {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Body section */
+.ui-wizard__body {
+  padding: var(--spacing-md);
+  flex: 1;
+  min-height: 200px;
+}
+
+/* Footer section */
+.ui-wizard__footer {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Navigation section */
+.ui-wizard__navigation {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  overflow-x: auto;
+}
+
+/* Step */
+.ui-wizard__step {
+  display: none;
+}
+
+.ui-wizard__step[data-state="active"] {
+  display: block;
+}
+
+/* Step title */
+.ui-wizard__step-title {
+  font-weight: bold;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Step content */
+.ui-wizard__step-content {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Step indicator */
+.ui-wizard__step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: var(--spacing-sm);
+  background-color: var(--color-background-light);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition-standard);
+}
+
+.ui-wizard__step-indicator[data-state="active"] {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.ui-wizard__step-indicator[data-state="completed"] {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: var(--color-text-on-success);
+}
+
+.ui-wizard__step-indicator[data-state="error"] {
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+  color: var(--color-text-on-error);
+}
+
+.ui-wizard__step-indicator[data-state="disabled"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Progress bar */
+.ui-wizard__progress-bar {
+  height: 4px;
+  background-color: var(--color-border);
+  margin: var(--spacing-md) 0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ui-wizard__progress-indicator {
+  height: 100%;
+  background-color: var(--color-primary);
+  transition: width 0.3s ease-in-out;
+}
+
+/* Button group */
+.ui-wizard__button-group {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Buttons */
+.ui-wizard__button-previous {
+  margin-right: auto;
+}
+
+.ui-wizard__button-next,
+.ui-wizard__button-finish {
+  margin-left: auto;
+}
+
+/* Summary */
+.ui-wizard__summary {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background-light);
+}
+
+/* Wizard variants */
+.ui-wizard--default {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-radius: var(--border-radius-md);
+}
+
+.ui-wizard--primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-text);
+  border-radius: var(--border-radius-md);
+}
+
+.ui-wizard--secondary {
+  background-color: var(--color-secondary-light);
+  color: var(--color-text);
+  border-radius: var(--border-radius-md);
+}
+
+.ui-wizard--compact .ui-wizard__header,
+.ui-wizard--compact .ui-wizard__body,
+.ui-wizard--compact .ui-wizard__footer {
+  padding: var(--spacing-sm);
+}
+
+.ui-wizard--vertical {
+  flex-direction: row;
+}
+
+.ui-wizard--vertical .ui-wizard__navigation {
+  flex-direction: column;
+  width: 200px;
+  padding: var(--spacing-md);
+  border-right: 1px solid var(--color-border);
+  margin-bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.ui-wizard--vertical .ui-wizard__container {
+  flex: 1;
+}
+
+/* Wizard sizes */
+.ui-wizard--sm {
+  max-width: 600px;
+}
+
+.ui-wizard--md {
+  max-width: 800px;
+}
+
+.ui-wizard--lg {
+  max-width: 1000px;
+}
+
+/* Wizard modifiers */
+.ui-wizard--with-border {
+  border: 1px solid var(--color-border);
+}
+
+.ui-wizard--with-shadow {
+  box-shadow: var(--shadow-md);
+}
+
+/* Navigation types */
+.ui-wizard__navigation--buttons {
+  justify-content: space-between;
+}
+
+.ui-wizard__navigation--tabs {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-sm);
+}
+
+.ui-wizard__navigation--tabs .ui-wizard__step-indicator {
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  width: auto;
+  height: auto;
+}
+
+.ui-wizard__navigation--dots {
+  justify-content: center;
+}
+
+.ui-wizard__navigation--dots .ui-wizard__step-indicator {
+  width: 12px;
+  height: 12px;
+  margin: 0 var(--spacing-xs);
+}
+
+.ui-wizard__navigation--progress {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .ui-wizard--vertical {
+    flex-direction: column;
+  }
+
+  .ui-wizard--vertical .ui-wizard__navigation {
+    width: 100%;
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-sm);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .ui-wizard__footer {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .ui-wizard__button-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .ui-wizard__button-previous,
+  .ui-wizard__button-next,
+  .ui-wizard__button-finish,
+  .ui-wizard__button-cancel {
+    margin: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .ui-wizard__navigation {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ui-wizard__step-indicator {
+    margin-bottom: var(--spacing-sm);
+  }
+}

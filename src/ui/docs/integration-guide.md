@@ -150,9 +150,9 @@ const ToastExample = () => {
 };
 ```
 
-### Using Planned Community-Specific Components
+### Using Community-Specific Components
 
-The following components are planned specifically for community features:
+The following components are available specifically for community features:
 
 ```jsx
 // Using Tabs for ActivityDetailView
@@ -294,9 +294,9 @@ const MyComponent = () => (
 );
 ```
 
-### Using Planned Community-Specific Organisms
+### Using Community-Specific Organisms
 
-The following organism components are planned specifically for community features:
+The following organism components are available specifically for community features:
 
 ```jsx
 // Using ActivityCard organism
@@ -307,13 +307,18 @@ const ActivityList = ({ activities }) => (
     {activities.map(activity => (
       <ActivityCard
         key={activity.id}
-        title={activity.title}
-        type={activity.type}
-        status={activity.status}
-        createdAt={activity.createdAt}
-        participants={activity.participants}
-        progress={activity.progress}
+        activity={activity}
+        variant="default"
+        size="medium"
+        interactive={true}
         onClick={() => handleActivityClick(activity.id)}
+        media={<img src={activity.image} alt={activity.title} />}
+        actions={
+          <>
+            <Button variant="secondary" size="small">Share</Button>
+            <Button variant="primary" size="small">View</Button>
+          </>
+        }
       />
     ))}
   </Stack>
@@ -322,36 +327,64 @@ const ActivityList = ({ activities }) => (
 // Using MilestoneTracker organism
 import { MilestoneTracker } from '../ui';
 
-const ActivityMilestones = ({ milestones }) => (
+const ActivityMilestones = ({ milestones, progress }) => (
   <MilestoneTracker
+    title="Project Milestones"
+    subtitle="Track progress through key milestones"
     milestones={milestones}
-    currentMilestoneId={currentMilestone.id}
+    progress={progress}
+    variant="default"
+    size="medium"
+    interactive={true}
     onMilestoneClick={handleMilestoneClick}
+    actions={
+      <>
+        <Button variant="secondary" size="small">Reset</Button>
+        <Button variant="primary" size="small">Save Progress</Button>
+      </>
+    }
   />
 );
 
 // Using DependencyGraph organism
 import { DependencyGraph } from '../ui';
 
-const MilestoneDependencies = ({ milestones, dependencies }) => (
+const MilestoneDependencies = ({ nodes, edges }) => (
   <DependencyGraph
-    nodes={milestones}
-    edges={dependencies}
+    nodes={nodes}
+    edges={edges}
     layout="horizontal"
+    interactive={true}
     onNodeClick={handleNodeClick}
+    onEdgeClick={handleEdgeClick}
+    zoomable={true}
+    pannable={true}
+    fitView={true}
+    nodeTypes={{
+      milestone: MilestoneNode,
+      activity: ActivityNode
+    }}
+    edgeTypes={{
+      dependency: DependencyEdge,
+      relation: RelationEdge
+    }}
   />
 );
 
-// Using CommentSection organism
-import { CommentSection } from '../ui';
+// Using CommentThread component
+import { CommentThread } from '../ui';
 
 const ActivityComments = ({ activityId, comments }) => (
-  <CommentSection
-    activityId={activityId}
+  <CommentThread
     comments={comments}
-    onCommentAdded={handleCommentAdded}
+    onCommentAdd={handleCommentAdd}
+    onCommentEdit={handleCommentEdit}
+    onCommentDelete={handleCommentDelete}
+    onCommentReply={handleCommentReply}
+    onCommentReaction={handleCommentReaction}
     allowReplies={true}
     allowReactions={true}
+    maxDepth={3}
   />
 );
 ```
@@ -743,26 +776,26 @@ When adding new components to the library:
 
 Future improvements to the UI component library include:
 
-1. **Community-Specific Components**:
-   - Timeline Component for activity timelines
-   - StatusBadge Component for activity statuses
-   - CommentThread Component for nested comments
-   - MetricCard Component for displaying metrics
+1. **Additional Community-Specific Components**:
+   - MilestoneTracker Component for tracking milestones
+   - DependencyGraph Component for visualizing dependencies
 
-2. **Community-Specific Organisms**:
-   - ActivityCard Organism for displaying activities
-   - MilestoneTracker Organism for tracking milestones
-   - DependencyGraph Organism for visualizing dependencies
-   - CommentSection Organism for comments and discussions
-
-3. **Advanced Features**:
-   - Visual testing implementation
+2. **Advanced Features**:
+   - Storybook integration for all components
+   - Comprehensive test coverage for all components
+   - Visual regression testing
    - Accessibility testing
    - Performance monitoring
    - Component playground
 
-4. **Application Refactoring**:
+3. **Application Refactoring**:
    - Migration strategy
    - Component refactoring
    - Performance optimization
    - Accessibility enhancements
+
+4. **Documentation Enhancements**:
+   - Comprehensive API documentation
+   - Interactive examples
+   - Integration guides for specific use cases
+   - Performance best practices

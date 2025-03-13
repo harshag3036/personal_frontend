@@ -1,0 +1,188 @@
+/**
+ * Footer Component Styles
+ * 
+ * This file contains all the styles for the Footer component.
+ */
+
+/* Base styles */
+.ui-footer {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-lg) 0;
+  transition: var(--transition-standard);
+}
+
+/* Container for footer content */
+.ui-footer__container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+  box-sizing: border-box;
+}
+
+/* Logo area */
+.ui-footer__logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Navigation area */
+.ui-footer__navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Social media area */
+.ui-footer__social {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Copyright area */
+.ui-footer__copyright {
+  text-align: center;
+  margin-top: var(--spacing-md);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* Newsletter area */
+.ui-footer__newsletter {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Column layout */
+.ui-footer__column {
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Column title */
+.ui-footer__column-title {
+  font-weight: bold;
+  margin-bottom: var(--spacing-sm);
+  font-size: 1rem;
+}
+
+/* Column content */
+.ui-footer__column-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+/* Bottom section */
+.ui-footer__bottom {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* Footer variants */
+.ui-footer--default {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.ui-footer--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.ui-footer--secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text-on-secondary);
+}
+
+.ui-footer--light {
+  background-color: var(--color-background-light);
+  color: var(--color-text);
+}
+
+.ui-footer--dark {
+  background-color: var(--color-background-dark);
+  color: var(--color-text-on-dark);
+}
+
+/* Footer sizes */
+.ui-footer--sm {
+  padding: var(--spacing-md) 0;
+}
+
+.ui-footer--md {
+  padding: var(--spacing-lg) 0;
+}
+
+.ui-footer--lg {
+  padding: var(--spacing-xl) 0;
+}
+
+/* Footer positions */
+.ui-footer--fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-footer);
+}
+
+.ui-footer--sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-index-footer);
+}
+
+.ui-footer--relative {
+  position: relative;
+}
+
+/* Footer modifiers */
+.ui-footer--with-border {
+  border-top: 1px solid var(--color-border);
+}
+
+.ui-footer--with-shadow {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .ui-footer__navigation {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .ui-footer__container {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .ui-footer__bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .ui-footer__social {
+    justify-content: center;
+  }
+  
+  .ui-footer__column {
+    min-width: 100%;
+  }
+}

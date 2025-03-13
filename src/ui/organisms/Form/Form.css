@@ -1,22 +1,24 @@
 /**
  * Form Component Styles
+ * 
+ * This file contains styles for the Form component and its sub-components.
  */
 
 /* Base Form Styles */
-.ds-form {
+.ui-form {
   display: flex;
   flex-direction: column;
   width: 100%;
   font-family: var(--font-family-primary);
 }
 
-.ds-form-disabled {
+.ui-form--disabled {
   opacity: 0.7;
   pointer-events: none;
 }
 
 /* Form Group */
-.ds-form-group {
+.ui-form-group {
   display: flex;
   flex-direction: column;
   margin-bottom: var(--spacing-4);
@@ -24,24 +26,24 @@
 }
 
 /* Form Label */
-.ds-form-label {
+.ui-form-label {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   margin-bottom: var(--spacing-1);
   color: var(--color-text-secondary);
 }
 
-.ds-form-label-disabled {
+.ui-form-label--disabled {
   color: var(--color-text-disabled);
 }
 
-.ds-form-required {
+.ui-form-required {
   color: var(--color-error-500);
   margin-left: var(--spacing-1);
 }
 
 /* Form Control */
-.ds-form-control {
+.ui-form-control {
   display: block;
   width: 100%;
   padding: var(--spacing-2) var(--spacing-3);
@@ -55,48 +57,48 @@
   transition: border-color var(--transition-default), box-shadow var(--transition-default);
 }
 
-.ds-form-control:focus {
+.ui-form-control:focus {
   border-color: var(--color-brand-500);
   outline: 0;
   box-shadow: 0 0 0 2px var(--color-brand-100);
 }
 
-.ds-form-control-invalid {
+.ui-form-control--invalid {
   border-color: var(--color-error-500);
 }
 
-.ds-form-control-invalid:focus {
+.ui-form-control--invalid:focus {
   box-shadow: 0 0 0 2px var(--color-error-100);
 }
 
-.ds-form-control-disabled {
+.ui-form-control--disabled {
   background-color: var(--color-background-disabled);
   border-color: var(--color-border-light);
   color: var(--color-text-disabled);
   cursor: not-allowed;
 }
 
-.ds-form-control::placeholder {
+.ui-form-control::placeholder {
   color: var(--color-text-tertiary);
   opacity: 1;
 }
 
 /* Form Feedback */
-.ds-form-feedback {
+.ui-form-feedback {
   margin-top: var(--spacing-1);
   font-size: var(--font-size-xs);
 }
 
-.ds-form-feedback-valid {
+.ui-form-feedback--valid {
   color: var(--color-success-500);
 }
 
-.ds-form-feedback-invalid {
+.ui-form-feedback--invalid {
   color: var(--color-error-500);
 }
 
 /* Form Text */
-.ds-form-text {
+.ui-form-text {
   display: block;
   margin-top: var(--spacing-1);
   font-size: var(--font-size-xs);
@@ -104,7 +106,7 @@
 }
 
 /* Form Submit Button */
-.ds-form-submit {
+.ui-form-submit {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -120,29 +122,29 @@
   transition: background-color var(--transition-default), border-color var(--transition-default), box-shadow var(--transition-default);
 }
 
-.ds-form-submit:hover {
+.ui-form-submit:hover {
   background-color: var(--color-brand-600);
 }
 
-.ds-form-submit:focus {
+.ui-form-submit:focus {
   outline: 0;
   box-shadow: 0 0 0 2px var(--color-brand-100);
 }
 
-.ds-form-submit-disabled {
+.ui-form-submit--disabled {
   opacity: 0.65;
   pointer-events: none;
   background-color: var(--color-brand-300);
 }
 
 /* Dark Theme Adjustments */
-.theme-dark .ds-form-control {
+.theme-dark .ui-form-control {
   background-color: var(--color-background-secondary);
   border-color: var(--color-border-medium);
   color: var(--color-text-primary);
 }
 
-.theme-dark .ds-form-control-disabled {
+.theme-dark .ui-form-control--disabled {
   background-color: var(--color-background-disabled);
   border-color: var(--color-border-light);
   color: var(--color-text-disabled);
@@ -150,57 +152,57 @@
 
 /* Responsive Adjustments */
 @media (max-width: 600px) {
-  .ds-form-group {
+  .ui-form-group {
     margin-bottom: var(--spacing-3);
   }
   
-  .ds-form-control {
+  .ui-form-control {
     padding: var(--spacing-2);
   }
   
-  .ds-form-submit {
+  .ui-form-submit {
     padding: var(--spacing-2) var(--spacing-3);
   }
 }
 
 /* Accessibility Focus Styles */
-.ds-form-control:focus-visible,
-.ds-form-submit:focus-visible {
+.ui-form-control:focus-visible,
+.ui-form-submit:focus-visible {
   outline: 2px solid var(--color-brand-500);
   outline-offset: 2px;
 }
 
 /* Form Layout Utilities */
-.ds-form-row {
+.ui-form-row {
   display: flex;
   flex-wrap: wrap;
   margin-right: calc(var(--spacing-3) * -1);
   margin-left: calc(var(--spacing-3) * -1);
 }
 
-.ds-form-col {
+.ui-form-col {
   flex: 1 0 0%;
   padding-right: var(--spacing-3);
   padding-left: var(--spacing-3);
 }
 
 /* Form Validation States */
-.ds-form-control:valid:not(.ds-form-control-invalid) {
+.ui-form-control:valid:not(.ui-form-control--invalid) {
   border-color: var(--color-success-500);
 }
 
-.ds-form-control:valid:focus:not(.ds-form-control-invalid) {
+.ui-form-control:valid:focus:not(.ui-form-control--invalid) {
   box-shadow: 0 0 0 2px var(--color-success-100);
 }
 
 /* Form Inline */
-.ds-form-inline {
+.ui-form--inline {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
 }
 
-.ds-form-inline .ds-form-group {
+.ui-form--inline .ui-form-group {
   display: flex;
   flex: 0 0 auto;
   flex-flow: row wrap;
@@ -209,13 +211,13 @@
   margin-right: var(--spacing-3);
 }
 
-.ds-form-inline .ds-form-control {
+.ui-form--inline .ui-form-control {
   display: inline-block;
   width: auto;
   vertical-align: middle;
 }
 
-.ds-form-inline .ds-form-label {
+.ui-form--inline .ui-form-label {
   margin-bottom: 0;
   margin-right: var(--spacing-2);
 }

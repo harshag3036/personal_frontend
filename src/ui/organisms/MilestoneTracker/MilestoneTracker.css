@@ -1,0 +1,428 @@
+/**
+ * MilestoneTracker Component Styles
+ * 
+ * This file contains styles for the MilestoneTracker component and its sub-components.
+ */
+
+/* Base MilestoneTracker Styles */
+.ui-milestone-tracker {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  font-family: var(--font-family-base);
+}
+
+/* MilestoneTracker Header */
+.ui-milestone-tracker-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-4);
+}
+
+.ui-milestone-tracker-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+  margin-bottom: var(--spacing-1);
+}
+
+.ui-milestone-tracker-subtitle {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* MilestoneTracker Body */
+.ui-milestone-tracker-body {
+  flex: 1;
+  position: relative;
+}
+
+/* MilestoneTracker Timeline */
+.ui-milestone-tracker-timeline {
+  position: relative;
+  padding: var(--spacing-2) 0;
+}
+
+/* Vertical Timeline Connector */
+.ui-milestone-tracker--vertical .ui-milestone-tracker-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 24px;
+  width: 2px;
+  background-color: var(--color-border-medium);
+  z-index: 0;
+}
+
+/* Horizontal Timeline Connector */
+.ui-milestone-tracker--horizontal .ui-milestone-tracker-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 24px;
+  height: 2px;
+  background-color: var(--color-border-medium);
+  z-index: 0;
+}
+
+/* MilestoneTracker Milestone */
+.ui-milestone-tracker-milestone {
+  display: flex;
+  position: relative;
+  margin-bottom: var(--spacing-4);
+  z-index: 1;
+}
+
+.ui-milestone-tracker--horizontal .ui-milestone-tracker-milestone {
+  flex-direction: column;
+  align-items: center;
+  margin-right: var(--spacing-6);
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.ui-milestone-tracker--horizontal .ui-milestone-tracker-timeline {
+  display: flex;
+  flex-direction: row;
+}
+
+/* MilestoneTracker Milestone Icon */
+.ui-milestone-tracker-milestone-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--color-background-primary);
+  border: 2px solid var(--color-border-medium);
+  margin-right: var(--spacing-3);
+  flex-shrink: 0;
+  z-index: 2;
+  transition: all var(--transition-default);
+}
+
+.ui-milestone-tracker--horizontal .ui-milestone-tracker-milestone-icon {
+  margin-right: 0;
+  margin-bottom: var(--spacing-3);
+}
+
+/* MilestoneTracker Milestone Content */
+.ui-milestone-tracker-milestone-content {
+  flex: 1;
+  padding-right: var(--spacing-3);
+}
+
+.ui-milestone-tracker--horizontal .ui-milestone-tracker-milestone-content {
+  text-align: center;
+  padding-right: 0;
+}
+
+/* MilestoneTracker Milestone Title */
+.ui-milestone-tracker-milestone-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+  margin-bottom: var(--spacing-1);
+}
+
+/* MilestoneTracker Milestone Date */
+.ui-milestone-tracker-milestone-date {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  margin-bottom: var(--spacing-2);
+}
+
+/* MilestoneTracker Milestone Description */
+.ui-milestone-tracker-milestone-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* MilestoneTracker Milestone Connector */
+.ui-milestone-tracker-milestone-connector {
+  position: absolute;
+  background-color: var(--color-border-medium);
+  z-index: 0;
+}
+
+.ui-milestone-tracker--vertical .ui-milestone-tracker-milestone-connector {
+  top: 48px;
+  left: 24px;
+  width: 2px;
+  height: calc(100% - 48px);
+}
+
+.ui-milestone-tracker--horizontal .ui-milestone-tracker-milestone-connector {
+  top: 24px;
+  left: 48px;
+  width: calc(100% - 48px);
+  height: 2px;
+}
+
+/* MilestoneTracker Progress */
+.ui-milestone-tracker-progress {
+  position: absolute;
+  background-color: var(--color-success-500);
+  z-index: 1;
+  transition: all var(--transition-default);
+}
+
+.ui-milestone-tracker--vertical .ui-milestone-tracker-progress {
+  top: 0;
+  left: 24px;
+  width: 2px;
+}
+
+.ui-milestone-tracker--horizontal .ui-milestone-tracker-progress {
+  left: 0;
+  top: 24px;
+  height: 2px;
+}
+
+/* MilestoneTracker Footer */
+.ui-milestone-tracker-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--spacing-4);
+}
+
+/* MilestoneTracker Actions */
+.ui-milestone-tracker-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+/* MilestoneTracker Variants */
+.ui-milestone-tracker--default {
+  /* Default styles already applied */
+}
+
+.ui-milestone-tracker--compact .ui-milestone-tracker-milestone {
+  margin-bottom: var(--spacing-2);
+}
+
+.ui-milestone-tracker--compact .ui-milestone-tracker-milestone-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.ui-milestone-tracker--compact.ui-milestone-tracker--vertical .ui-milestone-tracker-timeline::before,
+.ui-milestone-tracker--compact.ui-milestone-tracker--vertical .ui-milestone-tracker-progress {
+  left: 16px;
+}
+
+.ui-milestone-tracker--compact.ui-milestone-tracker--horizontal .ui-milestone-tracker-timeline::before,
+.ui-milestone-tracker--compact.ui-milestone-tracker--horizontal .ui-milestone-tracker-progress {
+  top: 16px;
+}
+
+.ui-milestone-tracker--detailed .ui-milestone-tracker-milestone-content {
+  padding: var(--spacing-3);
+  background-color: var(--color-background-subtle);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-border-light);
+}
+
+/* MilestoneTracker Sizes */
+.ui-milestone-tracker--small .ui-milestone-tracker-milestone-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.ui-milestone-tracker--small.ui-milestone-tracker--vertical .ui-milestone-tracker-timeline::before,
+.ui-milestone-tracker--small.ui-milestone-tracker--vertical .ui-milestone-tracker-progress {
+  left: 16px;
+}
+
+.ui-milestone-tracker--small.ui-milestone-tracker--horizontal .ui-milestone-tracker-timeline::before,
+.ui-milestone-tracker--small.ui-milestone-tracker--horizontal .ui-milestone-tracker-progress {
+  top: 16px;
+}
+
+.ui-milestone-tracker--large .ui-milestone-tracker-milestone-icon {
+  width: 64px;
+  height: 64px;
+}
+
+.ui-milestone-tracker--large.ui-milestone-tracker--vertical .ui-milestone-tracker-timeline::before,
+.ui-milestone-tracker--large.ui-milestone-tracker--vertical .ui-milestone-tracker-progress {
+  left: 32px;
+}
+
+.ui-milestone-tracker--large.ui-milestone-tracker--horizontal .ui-milestone-tracker-timeline::before,
+.ui-milestone-tracker--large.ui-milestone-tracker--horizontal .ui-milestone-tracker-progress {
+  top: 32px;
+}
+
+/* Milestone Status Styles */
+.ui-milestone-tracker-milestone[data-status="not-started"] .ui-milestone-tracker-milestone-icon {
+  background-color: var(--color-background-primary);
+  border-color: var(--color-border-medium);
+  color: var(--color-text-secondary);
+}
+
+.ui-milestone-tracker-milestone[data-status="in-progress"] .ui-milestone-tracker-milestone-icon {
+  background-color: var(--color-info-100);
+  border-color: var(--color-info-500);
+  color: var(--color-info-700);
+}
+
+.ui-milestone-tracker-milestone[data-status="completed"] .ui-milestone-tracker-milestone-icon {
+  background-color: var(--color-success-100);
+  border-color: var(--color-success-500);
+  color: var(--color-success-700);
+}
+
+.ui-milestone-tracker-milestone[data-status="delayed"] .ui-milestone-tracker-milestone-icon {
+  background-color: var(--color-warning-100);
+  border-color: var(--color-warning-500);
+  color: var(--color-warning-700);
+}
+
+.ui-milestone-tracker-milestone[data-status="blocked"] .ui-milestone-tracker-milestone-icon {
+  background-color: var(--color-danger-100);
+  border-color: var(--color-danger-500);
+  color: var(--color-danger-700);
+}
+
+.ui-milestone-tracker-milestone[data-status="skipped"] .ui-milestone-tracker-milestone-icon {
+  background-color: var(--color-background-muted);
+  border-color: var(--color-border-medium);
+  color: var(--color-text-muted);
+}
+
+/* MilestoneTracker Modifiers */
+.ui-milestone-tracker--interactive .ui-milestone-tracker-milestone {
+  cursor: pointer;
+}
+
+.ui-milestone-tracker--interactive .ui-milestone-tracker-milestone:hover .ui-milestone-tracker-milestone-icon {
+  transform: scale(1.1);
+}
+
+.ui-milestone-tracker--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.ui-milestone-tracker--loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.ui-milestone-tracker--loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-background-muted),
+    transparent
+  );
+  animation: milestone-tracker-shimmer 1.5s infinite;
+}
+
+@keyframes milestone-tracker-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Dark Theme Adjustments */
+.theme-dark .ui-milestone-tracker-milestone-icon {
+  background-color: var(--color-background-secondary);
+}
+
+.theme-dark .ui-milestone-tracker--detailed .ui-milestone-tracker-milestone-content {
+  background-color: var(--color-background-tertiary);
+  border-color: var(--color-border-dark);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .ui-milestone-tracker--horizontal {
+    flex-direction: column;
+  }
+  
+  .ui-milestone-tracker--horizontal .ui-milestone-tracker-timeline {
+    flex-direction: column;
+  }
+  
+  .ui-milestone-tracker--horizontal .ui-milestone-tracker-milestone {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-right: 0;
+    margin-bottom: var(--spacing-4);
+  }
+  
+  .ui-milestone-tracker--horizontal .ui-milestone-tracker-milestone-icon {
+    margin-right: var(--spacing-3);
+    margin-bottom: 0;
+  }
+  
+  .ui-milestone-tracker--horizontal .ui-milestone-tracker-milestone-content {
+    text-align: left;
+    padding-right: var(--spacing-3);
+  }
+  
+  .ui-milestone-tracker--horizontal .ui-milestone-tracker-timeline::before {
+    left: 24px;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    height: 100%;
+  }
+  
+  .ui-milestone-tracker--horizontal .ui-milestone-tracker-progress {
+    left: 24px;
+    top: 0;
+    width: 2px;
+    height: auto;
+  }
+  
+  .ui-milestone-tracker--horizontal .ui-milestone-tracker-milestone-connector {
+    top: 48px;
+    left: 24px;
+    width: 2px;
+    height: calc(100% - 48px);
+  }
+  
+  .ui-milestone-tracker--horizontal.ui-milestone-tracker--small .ui-milestone-tracker-timeline::before,
+  .ui-milestone-tracker--horizontal.ui-milestone-tracker--small .ui-milestone-tracker-progress {
+    left: 16px;
+  }
+  
+  .ui-milestone-tracker--horizontal.ui-milestone-tracker--large .ui-milestone-tracker-timeline::before,
+  .ui-milestone-tracker--horizontal.ui-milestone-tracker--large .ui-milestone-tracker-progress {
+    left: 32px;
+  }
+}
+
+/* Accessibility Focus Styles */
+.ui-milestone-tracker:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.ui-milestone-tracker--interactive .ui-milestone-tracker-milestone:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
