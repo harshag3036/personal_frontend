@@ -27,13 +27,21 @@ const TabList = ({
     className
   ].filter(Boolean).join(' ');
 
+  // Clone children to add index prop
+  const tabsWithIndex = React.Children.map(children, (child, index) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child, { index });
+    }
+    return child;
+  });
+
   return (
     <div 
       className={tabListClasses}
       role="tablist"
       {...restProps}
     >
-      {children}
+      {tabsWithIndex}
     </div>
   );
 };

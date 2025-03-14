@@ -177,7 +177,9 @@ describe('Menu Component', () => {
   });
   
   // Test keyboard navigation
-  test('handles keyboard navigation correctly', () => {
+  test('handles keyboard navigation correctly', async () => {
+    const user = userEvent.setup();
+    
     render(
       <Menu isOpen={true}>
         <MenuItem index={0} data-testid="item-0">Option 1</MenuItem>
@@ -189,28 +191,40 @@ describe('Menu Component', () => {
     const menu = screen.getByRole('menu');
     
     // Initial focus should be on the first item
-    fireEvent.keyDown(menu, { key: 'ArrowDown' });
-    expect(document.activeElement).toBe(screen.getByTestId('item-1'));
+    await user.keyboard('{ArrowDown}');
+    await waitFor(() => {
+      expect(document.activeElement).toBe(screen.getByTestId('item-1'));
+    });
     
     // Move down again
-    fireEvent.keyDown(menu, { key: 'ArrowDown' });
-    expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    await user.keyboard('{ArrowDown}');
+    await waitFor(() => {
+      expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    });
     
     // Move down again should cycle back to the first item
-    fireEvent.keyDown(menu, { key: 'ArrowDown' });
-    expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    await user.keyboard('{ArrowDown}');
+    await waitFor(() => {
+      expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    });
     
     // Move up should go to the last item
-    fireEvent.keyDown(menu, { key: 'ArrowUp' });
-    expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    await user.keyboard('{ArrowUp}');
+    await waitFor(() => {
+      expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    });
     
     // Home key should go to the first item
-    fireEvent.keyDown(menu, { key: 'Home' });
-    expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    await user.keyboard('{Home}');
+    await waitFor(() => {
+      expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    });
     
     // End key should go to the last item
-    fireEvent.keyDown(menu, { key: 'End' });
-    expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    await user.keyboard('{End}');
+    await waitFor(() => {
+      expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    });
   });
   
   // Test menu item with icon and right icon

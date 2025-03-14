@@ -10,6 +10,8 @@ describe('Pagination Component', () => {
         currentPage={1} 
         totalPages={5} 
         onPageChange={() => {}}
+        // Force showing all pages by setting large sibling count
+        siblingCount={5}
       />
     );
     
@@ -63,6 +65,8 @@ describe('Pagination Component', () => {
         currentPage={1} 
         totalPages={5} 
         onPageChange={handlePageChange}
+        // Force showing all pages by setting large sibling count
+        siblingCount={5}
       />
     );
     
@@ -303,7 +307,7 @@ describe('Pagination Component', () => {
   
   // Test with invalid current page
   test('handles invalid current page by clamping to valid range', () => {
-    render(
+    const { rerender } = render(
       <Pagination 
         currentPage={10} // Greater than totalPages
         totalPages={5} 
@@ -315,8 +319,11 @@ describe('Pagination Component', () => {
     const page5Button = screen.getByText('5');
     expect(page5Button).toHaveAttribute('aria-current', 'page');
     
+    // Clear the previous render
+    rerender(<div />);
+    
     // Render with negative current page
-    const { rerender } = render(
+    render(
       <Pagination 
         currentPage={-1} // Less than 1
         totalPages={5} 

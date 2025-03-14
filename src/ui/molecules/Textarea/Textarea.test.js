@@ -4,13 +4,14 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Textarea, { 
+import Textarea from './index';
+import { 
   TEXTAREA_CLASS, 
   TEXTAREA_VARIANTS, 
   TEXTAREA_SIZES, 
   TEXTAREA_STATES,
   TEXTAREA_MODIFIERS
-} from './index';
+} from './constants';
 
 describe('Textarea Component', () => {
   // Basic rendering tests

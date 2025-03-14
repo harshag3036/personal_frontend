@@ -44,7 +44,7 @@ const Switch = forwardRef(function Switch(props, ref) {
     style,
     variant = SWITCH_VARIANTS.PRIMARY,
     size = SWITCH_SIZES.MEDIUM,
-    checked = false,
+    checked,
     defaultChecked,
     disabled = false,
     label,
@@ -207,7 +207,6 @@ Switch.defaultProps = {
   as: 'label',
   variant: SWITCH_VARIANTS.PRIMARY,
   size: SWITCH_SIZES.MEDIUM,
-  checked: false,
   disabled: false,
   labelPosition: 'right',
 };

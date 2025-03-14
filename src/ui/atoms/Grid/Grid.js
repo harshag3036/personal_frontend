@@ -116,6 +116,7 @@ const Grid = ({
     ...(gap && !isResponsiveObject(gap) && { gap: `var(--spacing-${gap})` }),
     ...(columnGap && !isResponsiveObject(columnGap) && { columnGap: `var(--spacing-${columnGap})` }),
     ...(rowGap && !isResponsiveObject(rowGap) && { rowGap: `var(--spacing-${rowGap})` }),
+    // Ensure areas is applied exactly as provided without any whitespace normalization
     ...(areas && !isResponsiveObject(areas) && { gridTemplateAreas: areas }),
     ...(autoColumns && !isResponsiveObject(autoColumns) && { gridAutoColumns: autoColumns }),
     ...(autoRows && !isResponsiveObject(autoRows) && { gridAutoRows: autoRows }),

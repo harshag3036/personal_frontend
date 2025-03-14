@@ -5,15 +5,15 @@ import { LABEL_VARIANTS, LABEL_SIZES } from './index';
 
 describe('Label Component', () => {
   test('renders with default props', () => {
-    render(<Label htmlFor="test-input">Test Label</Label>);
-    const labelElement = screen.getByText('Test Label');
+    render(<Label htmlFor="test-input" data-testid="test-label">Test Label</Label>);
+    const labelElement = screen.getByTestId('test-label');
     
     expect(labelElement).toBeInTheDocument();
     expect(labelElement.tagName).toBe('LABEL');
     expect(labelElement.className).toContain('ui-label');
     expect(labelElement.className).toContain('ui-label--default');
     expect(labelElement.className).toContain('ui-label--size-md');
-    expect(labelElement.getAttribute('htmlFor')).toBe('test-input');
+    expect(labelElement.getAttribute('for')).toBe('test-input');
   });
 
   test('renders with custom variant', () => {

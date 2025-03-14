@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import { ToastProvider } from './index';
+import ToastProvider from './ToastProvider';
 import { useToast } from '../../utilities';
 
 // Mock the useToast hook
@@ -13,14 +13,13 @@ jest.mock('../../utilities', () => ({
 }));
 
 // Mock the ToastContainer component
-jest.mock('./index', () => ({
-  ToastContainer: jest.fn(({ as, toasts, position, maxToasts }) => (
+jest.mock('./ToastContainer', () => 
+  jest.fn(({ as, toasts, position, maxToasts }) => (
     <div data-testid="mock-toast-container" data-as={as} data-position={position} data-max-toasts={maxToasts}>
       {toasts?.length || 0} toasts
     </div>
-  )),
-  ToastProvider: jest.requireActual('./ToastProvider').default,
-}));
+  ))
+);
 
 describe('ToastProvider Component', () => {
   beforeEach(() => {

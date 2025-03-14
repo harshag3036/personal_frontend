@@ -47,6 +47,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
+    "test:ui": "react-scripts test --testPathPattern=src/ui --watchAll=false",
+    "test:ui:coverage": "react-scripts test --coverage --testPathPattern=src/ui --watchAll=false",
+    "test:ui:organisms": "react-scripts test --testPathPattern=src/ui/organisms --watchAll=false",
+    "test:ui:organisms:coverage": "react-scripts test --coverage --testPathPattern=src/ui/organisms --watchAll=false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -65,6 +70,36 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/ui/**/*.{js,jsx}",
+      "!src/ui/**/*.stories.js",
+      "!src/ui/**/index.js",
+      "!src/ui/examples/**",
+      "!src/ui/docs/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 80,
+        "branches": 80,
+        "functions": 80,
+        "lines": 80
+      }
+    },
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "<rootDir>/src/__mocks__/styleMock.js",
+      "^../../utilities/responsive-props$": "<rootDir>/src/__mocks__/useResponsiveProps.js"
+    },
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
     ]
   },
   "devDependencies": {

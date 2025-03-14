@@ -133,7 +133,7 @@ describe('DataTable Component', () => {
     expect(handleSelectionChange).toHaveBeenCalledWith([2]);
   });
 
-  test('handles search', async () => {
+  test('handles search', () => {
     const handleSearch = jest.fn();
     render(
       <DataTable 
@@ -151,9 +151,7 @@ describe('DataTable Component', () => {
     fireEvent.change(searchInput, { target: { value: 'John' } });
     
     // Check if the handler was called with the correct search term
-    await waitFor(() => {
-      expect(handleSearch).toHaveBeenCalledWith('John');
-    });
+    expect(handleSearch).toHaveBeenCalledWith('John');
   });
 
   test('handles pagination', () => {

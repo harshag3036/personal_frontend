@@ -13,9 +13,11 @@ jest.mock('react-dom', () => {
 
 describe('Tooltip Component', () => {
   // Mock requestAnimationFrame
+  let rafSpy;
+  
   beforeEach(() => {
     jest.useFakeTimers();
-    jest.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+    rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
       cb();
       return 0;
     });
@@ -23,7 +25,9 @@ describe('Tooltip Component', () => {
 
   afterEach(() => {
     jest.useRealTimers();
-    window.requestAnimationFrame.mockRestore();
+    if (rafSpy) {
+      rafSpy.mockRestore();
+    }
   });
 
   test('renders children correctly', () => {

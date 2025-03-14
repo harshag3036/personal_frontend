@@ -90,21 +90,19 @@ describe('CommentSection Component', () => {
     expect(screen.getByText('Alice Johnson')).toBeInTheDocument();
   });
 
-  it('allows adding a new comment', async () => {
+  it('allows adding a new comment', () => {
     render(<CommentSection {...mockHandlers} />);
     
     const textarea = screen.getByPlaceholderText('Write a comment...');
     const testComment = 'This is a new comment';
     
-    await userEvent.type(textarea, testComment);
+    fireEvent.change(textarea, { target: { value: testComment } });
     expect(textarea).toHaveValue(testComment);
     
     const submitButton = screen.getByText('Post');
     fireEvent.click(submitButton);
     
-    await waitFor(() => {
-      expect(mockHandlers.onAddComment).toHaveBeenCalledWith(testComment);
-    });
+    expect(mockHandlers.onAddComment).toHaveBeenCalledWith(testComment);
   });
 
   it('disables submit button when comment is empty', () => {

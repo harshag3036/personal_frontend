@@ -1,5 +1,5 @@
 import { MENU_VARIANTS, MENU_SIZES } from './constants';
-import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
+import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import './Menu.css';
 
@@ -78,8 +78,8 @@ const Menu = ({
     }
   };
   
-  // Handle closing the menu
-  const handleClose = () => {
+  // Handle closing the menu - memoized to prevent unnecessary re-renders
+  const handleClose = useCallback(() => {
     if (!isControlled) {
       setUncontrolledIsOpen(false);
     }
@@ -87,10 +87,10 @@ const Menu = ({
       onClose();
     }
     setActiveIndex(initialFocusIndex);
-  };
+  }, [isControlled, onClose, initialFocusIndex, setUncontrolledIsOpen]);
   
-  // Handle item click
-  const handleItemClick = (event, index, value) => {
+  // Handle item click - memoized to prevent unnecessary re-renders
+  const handleItemClick = useCallback((event, index, value) => {
     if (onItemClick) {
       onItemClick(event, index, value);
     }
@@ -98,16 +98,16 @@ const Menu = ({
     if (closeOnSelect) {
       handleClose();
     }
-  };
+  }, [onItemClick, closeOnSelect, handleClose]);
   
-  // Register menu item
-  const registerItem = (index, ref) => {
+  // Register menu item - memoized with useCallback to prevent infinite re-renders
+  const registerItem = useCallback((index, ref) => {
     setItems((prevItems) => {
       const newItems = [...prevItems];
       newItems[index] = ref;
       return newItems;
     });
-  };
+  }, []);
   
   // Handle escape key press
   useEffect(() => {
@@ -124,7 +124,7 @@ const Menu = ({
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };
-  }, [isOpen, closeOnEsc]);
+  }, [isOpen, closeOnEsc, handleClose]);
   
   // Handle click outside
   useEffect(() => {
@@ -141,7 +141,7 @@ const Menu = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen, closeOnBlur]);
+  }, [isOpen, closeOnBlur, handleClose]);
   
   // Handle keyboard navigation
   useEffect(() => {
@@ -209,6 +209,11 @@ const Menu = ({
     }
   }, [isOpen, items, autoFocus, initialFocusIndex]);
   
+  // Context value - memoize functions that could cause re-renders
+  const setActiveIndexCallback = useCallback((index) => {
+    setActiveIndex(index);
+  }, []);
+  
   // Context value
   const contextValue = {
     isOpen,
@@ -218,7 +223,7 @@ const Menu = ({
     onClose: handleClose,
     onItemClick: handleItemClick,
     registerItem,
-    setActiveIndex,
+    setActiveIndex: setActiveIndexCallback,
   };
   
   // Don't render if not open

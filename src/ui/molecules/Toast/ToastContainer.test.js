@@ -4,14 +4,14 @@
 
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import ToastContainer from './index';
+import ToastContainer from './ToastContainer';
 import { 
   TOAST_CONTAINER_CLASS, 
   TOAST_GROUP_CLASS,
   TOAST_POSITIONS, 
   TOAST_CLASS,
   TOAST_BREAKPOINTS
-} from './index';
+} from './constants';
 
 describe('ToastContainer Component', () => {
   // Mock toasts for testing

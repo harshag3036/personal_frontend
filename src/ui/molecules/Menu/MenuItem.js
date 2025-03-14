@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useMenu } from './Menu';
 
@@ -47,8 +47,8 @@ const MenuItem = ({
     }
   }, [index, registerItem]);
   
-  // Handle click
-  const handleClick = (event) => {
+  // Handle click - memoized to prevent unnecessary re-renders
+  const handleClick = useCallback((event) => {
     if (disabled) return;
     
     if (onClick) {
@@ -56,24 +56,24 @@ const MenuItem = ({
     }
     
     onItemClick(event, index, value);
-  };
+  }, [disabled, onClick, onItemClick, index, value]);
   
-  // Handle mouse enter
-  const handleMouseEnter = () => {
+  // Handle mouse enter - memoized to prevent unnecessary re-renders
+  const handleMouseEnter = useCallback(() => {
     if (disabled) return;
     
     setActiveIndex(index);
-  };
+  }, [disabled, index, setActiveIndex]);
   
-  // Handle key down
-  const handleKeyDown = (event) => {
+  // Handle key down - memoized to prevent unnecessary re-renders
+  const handleKeyDown = useCallback((event) => {
     if (disabled) return;
     
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       handleClick(event);
     }
-  };
+  }, [disabled, handleClick]);
   
   // Combine class names
   const itemClasses = [

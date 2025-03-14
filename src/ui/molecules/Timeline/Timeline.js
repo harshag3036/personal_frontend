@@ -39,10 +39,23 @@ const Timeline = ({
   showConnectors = TIMELINE_DEFAULT_PROPS.showConnectors,
   ...rest
 }) => {
+  // Process responsive props for orientation
+  const timelineProps = {};
+  
+  if (isResponsiveObject(orientation)) {
+    // Add data attributes for responsive orientation
+    Object.entries(orientation).forEach(([breakpoint, value]) => {
+      if (breakpoint !== 'base') {
+        timelineProps[`data-${breakpoint}-orientation`] = value;
+      }
+    });
+  }
+  
   // Join class names
   const timelineClasses = [
     'ui-timeline',
-    `ui-timeline--${orientation}`,
+    `ui-timeline--${isResponsiveObject(orientation) ? orientation.base || TIMELINE_ORIENTATIONS.VERTICAL : orientation}`,
+    `ui-timeline--${variant}`,
     className
   ].filter(Boolean).join(' ');
 
@@ -58,7 +71,7 @@ const Timeline = ({
 
   return (
     <TimelineContext.Provider value={contextValue}>
-      <Component className={timelineClasses} {...rest}>
+      <Component className={timelineClasses} {...timelineProps} {...rest}>
         {children}
       </Component>
     </TimelineContext.Provider>
@@ -76,8 +89,11 @@ Timeline.propTypes = {
   variant: PropTypes.oneOf(Object.values(TIMELINE_VARIANTS)),
   /** The size of the timeline dots */
   size: PropTypes.oneOf(Object.values(TIMELINE_SIZES)),
-  /** The orientation of the timeline */
-  orientation: PropTypes.oneOf(Object.values(TIMELINE_ORIENTATIONS)),
+  /** The orientation of the timeline or responsive object */
+  orientation: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(TIMELINE_ORIENTATIONS)),
+    PropTypes.object,
+  ]),
   /** The alignment of timeline items (for vertical orientation) */
   alignment: PropTypes.oneOf(Object.values(TIMELINE_ALIGNMENTS)),
   /** The style of the connectors between timeline items */

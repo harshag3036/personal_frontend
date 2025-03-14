@@ -70,16 +70,20 @@ const Label = ({
     className
   ].filter(Boolean).join(' ');
   
-  // Determine appropriate props based on element type
-  const elementProps = Element === 'label' ? { htmlFor } : {};
+  // Prepare props based on element type
+  const props = {
+    ...restProps,
+    className: labelClasses,
+    style: combinedStyle,
+  };
+  
+  // Only add htmlFor to label elements
+  if (Element === 'label' && htmlFor) {
+    props.htmlFor = htmlFor;
+  }
   
   return (
-    <Element 
-      className={labelClasses}
-      style={combinedStyle}
-      {...elementProps}
-      {...restProps}
-    >
+    <Element {...props}>
       {children}
     </Element>
   );

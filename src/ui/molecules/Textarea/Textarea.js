@@ -405,7 +405,6 @@ const Textarea = forwardRef(({
   // Combine class names
   const textareaWrapperClasses = [
     TEXTAREA_CLASS,
-    `${TEXTAREA_CLASS}-wrapper`,
     `${TEXTAREA_CLASS}-${extendedVariant}`,
     `${TEXTAREA_CLASS}-${extendedSize}`,
     `${TEXTAREA_CLASS}-${extendedState}`,

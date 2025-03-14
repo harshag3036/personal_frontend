@@ -34,7 +34,7 @@ const TabPanel = ({
       className={tabPanelClasses}
       role="tabpanel"
       aria-hidden={!isActive}
-      hidden={!isActive}
+      style={{ display: isActive ? 'block' : 'none' }}
       tabIndex={0}
       {...restProps}
     >

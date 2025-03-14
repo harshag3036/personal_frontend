@@ -138,7 +138,8 @@ describe('Accordion Component', () => {
   test('sets correct ARIA attributes for accessibility', () => {
     renderAccordion({ defaultIndex: 0 });
     
-    const header = screen.getByText('Section 1');
+    // Find the header button by its role
+    const header = screen.getByRole('button', { name: 'Section 1' });
     const panel = screen.getByText('Content 1').closest('[role="region"]');
     
     // Header should have aria-expanded="true" and aria-controls pointing to the panel

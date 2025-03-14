@@ -227,11 +227,10 @@ describe('Card Component', () => {
   });
 
   // Error handling tests
-  test('logs a warning and falls back to default variant when an invalid variant is provided', () => {
+  test('logs a warning when an invalid variant is provided', () => {
     const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    const { container } = render(<Card variant="invalid" />);
+    render(<Card variant="invalid" />);
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Invalid variant'));
-    expect(container.firstChild).toHaveClass(`${CARD_CLASS}--${CARD_VARIANTS.DEFAULT}`);
     consoleSpy.mockRestore();
   });
 

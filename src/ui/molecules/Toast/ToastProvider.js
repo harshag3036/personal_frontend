@@ -8,7 +8,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useToast } from '../../utilities';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
-import { ToastContainer } from './index';
+import ToastContainer from './ToastContainer';
 
 /**
  * ToastProvider Component

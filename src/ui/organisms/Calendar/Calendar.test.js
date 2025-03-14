@@ -71,7 +71,7 @@ describe('Calendar Component', () => {
     expect(screen.getByText('Team Meeting')).toBeInTheDocument();
   });
 
-  test('handles date selection in single mode', async () => {
+  test('handles date selection in single mode', () => {
     const testDate = new Date(2025, 2, 15); // March 15, 2025
     render(
       <Calendar 
@@ -92,7 +92,7 @@ describe('Calendar Component', () => {
     expect(selectedDates[0].getDate()).toBe(15);
   });
 
-  test('handles date selection in multiple mode', async () => {
+  test('handles date selection in multiple mode', () => {
     const testDate = new Date(2025, 2, 15); // March 15, 2025
     render(
       <Calendar 
@@ -115,7 +115,7 @@ describe('Calendar Component', () => {
     expect(selectedDates.length).toBe(2);
   });
 
-  test('handles event click', async () => {
+  test('handles event click', () => {
     const testDate = new Date(2025, 2, 15); // March 15, 2025
     render(
       <Calendar 
@@ -133,7 +133,7 @@ describe('Calendar Component', () => {
     expect(mockEventClick).toHaveBeenCalledWith(mockEvents[0]);
   });
 
-  test('handles view change', async () => {
+  test('handles view change', () => {
     render(
       <Calendar 
         views={Object.values(CALENDAR_VIEW_TYPES)}
@@ -149,7 +149,7 @@ describe('Calendar Component', () => {
     expect(mockViewChange).toHaveBeenCalledWith(CALENDAR_VIEW_TYPES.WEEK);
   });
 
-  test('handles navigation', async () => {
+  test('handles navigation', () => {
     render(
       <Calendar 
         onNavigate={mockNavigate}

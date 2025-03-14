@@ -7,7 +7,7 @@
 export { default } from './Toast';
 export { default as ToastContainer } from './ToastContainer';
 export { default as ToastProvider } from './ToastProvider';
-export { default as ToastItem } from './ToastItem';
+// ToastItem is used internally by ToastContainer and ToastProvider
 
 // Re-export constants from constants.js
 export {

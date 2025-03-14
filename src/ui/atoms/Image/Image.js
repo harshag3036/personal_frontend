@@ -31,6 +31,7 @@ const getResponsiveProps = (prop) => {
  * Enhanced Image component with additional features beyond the native img element
  */
 const Image = forwardRef(({
+  as: Element = 'img',
   src,
   alt = IMAGE_DEFAULT_PROPS.alt,
   fit = IMAGE_DEFAULT_PROPS.fit,
@@ -101,16 +102,22 @@ const Image = forwardRef(({
   if (width !== null) customStyles.width = width;
   if (height !== null) customStyles.height = height;
   
+  // Determine appropriate props based on element type
+  const elementProps = {};
+  if (Element === 'img') {
+    elementProps.src = imageSrc;
+    elementProps.alt = alt;
+    elementProps.loading = loading;
+    elementProps.onError = handleError;
+    elementProps.onLoad = handleLoad;
+  }
+  
   return (
-    <img
+    <Element
       ref={ref}
-      src={imageSrc}
-      alt={alt}
-      loading={loading}
       className={classes}
-      onError={handleError}
-      onLoad={handleLoad}
       style={Object.keys(customStyles).length > 0 ? customStyles : undefined}
+      {...elementProps}
       {...props}
     />
   );
@@ -159,7 +166,5 @@ Image.propTypes = {
   onError: PropTypes.func,
 };
 
-// Create polymorphic component
-const PolymorphicImage = createPolymorphicComponent(Image);
-
-export default PolymorphicImage;
+// Export the component directly
+export default Image;

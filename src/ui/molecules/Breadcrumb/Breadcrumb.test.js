@@ -37,7 +37,9 @@ describe('Breadcrumb', () => {
     const customSeparator = <span data-testid="custom-separator">|</span>;
     render(<Breadcrumb items={defaultItems} customSeparator={customSeparator} />);
     
-    expect(screen.getByTestId('custom-separator')).toBeInTheDocument();
+    // Check if at least one custom separator exists
+    const separators = screen.getAllByTestId('custom-separator');
+    expect(separators.length).toBeGreaterThan(0);
   });
 
   it('renders with home icon', () => {

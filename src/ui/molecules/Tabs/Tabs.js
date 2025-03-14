@@ -56,10 +56,24 @@ const Tabs = ({
     className
   ].filter(Boolean).join(' ');
 
+  // Clone children to add index prop to TabPanel components
+  let tabPanelIndex = 0;
+  const childrenWithProps = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      // If it's a TabPanel, add the current index and increment the counter
+      if (child.type.name === 'TabPanel') {
+        const panel = React.cloneElement(child, { index: tabPanelIndex });
+        tabPanelIndex++;
+        return panel;
+      }
+    }
+    return child;
+  });
+
   return (
     <TabsContext.Provider value={{ activeTab, setActiveTab: handleTabChange }}>
       <div className={tabsClasses} {...restProps}>
-        {children}
+        {childrenWithProps}
       </div>
     </TabsContext.Provider>
   );

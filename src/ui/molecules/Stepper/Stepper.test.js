@@ -93,7 +93,7 @@ describe('Stepper', () => {
     render(
       <Stepper>
         <Step error>
-          <StepLabel error errorText="Error">Step 1</StepLabel>
+          <StepLabel error optional errorText="Error">Step 1</StepLabel>
         </Step>
       </Stepper>
     );

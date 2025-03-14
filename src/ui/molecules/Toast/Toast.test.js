@@ -4,13 +4,14 @@
 
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import Toast, { 
+import Toast from './index';
+import { 
   TOAST_CLASS, 
   TOAST_VARIANTS, 
   TOAST_POSITIONS,
   TOAST_MODIFIERS,
   TOAST_BREAKPOINTS
-} from './index';
+} from './constants';
 
 describe('Toast Component', () => {
   // Basic rendering tests

@@ -364,14 +364,14 @@ const CommentSection = ({
   };
 
   // Handle comment submission
-  const handleSubmitComment = async () => {
+  const handleSubmitComment = () => {
     if (!commentText.trim() || isSubmitting) return;
     
     setIsSubmitting(true);
     
     try {
       if (onAddComment) {
-        await onAddComment(commentText);
+        onAddComment(commentText);
       }
       setCommentText('');
     } catch (error) {

@@ -23,6 +23,7 @@ const getResponsiveProps = (prop) => {
  * Radio component for selecting a single option from a group
  */
 const Radio = forwardRef(({
+  as: Element = 'label',
   variant = RADIO_DEFAULT_PROPS.variant,
   size = RADIO_DEFAULT_PROPS.size,
   labelPosition = RADIO_DEFAULT_PROPS.labelPosition,
@@ -61,7 +62,7 @@ const Radio = forwardRef(({
   ].filter(Boolean).join(' ');
 
   return (
-    <label className={classes} {...props}>
+    <Element className={classes} {...props}>
       <input
         ref={ref}
         type="radio"
@@ -78,7 +79,7 @@ const Radio = forwardRef(({
         <span className={`${baseClassName}__dot`}></span>
       </span>
       {label && <span className={`${baseClassName}__label`}>{label}</span>}
-    </label>
+    </Element>
   );
 });
 
@@ -117,7 +118,5 @@ Radio.propTypes = {
   onChange: PropTypes.func,
 };
 
-// Create polymorphic component
-const PolymorphicRadio = createPolymorphicComponent(Radio);
-
-export default PolymorphicRadio;
+// Export the component directly
+export default Radio;

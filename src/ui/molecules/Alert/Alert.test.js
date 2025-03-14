@@ -53,8 +53,8 @@ describe('Alert Component', () => {
   // Icon tests
   test('renders with icon when hasIcon is true', () => {
     render(<Alert hasIcon>Test alert</Alert>);
-    const iconElement = screen.getByText('').closest('.ui-alert__icon');
-    
+    const iconElement = document.querySelector('.ui-alert__icon');
+
     expect(iconElement).toBeInTheDocument();
   });
 

@@ -9,7 +9,7 @@ import Timeline, {
   TimelineDot, 
   TimelineConnector, 
   TimelineContent 
-} from './Timeline';
+} from './index';
 import { 
   TIMELINE_VARIANTS, 
   TIMELINE_SIZES, 
@@ -186,7 +186,7 @@ describe('Timeline Component', () => {
         <TimelineItem>
           <TimelineDot />
           <TimelineConnector 
-            variant={TIMELINE_VARIANTS.DANGER} 
+            variant={TIMELINE_VARIANTS.WARNING} 
             connectorType={TIMELINE_CONNECTOR_TYPES.DOTTED}
             className="custom-connector-class"
           />
@@ -195,7 +195,7 @@ describe('Timeline Component', () => {
       </Timeline>
     );
     
-    const connector = container.querySelector('.ui-timeline-connector.ui-timeline-connector--danger.ui-timeline-connector--dotted.custom-connector-class');
+    const connector = container.querySelector('.ui-timeline-connector.ui-timeline-connector--warning.ui-timeline-connector--dotted.custom-connector-class');
     expect(connector).toBeInTheDocument();
   });
 
