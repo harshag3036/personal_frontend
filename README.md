@@ -87,8 +87,29 @@ npm install
 # Start development server
 npm start
 
+# Run tests (recommended method)
+./run-tests-safely.sh
+
 # Build for production
 npm run build
+```
+
+## Testing
+
+This project uses Jest for testing UI components. For a comprehensive guide on running tests and fixing common issues, see:
+
+[UI Component Testing Guide](docs/UI_TESTING.md)
+
+Key testing commands:
+```bash
+# Run all tests (recommended)
+./run-tests-safely.sh
+
+# Test specific components
+./run-tests-safely.sh "Button"
+
+# Test with advanced options
+./run-tests.sh --help
 ```
 
 ## License

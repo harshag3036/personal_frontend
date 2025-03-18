@@ -1,0 +1,4 @@
+
+> personal_frontend@0.1.0 test
+> react-scripts test --testPathPattern= --testTimeout=10000 --maxWorkers=1 --bail --verbose --watchAll=false --json
+

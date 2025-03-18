@@ -8,6 +8,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import DataTable from './DataTable';
 import { DATA_TABLE_SELECTION_TYPES } from './constants';
+import { applyTestFixes } from '../../../utils/testUtils';
 
 // Mock data for testing
 const mockColumns = [
@@ -24,6 +25,8 @@ const mockData = [
 ];
 
 describe('DataTable Component', () => {
+  // Apply fixes to prevent tests from hanging
+  applyTestFixes();
   test('renders with basic props', () => {
     render(<DataTable columns={mockColumns} data={mockData} />);
     

@@ -95,12 +95,11 @@
     ],
     "moduleNameMapper": {
       "\\.(css|less|scss|sass)$": "<rootDir>/src/__mocks__/styleMock.js",
-      "^../../utilities/responsive-props$": "<rootDir>/src/__mocks__/useResponsiveProps.js"
-    },
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.js"
-    ]
+      "^../../utilities/responsive-props$": "<rootDir>/src/__mocks__/useResponsiveProps.js",
+      "^../../utilities/component-extension$": "<rootDir>/src/__mocks__/componentExtension.js",
+      "^../../atoms$": "<rootDir>/src/__mocks__/ui-components.js",
+      "^../../molecules$": "<rootDir>/src/__mocks__/ui-components.js"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",

@@ -7,6 +7,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CommentSection from './CommentSection';
 import { COMMENT_SECTION_COMMENT_TYPES } from './constants';
+import { applyTestFixes } from '../../../utils/testUtils';
+
+// Apply test fixes
+applyTestFixes();
 
 // Mock data for testing
 const mockComments = [

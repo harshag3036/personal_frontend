@@ -4,6 +4,8 @@
  * This file provides utilities for extending components with variants and extensions.
  */
 
+import React from 'react';
+
 // Store for component variants
 const componentVariants = {};
 
