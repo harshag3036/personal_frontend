@@ -4,8 +4,9 @@
  * A component for displaying and managing notifications with various layouts and features.
  */
 
-import React, { forwardRef, useState, useEffect, useCallback } from 'react';
+import React, { forwardRef, useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import { 
   NOTIFICATION_CENTER_VARIANTS,
   NOTIFICATION_CENTER_SIZES,
@@ -765,6 +766,89 @@ const NotificationCenter = forwardRef(({
     return grouped;
   };
   
+  // Build notification center state object for render props
+  const notificationCenterState = useMemo(() => ({
+    // Data
+    notifications,
+    filteredNotifications: getFilteredNotifications(),
+    groupedNotifications: getGroupedNotifications(),
+    unreadCount,
+    totalCount: notifications.length,
+    
+    // Configuration
+    variant,
+    size,
+    withBorder,
+    withShadow,
+    withHeader,
+    withFooter,
+    withFilters,
+    withSearch,
+    withActions,
+    withCounter,
+    withGroups,
+    withTabs,
+    
+    // State
+    loading,
+    error,
+    searchQuery,
+    activeFilter,
+    activeSort,
+    
+    // Handlers
+    handleSearchChange,
+    handleFilterChange,
+    onNotificationClick,
+    onMarkAsRead,
+    onMarkAllAsRead,
+    onDismiss,
+    onClearAll,
+    onPin,
+    onArchive,
+    onViewAll,
+    
+    // Components
+    Header: NotificationCenterHeader,
+    Filters: NotificationCenterFilters,
+    Search: NotificationCenterSearch,
+    Tabs: NotificationCenterTabs,
+    List: NotificationCenterList,
+    Group: NotificationCenterGroup,
+    Item: NotificationCenterItem,
+    Empty: NotificationCenterEmpty,
+    Loading: NotificationCenterLoading,
+    Error: NotificationCenterError,
+    Footer: NotificationCenterFooter,
+    Actions: NotificationCenterActions,
+    Action: NotificationCenterAction,
+    
+    // CSS classes
+    headerClass: NOTIFICATION_CENTER_CLASS_NAMES.HEADER,
+    filtersClass: NOTIFICATION_CENTER_CLASS_NAMES.FILTERS,
+    searchClass: NOTIFICATION_CENTER_CLASS_NAMES.SEARCH,
+    tabsClass: NOTIFICATION_CENTER_CLASS_NAMES.TABS,
+    listClass: NOTIFICATION_CENTER_CLASS_NAMES.LIST,
+    groupClass: NOTIFICATION_CENTER_CLASS_NAMES.GROUP,
+    itemClass: NOTIFICATION_CENTER_CLASS_NAMES.ITEM,
+    emptyClass: NOTIFICATION_CENTER_CLASS_NAMES.EMPTY,
+    loadingClass: NOTIFICATION_CENTER_CLASS_NAMES.LOADING,
+    errorClass: NOTIFICATION_CENTER_CLASS_NAMES.ERROR,
+    footerClass: NOTIFICATION_CENTER_CLASS_NAMES.FOOTER,
+    actionsClass: NOTIFICATION_CENTER_CLASS_NAMES.ACTIONS,
+    actionClass: NOTIFICATION_CENTER_CLASS_NAMES.ACTION
+  }), [
+    notifications, getFilteredNotifications, getGroupedNotifications, unreadCount,
+    variant, size, withBorder, withShadow, withHeader, withFooter, 
+    withFilters, withSearch, withActions, withCounter, withGroups, withTabs,
+    loading, error, searchQuery, activeFilter, activeSort,
+    handleSearchChange, handleFilterChange, onNotificationClick, 
+    onMarkAsRead, onMarkAllAsRead, onDismiss, onClearAll, onPin, onArchive, onViewAll
+  ]);
+  
+  // Determine if we're using render props
+  const isRenderProps = isFunction(children);
+  
   // Build class names
   const notificationCenterClasses = [
     NOTIFICATION_CENTER_CLASS_NAMES.ROOT,
@@ -933,6 +1017,29 @@ const NotificationCenter = forwardRef(({
     );
   };
   
+  // If using render props, call the children function with the notification center state
+  if (isRenderProps) {
+    return (
+      <div 
+        ref={ref}
+        className={notificationCenterClasses}
+        style={style}
+        role={NOTIFICATION_CENTER_ARIA.ROLE}
+        aria-label={NOTIFICATION_CENTER_ARIA.LABEL}
+        data-variant={variant}
+        data-size={size}
+        data-unread-count={unreadCount}
+        data-total-count={notifications.length}
+        {...props}
+      >
+        <div className={NOTIFICATION_CENTER_CLASS_NAMES.CONTAINER}>
+          {children(notificationCenterState)}
+        </div>
+      </div>
+    );
+  }
+  
+  // Otherwise, use standard component structure
   return (
     <div 
       ref={ref}
@@ -956,7 +1063,11 @@ const NotificationCenter = forwardRef(({
 NotificationCenter.displayName = 'NotificationCenter';
 
 NotificationCenter.propTypes = {
-  children: PropTypes.node,
+  /** Children nodes or render props function */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   notifications: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

@@ -4,8 +4,9 @@
  * A component for displaying user profile information with various sections and layouts.
  */
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import { 
   USER_PROFILE_VARIANTS,
   USER_PROFILE_SIZES,
@@ -648,8 +649,61 @@ const UserProfile = forwardRef(({
     className || ''
   ].filter(Boolean).join(' ');
 
-  // Find and organize children by type
-  const renderChildren = () => {
+  // Create state object for render props
+  const [editMode, setEditMode] = useState(false);
+  
+  // Build userProfile state object to pass to render function
+  const userProfileState = {
+    // Configuration props
+    variant,
+    size,
+    withBorder,
+    withShadow,
+    withHeader,
+    withFooter,
+    withAvatar,
+    withCover,
+    withStats,
+    withBio,
+    withContact,
+    withSocial,
+    withActions,
+    withBadges,
+    withTabs,
+    
+    // State
+    editMode,
+    
+    // Handlers
+    toggleEditMode: () => setEditMode(prev => !prev),
+    setEditMode,
+    
+    // Sub-components
+    Header: UserProfileHeader,
+    Cover: UserProfileCover,
+    Avatar: UserProfileAvatar,
+    Info: UserProfileInfo,
+    Name: UserProfileName,
+    Username: UserProfileUsername,
+    Title: UserProfileTitle,
+    Bio: UserProfileBio,
+    Stats: UserProfileStats,
+    Stat: UserProfileStat,
+    Contact: UserProfileContact,
+    ContactItem: UserProfileContactItem,
+    Social: UserProfileSocial,
+    SocialItem: UserProfileSocialItem,
+    Actions: UserProfileActions,
+    Action: UserProfileAction,
+    Badges: UserProfileBadges,
+    Badge: UserProfileBadge,
+    Tabs: UserProfileTabs,
+    Content: UserProfileContent,
+    Footer: UserProfileFooter
+  };
+  
+  // Find and organize children by type (for standard rendering)
+  const renderStandardChildren = () => {
     let header = null;
     let cover = null;
     let avatar = null;
@@ -717,6 +771,17 @@ const UserProfile = forwardRef(({
     );
   };
   
+  // Render using either standard children or render props pattern
+  const renderContent = () => {
+    // If children is a function, use render props pattern
+    if (isFunction(children)) {
+      return children(userProfileState);
+    }
+    
+    // Otherwise, use standard children approach
+    return renderStandardChildren();
+  };
+  
   return (
     <div 
       ref={ref}
@@ -726,10 +791,11 @@ const UserProfile = forwardRef(({
       aria-label={USER_PROFILE_ARIA.LABEL}
       data-variant={variant}
       data-size={size}
+      data-edit-mode={editMode ? 'true' : 'false'}
       {...props}
     >
       <div className={USER_PROFILE_CLASS_NAMES.CONTAINER}>
-        {renderChildren()}
+        {renderContent()}
       </div>
     </div>
   );
@@ -738,7 +804,10 @@ const UserProfile = forwardRef(({
 UserProfile.displayName = 'UserProfile';
 
 UserProfile.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   variant: PropTypes.oneOf(Object.values(USER_PROFILE_VARIANTS)),
   size: PropTypes.oneOf(Object.values(USER_PROFILE_SIZES)),
   withBorder: PropTypes.bool,

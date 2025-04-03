@@ -4,8 +4,9 @@
  * A flexible layout component for structuring application pages with header, sidebar, main content, footer, and aside areas.
  */
 
-import React, { forwardRef, Children, cloneElement, useCallback, useState, useEffect } from 'react';
+import React, { forwardRef, Children, cloneElement, useCallback, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import { 
   LAYOUT_VARIANTS,
   LAYOUT_SIZES,
@@ -249,6 +250,8 @@ const Layout = forwardRef(({
   const [isMobile, setIsMobile] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showAside, setShowAside] = useState(false);
+  const [theme, setTheme] = useState('light'); // Add theme state
+  const [contentLayout, setContentLayout] = useState('default'); // Add content layout state
 
   // Handle responsive behavior
   useEffect(() => {
@@ -288,6 +291,55 @@ const Layout = forwardRef(({
     setShowSidebar(false);
     setShowAside(false);
   }, []);
+  
+  // Toggle theme
+  const toggleTheme = useCallback(() => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  }, []);
+  
+  // Set content layout
+  const setLayout = useCallback((layout) => {
+    setContentLayout(layout);
+  }, []);
+  
+  // Build layout state object for render props
+  const layoutState = useMemo(() => ({
+    // Configuration
+    variant,
+    size,
+    withHeader,
+    withSidebar,
+    withFooter,
+    withAside,
+    sidebarPosition,
+    asidePosition,
+    
+    // State
+    isMobile,
+    showSidebar,
+    showAside,
+    theme,
+    contentLayout,
+    
+    // Handlers
+    toggleSidebar,
+    toggleAside,
+    toggleTheme,
+    setLayout,
+    
+    // Sub-components
+    Header: LayoutHeader,
+    Sidebar: LayoutSidebar,
+    Main: LayoutMain,
+    Footer: LayoutFooter,
+    Aside: LayoutAside,
+    Content: LayoutContent,
+    Container: LayoutContainer
+  }), [
+    variant, size, withHeader, withSidebar, withFooter, withAside,
+    sidebarPosition, asidePosition, isMobile, showSidebar, showAside,
+    theme, contentLayout, toggleSidebar, toggleAside, toggleTheme, setLayout
+  ]);
 
   // Build class names
   const layoutClasses = [
@@ -355,6 +407,28 @@ const Layout = forwardRef(({
     );
   };
 
+  // Determine if we're using render props
+  const isRenderProps = isFunction(children);
+  
+  // If using render props, call the children function with the layout state
+  if (isRenderProps) {
+    return (
+      <div 
+        ref={ref}
+        className={layoutClasses}
+        style={style}
+        data-variant={variant}
+        data-size={size}
+        data-theme={theme}
+        data-content-layout={contentLayout}
+        {...props}
+      >
+        {children(layoutState)}
+      </div>
+    );
+  }
+  
+  // Otherwise use traditional component structure
   return (
     <div 
       ref={ref}
@@ -362,6 +436,8 @@ const Layout = forwardRef(({
       style={style}
       data-variant={variant}
       data-size={size}
+      data-theme={theme}
+      data-content-layout={contentLayout}
       {...props}
     >
       {renderChildren()}
@@ -372,23 +448,44 @@ const Layout = forwardRef(({
 Layout.displayName = 'Layout';
 
 Layout.propTypes = {
-  children: PropTypes.node,
+  /** Children node or render props function */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
+  /** Layout variant */
   variant: PropTypes.oneOf(Object.values(LAYOUT_VARIANTS)),
+  /** Layout size */
   size: PropTypes.oneOf(Object.values(LAYOUT_SIZES)),
+  /** Whether to include header */
   withHeader: PropTypes.bool,
+  /** Whether to include sidebar */
   withSidebar: PropTypes.bool,
+  /** Whether to include footer */
   withFooter: PropTypes.bool,
+  /** Whether to include aside */
   withAside: PropTypes.bool,
+  /** Whether header is fixed */
   fixedHeader: PropTypes.bool,
+  /** Whether sidebar is fixed */
   fixedSidebar: PropTypes.bool,
+  /** Whether footer is fixed */
   fixedFooter: PropTypes.bool,
+  /** Whether header is sticky */
   stickyHeader: PropTypes.bool,
+  /** Whether sidebar is sticky */
   stickySidebar: PropTypes.bool,
+  /** Whether footer is sticky */
   stickyFooter: PropTypes.bool,
+  /** Sidebar position (left or right) */
   sidebarPosition: PropTypes.oneOf(['left', 'right']),
+  /** Aside position (left or right) */
   asidePosition: PropTypes.oneOf(['left', 'right']),
+  /** Responsive breakpoint */
   breakpoint: PropTypes.oneOf(Object.values(LAYOUT_BREAKPOINTS)),
+  /** Additional CSS class names */
   className: PropTypes.string,
+  /** Custom styles */
   style: PropTypes.object
 };
 

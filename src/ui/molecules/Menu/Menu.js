@@ -1,6 +1,7 @@
 import { MENU_VARIANTS, MENU_SIZES } from './constants';
-import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import './Menu.css';
 
 /**
@@ -214,6 +215,13 @@ const Menu = ({
     setActiveIndex(index);
   }, []);
   
+  // Combine class names
+  const menuClasses = [
+    'ui-menu',
+    `ui-menu--${variant}`,
+    `ui-menu--${size}`,
+  ].filter(Boolean).join(' ');
+  
   // Context value
   const contextValue = {
     isOpen,
@@ -226,16 +234,115 @@ const Menu = ({
     setActiveIndex: setActiveIndexCallback,
   };
   
+  // Create menu state object for render props
+  const menuState = useMemo(() => ({
+    // Current state
+    isOpen,
+    activeIndex,
+    items,
+    
+    // Configuration
+    variant,
+    size,
+    closeOnBlur,
+    closeOnEsc,
+    closeOnSelect,
+    autoFocus,
+    initialFocusIndex,
+    
+    // Actions
+    open: handleOpen,
+    close: handleClose,
+    onItemClick: handleItemClick,
+    registerItem,
+    setActiveIndex: setActiveIndexCallback,
+    
+    // Refs
+    menuRef,
+    
+    // Functions for keyboard navigation
+    navigateNext: () => {
+      if (items.length === 0) return;
+      const nextIndex = (activeIndex + 1) % items.length;
+      if (items[nextIndex] && items[nextIndex].current) {
+        items[nextIndex].current.focus();
+      }
+      setActiveIndex(nextIndex);
+    },
+    
+    navigatePrevious: () => {
+      if (items.length === 0) return;
+      const nextIndex = (activeIndex - 1 + items.length) % items.length;
+      if (items[nextIndex] && items[nextIndex].current) {
+        items[nextIndex].current.focus();
+      }
+      setActiveIndex(nextIndex);
+    },
+    
+    navigateToFirst: () => {
+      if (items.length === 0 || !items[0] || !items[0].current) return;
+      items[0].current.focus();
+      setActiveIndex(0);
+    },
+    
+    navigateToLast: () => {
+      if (items.length === 0) return;
+      const lastIndex = items.length - 1;
+      if (items[lastIndex] && items[lastIndex].current) {
+        items[lastIndex].current.focus();
+      }
+      setActiveIndex(lastIndex);
+    },
+    
+    // CSS Classes
+    menuClasses,
+    
+    // Constants
+    variants: MENU_VARIANTS,
+    sizes: MENU_SIZES
+  }), [
+    isOpen, 
+    activeIndex, 
+    items, 
+    variant, 
+    size, 
+    closeOnBlur, 
+    closeOnEsc, 
+    closeOnSelect, 
+    autoFocus, 
+    initialFocusIndex, 
+    handleOpen,
+    handleClose, 
+    handleItemClick, 
+    registerItem, 
+    setActiveIndexCallback,
+    menuClasses
+  ]);
+  
+  // Check if using render props
+  const isRenderProps = isFunction(children);
+  
   // Don't render if not open
   if (!isOpen) return null;
   
-  // Combine class names
-  const menuClasses = [
-    'ui-menu',
-    `ui-menu--${variant}`,
-    `ui-menu--${size}`,
-  ].filter(Boolean).join(' ');
+  // If using render props, return children as a function with menu state
+  if (isRenderProps) {
+    return (
+      <MenuContext.Provider value={contextValue}>
+        <div
+          ref={menuRef}
+          className={menuClasses}
+          role="menu"
+          tabIndex={-1}
+          {...restProps}
+        >
+          {children(menuState)}
+        </div>
+      </MenuContext.Provider>
+    );
+  }
   
+  // Default rendering with compound components
   return (
     <MenuContext.Provider value={contextValue}>
       <div
@@ -252,8 +359,14 @@ const Menu = ({
 };
 
 Menu.propTypes = {
-  /** The content of the menu */
-  children: PropTypes.node.isRequired,
+  /** 
+   * Menu content or render props function
+   * If a function is provided, it will be called with the menu state 
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]).isRequired,
   /** Whether the menu is open (controlled) */
   isOpen: PropTypes.bool,
   /** Callback when the menu opens */
@@ -263,9 +376,9 @@ Menu.propTypes = {
   /** Callback when a menu item is clicked */
   onItemClick: PropTypes.func,
   /** The visual variant of the menu */
-  variant: PropTypes.oneOf(['default', 'light', 'dark', 'primary', 'success', 'warning', 'error']),
+  variant: PropTypes.oneOf(Object.values(MENU_VARIANTS)),
   /** The size of the menu */
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  size: PropTypes.oneOf(Object.values(MENU_SIZES)),
   /** Whether to close the menu when clicking outside */
   closeOnBlur: PropTypes.bool,
   /** Whether to close the menu when pressing escape */

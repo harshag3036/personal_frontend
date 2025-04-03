@@ -68,6 +68,7 @@ const StatusBadge = ({
   pill = true,
   className = '',
   style = {},
+  children,
   ...props
 }) => {
   // Validate status and get status definition
@@ -120,6 +121,44 @@ const StatusBadge = ({
   
   // Determine if we should show the description tooltip
   const shouldShowDescription = !isResponsiveObject(showDescription) && showDescription;
+  
+  // Create status badge state object for render props pattern
+  const statusBadgeState = {
+    // Data
+    status: statusType,
+    statusDef,
+    
+    // Configuration
+    size,
+    showIcon,
+    showLabel,
+    showDescription,
+    pill,
+    hasResponsiveProps,
+    
+    // Computed values
+    shouldShowIcon,
+    shouldShowLabel,
+    shouldShowDescription,
+    
+    // Utilities
+    getStatusDefinition: (statusType) => STATUS_DEFINITIONS[statusType],
+    getStatusVariant: (statusType) => STATUS_DEFINITIONS[statusType].variant,
+    getStatusColor: (statusType) => STATUS_DEFINITIONS[statusType].color,
+    getStatusIcon: (statusType) => STATUS_DEFINITIONS[statusType].icon,
+    getStatusLabel: (statusType) => STATUS_DEFINITIONS[statusType].label,
+    getStatusDescription: (statusType) => STATUS_DEFINITIONS[statusType].description
+  };
+  
+  // Check if children is a function (render props pattern)
+  const isRenderProps = typeof children === 'function';
+  
+  // If using render props, pass the state to the children function
+  if (isRenderProps) {
+    return children(statusBadgeState);
+  }
+  
+  // Standard rendering
   
   // Create the badge with or without tooltip
   const badge = (
@@ -185,6 +224,14 @@ StatusBadge.propTypes = {
   className: PropTypes.string,
   /** Additional inline styles */
   style: PropTypes.object,
+  /** 
+   * StatusBadge content or render props function
+   * When a function is provided, it receives the status badge state object
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func,
+  ]),
 };
 
 StatusBadge.defaultProps = {

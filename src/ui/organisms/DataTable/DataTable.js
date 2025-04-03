@@ -436,6 +436,47 @@ const DataTable = ({
     );
   }
 
+  // Create a data table context object with all state and handlers
+  const dataTableContext = {
+    // State
+    data: internalData,
+    displayedData,
+    sortColumn,
+    sortDirection,
+    selectedRows: selected,
+    searchTerm,
+    page,
+    totalPages,
+    
+    // Handlers
+    handleSort,
+    handleSelectAll,
+    handleSelectRow,
+    handleSearch,
+    handlePageChange,
+    handleRowClick,
+    
+    // Rendering helpers
+    renderCellContent,
+    
+    // Component props
+    selectionType,
+    columns,
+    rowActions,
+    loading,
+    error
+  };
+  
+  // Check if children is a function (render props pattern)
+  if (typeof props.children === 'function') {
+    return (
+      <div className={tableClasses} {...restProps}>
+        {props.children(dataTableContext)}
+      </div>
+    );
+  }
+  
+  // Default rendering if not using render props
   return (
     <div className={tableClasses} {...restProps}>
       {/* Toolbar */}
@@ -613,6 +654,14 @@ const DataTable = ({
 };
 
 DataTable.propTypes = {
+  /** 
+   * Optional children as a render prop function that receives the data table context 
+   * and returns React elements
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   /** Array of column definitions */
   columns: PropTypes.arrayOf(PropTypes.shape({
     /** Unique key for the column */

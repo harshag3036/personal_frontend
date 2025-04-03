@@ -266,6 +266,25 @@ const Toast = ({
     toastStyles['--responsive-styles'] = responsiveStyles;
   }
   
+  // Create state object for render props pattern
+  const toastState = {
+    // Data
+    variant: extendedVariant,
+    position: extendedPosition,
+    icon: extendedIcon,
+    
+    // UI state
+    visible: extendedVisible,
+    showCloseButton: extendedShowCloseButton,
+    duration: extendedDuration,
+    
+    // Handlers
+    handleClose: extendedOnClose,
+  };
+  
+  // Check if children is a function (render props pattern)
+  const isRenderProps = typeof extendedChildren === 'function';
+  
   // Use Box for consistent rendering and polymorphic support
   return (
     <Box
@@ -276,25 +295,33 @@ const Toast = ({
       aria-live="polite"
       {...restProps}
     >
-      {extendedIcon && (
-        <div className={`${TOAST_CLASS}-icon`}>
-          {extendedIcon}
-        </div>
-      )}
-      
-      <div className={`${TOAST_CLASS}-content`}>
-        {extendedChildren || 'Notification'}
-      </div>
-      
-      {extendedShowCloseButton && (
-        <button
-          className={`${TOAST_CLASS}-close`}
-          onClick={extendedOnClose}
-          aria-label="Close notification"
-          type="button"
-        >
-          <span aria-hidden="true">×</span>
-        </button>
+      {isRenderProps ? (
+        // Render props pattern - pass toast state to the children function
+        extendedChildren(toastState)
+      ) : (
+        // Standard rendering
+        <>
+          {extendedIcon && (
+            <div className={`${TOAST_CLASS}-icon`}>
+              {extendedIcon}
+            </div>
+          )}
+          
+          <div className={`${TOAST_CLASS}-content`}>
+            {extendedChildren || 'Notification'}
+          </div>
+          
+          {extendedShowCloseButton && (
+            <button
+              className={`${TOAST_CLASS}-close`}
+              onClick={extendedOnClose}
+              aria-label="Close notification"
+              type="button"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          )}
+        </>
       )}
     </Box>
   );
@@ -303,8 +330,14 @@ const Toast = ({
 Toast.propTypes = {
   /** Element to render the Toast as */
   ...polymorphicPropTypes,
-  /** Toast content */
-  children: PropTypes.node.isRequired,
+  /** 
+   * Toast content or render props function 
+   * When a function is provided, it receives the toast state object
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func,
+  ]).isRequired,
   /** Toast variant or responsive object */
   variant: PropTypes.oneOfType([
     PropTypes.oneOf(Object.values(TOAST_VARIANTS)),

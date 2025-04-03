@@ -1,27 +1,76 @@
 # UI Component Testing Guide
 
-This guide provides information on how to test UI components and generate test coverage reports.
+This comprehensive guide covers UI component testing for this project, including running tests, fixing common issues, and best practices.
+
+## Table of Contents
+
+1. [Running Tests](#running-tests)
+2. [How Tests Work](#how-tests-work)
+3. [Common Testing Issues](#common-testing-issues)
+4. [Memory Optimization](#memory-optimization)
+5. [Test Examples](#test-examples)
+6. [Best Practices](#best-practices)
+7. [Resources](#resources)
 
 ## Running Tests
 
-The project includes several npm scripts for running tests:
-
-- `npm test`: Run all tests in watch mode (interactive)
-- `npm run test:coverage`: Run all tests and generate a coverage report
-- `npm run test:ui`: Run tests for UI components only
-- `npm run test:ui:coverage`: Run tests for UI components and generate a coverage report
-- `npm run test:ui:organisms`: Run tests for organism components only
-- `npm run test:ui:organisms:coverage`: Run tests for organism components and generate a coverage report
-
-You can also use the provided shell scripts to run tests:
-
+### Recommended Method
 ```bash
-# Run tests for organism components only
-./run-organism-tests.sh
+# Run all tests (most reliable)
+./run-tests-safely.sh
 
-# Run a comprehensive test suite for all components
-./run-all-tests.sh
+# Test specific component
+./run-tests-safely.sh "Button"
+
+# Test specific category
+./run-tests-safely.sh "src/ui/atoms"
+./run-tests-safely.sh "src/ui/molecules"
+./run-tests-safely.sh "src/ui/organisms"
 ```
+
+### Alternative Methods
+```bash
+# Run by category with command flags
+./run-tests.sh --category=atoms
+
+# Run with optimized mocks
+./run-tests.sh --optimized
+
+# See all options
+./run-tests.sh --help
+```
+
+**NPM Scripts:**
+```bash
+# Run all tests in watch mode (interactive)
+npm test
+
+# Run all tests and generate coverage report
+npm run test:coverage
+
+# Run only UI component tests
+npm run test:ui
+
+# Run UI tests with coverage report
+npm run test:ui:coverage
+
+# Run tests for organism components only
+npm run test:ui:organisms
+
+# Run tests for organism components with coverage
+npm run test:ui:organisms:coverage
+```
+
+Note: The `run-tests-safely.sh` script is generally more reliable for running complete test suites.
+
+## How Tests Work
+
+The `run-tests-safely.sh` script uses a multi-phase approach:
+
+1. Runs tests with memory leak detection and error logging
+2. Analyzes results to identify memory issues and timeouts
+3. Creates an improved test setup with better memory handling
+4. Re-runs problematic tests with optimized settings
 
 The `run-all-tests.sh` script provides a comprehensive test suite that:
 - Runs tests for all component types (atoms, molecules, organisms) separately
@@ -30,27 +79,117 @@ The `run-all-tests.sh` script provides a comprehensive test suite that:
 - Creates a combined coverage report
 - Provides a summary of test results with color-coded output
 
-## Test Coverage
+### Coverage Requirements
 
-The project is configured to generate test coverage reports using Jest's built-in coverage reporter. The coverage report includes information on:
+- **Statement coverage:** 80% minimum
+- **Branch coverage:** 80% minimum 
+- **Function coverage:** 80% minimum
+- **Line coverage:** 80% minimum
 
-- Statement coverage: The percentage of statements that have been executed
-- Branch coverage: The percentage of branches (if/else, switch cases) that have been executed
-- Function coverage: The percentage of functions that have been called
-- Line coverage: The percentage of lines that have been executed
+### Viewing Coverage Reports
 
-The coverage threshold is set to 80% for all metrics. This means that at least 80% of the code should be covered by tests.
+- **Terminal output:** Summary of the coverage report is displayed in the terminal
+- **HTML report:** Detailed HTML report at `coverage/lcov-report/index.html`
 
-## Viewing Coverage Reports
+## Common Testing Issues
 
-After running a test command with the `:coverage` suffix, you can view the coverage report in the following ways:
+### 1. Responsive Props Handling
 
-1. **Terminal output**: A summary of the coverage report is displayed in the terminal
-2. **HTML report**: A detailed HTML report is generated in the `coverage/lcov-report` directory. Open `coverage/lcov-report/index.html` in a browser to view it.
+**Problem**: Tests fail when components use responsive props.
 
-## Writing Tests
+**Solution**:
+```jsx
+// In your test file:
+import { hasResponsiveStyling } from '../../utils/testUtils';
 
-Tests for UI components are written using Jest and React Testing Library. Here's a basic example of a test for a UI component:
+test('component renders with responsive props', () => {
+  const { container } = render(<Component variant={{ base: 'primary', md: 'secondary' }} />);
+  
+  // Check base class is always present
+  expect(container.firstChild).toHaveClass('ui-component');
+  
+  // Handle both responsive and non-responsive cases
+  if (hasResponsiveStyling(container.firstChild)) {
+    expect(container.firstChild).toHaveAttribute('data-responsive', 'true');
+  } else {
+    expect(container.firstChild).toHaveClass('ui-component--primary');
+  }
+});
+```
+
+### 2. Component Extension Issues
+
+**Problem**: Tests fail when using the component extension system.
+
+**Solution**:
+```jsx
+// In your test file:
+import { registerComponentExtension } from '../../ui/utilities/component-extension';
+
+beforeEach(() => {
+  // Register extensions needed for testing
+  registerComponentExtension('Component', 'tooltip', (props) => ({
+    ...props,
+    'aria-label': props.tooltipContent || 'Tooltip',
+  }));
+});
+
+test('component with extension works', () => {
+  const { getByTestId } = render(
+    <Component extensions={['tooltip']} tooltipContent="Help text" />
+  );
+  
+  expect(getByTestId('mock-component')).toHaveAttribute('aria-label', 'Help text');
+});
+```
+
+### 3. Timing Issues
+
+**Problem**: Tests fail for components with animations or async behavior.
+
+**Solution**:
+```jsx
+// In your test file:
+import { act } from '@testing-library/react';
+
+test('modal shows content after animation', () => {
+  jest.useFakeTimers();
+  
+  const { getByTestId } = render(<Modal isOpen={true} />);
+  
+  // Fast-forward through animation
+  act(() => {
+    jest.advanceTimersByTime(300);
+  });
+  
+  expect(getByTestId('mock-modal')).toBeVisible();
+});
+```
+
+## Memory Optimization
+
+If tests still crash or run out of memory:
+
+1. **Use Optimized Mocks**:
+   ```bash
+   ./run-tests-safely.sh
+   # Or for specific components
+   ./run-tests.sh --component=Button --optimized
+   ```
+
+2. **Make Optimized Mocks Permanent**:
+   ```bash
+   cp src/__mocks__/ui-components.optimized.js src/__mocks__/ui-components.js
+   ```
+
+3. **Increase Memory Limit**:
+   ```bash
+   NODE_OPTIONS="--max-old-space-size=8192" ./run-tests-safely.sh
+   ```
+
+## Test Examples
+
+### Basic Component Test
 
 ```jsx
 import React from 'react';
@@ -80,37 +219,12 @@ describe('Button', () => {
 });
 ```
 
-## Best Practices for Testing UI Components
-
-1. **Test behavior, not implementation**: Focus on testing what the component does, not how it does it.
-2. **Test from the user's perspective**: Use queries that users would use to find elements (e.g., `getByText`, `getByRole`).
-3. **Test accessibility**: Ensure that components are accessible by using role-based queries.
-4. **Test different states**: Test components in different states (e.g., loading, error, success).
-5. **Test edge cases**: Test components with edge cases (e.g., empty data, large data).
-6. **Test interactions**: Test user interactions (e.g., clicking, typing, hovering).
-7. **Test responsiveness**: Test components at different screen sizes.
-8. **Test with realistic data**: Use realistic data in tests to ensure components work as expected in real-world scenarios.
-
-## Testing Organisms
-
-Organism components are more complex than atoms and molecules, and often require more comprehensive testing. When testing organisms, consider the following:
-
-1. **Test component composition**: Ensure that the organism correctly composes its child components.
-2. **Test data flow**: Test how data flows through the organism and its child components.
-3. **Test state management**: Test how the organism manages its internal state.
-4. **Test interactions between components**: Test how different parts of the organism interact with each other.
-5. **Test integration with external systems**: Test how the organism integrates with external systems (e.g., APIs, stores).
-
-## Example: Testing a NotificationCenter Organism
-
-Here's an example of testing a NotificationCenter organism:
+### Complex Organism Testing
 
 ```jsx
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+// For testing complex organism components
 import NotificationCenter, { NOTIFICATION_TYPES, NOTIFICATION_STATES } from './index';
 
-// Sample notifications for testing
 const mockNotifications = [
   {
     id: 1,
@@ -119,14 +233,6 @@ const mockNotifications = [
     time: '5 minutes ago',
     type: NOTIFICATION_TYPES.INFO,
     state: NOTIFICATION_STATES.UNREAD
-  },
-  {
-    id: 2,
-    title: 'Test Notification 2',
-    message: 'This is another test notification message',
-    time: '1 hour ago',
-    type: NOTIFICATION_TYPES.SUCCESS,
-    state: NOTIFICATION_STATES.READ
   }
 ];
 
@@ -138,60 +244,67 @@ describe('NotificationCenter', () => {
 
   test('renders notifications correctly', () => {
     render(<NotificationCenter notifications={mockNotifications} />);
-    
     expect(screen.getByText('Test Notification 1')).toBeInTheDocument();
-    expect(screen.getByText('This is a test notification message')).toBeInTheDocument();
-    expect(screen.getByText('Test Notification 2')).toBeInTheDocument();
-    expect(screen.getByText('This is another test notification message')).toBeInTheDocument();
   });
-
+  
   test('renders empty state when no notifications', () => {
     render(<NotificationCenter notifications={[]} />);
-    
     expect(screen.getByText('No notifications')).toBeInTheDocument();
   });
-
+  
   test('calls onMarkAsRead when mark as read button is clicked', () => {
     const handleMarkAsRead = jest.fn();
-    
     render(
       <NotificationCenter 
-        notifications={[{
-          id: 1,
-          title: 'Unread Notification',
-          message: 'This is an unread notification',
-          time: 'Just now',
-          type: NOTIFICATION_TYPES.INFO,
-          state: NOTIFICATION_STATES.UNREAD,
-          actions: ['markAsRead']
-        }]} 
+        notifications={[{...mockNotifications[0], actions: ['markAsRead']}]} 
         onMarkAsRead={handleMarkAsRead}
       />
     );
     
-    const markAsReadButton = screen.getByLabelText('Mark as read');
-    fireEvent.click(markAsReadButton);
-    
+    fireEvent.click(screen.getByLabelText('Mark as read'));
     expect(handleMarkAsRead).toHaveBeenCalledWith(1);
   });
 });
 ```
 
-## Troubleshooting
+## Best Practices
 
-If you encounter issues with tests, try the following:
+1. **Test Behavior, Not Implementation**:
+   - Focus on what the component does, not how it's built
+   - Test user interactions and visible outputs
 
-1. **Check the console for errors**: Look for error messages in the console.
-2. **Check the test output**: Look for error messages in the test output.
-3. **Debug tests**: Use `console.log` or the `debug` function from React Testing Library to debug tests.
-4. **Check the component**: Make sure the component is working as expected.
-5. **Check the test**: Make sure the test is written correctly.
-6. **Check the test environment**: Make sure the test environment is set up correctly.
-7. **Check the test dependencies**: Make sure all dependencies are installed and up to date.
+2. **Don't Hard-code for Test Success**:
+   - Never modify components just to make tests pass
+   - Fix the test approach when components use advanced patterns
+
+3. **Handle Responsive Props Correctly**:
+   - Use the `hasResponsiveStyling` utility
+   - Check for data attributes instead of exact classes
+
+4. **Clean Up Between Tests**:
+   - Clear mocks with `jest.clearAllMocks()`
+   - Run garbage collection with the `--expose-gc` flag
+   - Reset timers with `jest.clearAllTimers()`
+
+5. **Run Tests in Smaller Batches**:
+   - Test by category when working on specific component types
+   - Use specific component patterns when fixing individual components
+
+6. **Test Component Composition (for Organisms)**:
+   - Test how child components are composed
+   - Test data flow between components
+   - Test state management
+   - Test interactions between parts
+
+7. **Test Edge Cases**:
+   - Test empty data
+   - Test large data sets
+   - Test error states
+   - Test loading states
 
 ## Resources
 
 - [Jest Documentation](https://jestjs.io/docs/getting-started)
-- [React Testing Library Documentation](https://testing-library.com/docs/react-testing-library/intro/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 - [Testing Library Cheatsheet](https://testing-library.com/docs/react-testing-library/cheatsheet/)
 - [Jest DOM](https://github.com/testing-library/jest-dom)

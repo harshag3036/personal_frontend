@@ -78,6 +78,7 @@ const MetricCard = ({
   className = '',
   style = {},
   onClick,
+  children,
   ...restProps
 }) => {
   // Process responsive props
@@ -169,6 +170,45 @@ const MetricCard = ({
     return `${METRIC_CARD_CLASS}__trend--neutral`;
   };
   
+  // Create metric card state object for render props pattern
+  const metricCardState = {
+    // Data
+    value,
+    label,
+    detail,
+    icon,
+    iconColor,
+    trend,
+    
+    // Configuration
+    variant,
+    size,
+    interactive,
+    fullWidth,
+    hasResponsiveProps,
+    
+    // Computed values
+    trendColor: getTrendColor(),
+    trendIcon: getTrendIcon(),
+    trendClass: getTrendClass(),
+    
+    // Handlers
+    handleClick: interactive ? onClick : undefined,
+    
+    // Utilities
+    getTrendColor,
+    getTrendIcon,
+    getTrendClass
+  };
+  
+  // Check if children is a function (render props pattern)
+  const isRenderProps = typeof children === 'function';
+  
+  if (isRenderProps) {
+    return children(metricCardState);
+  }
+  
+  // Standard rendering
   return (
     <Box
       as={as}
@@ -281,6 +321,14 @@ MetricCard.propTypes = {
   style: PropTypes.object,
   /** Click handler for interactive cards */
   onClick: PropTypes.func,
+  /** 
+   * MetricCard content or render props function
+   * When a function is provided, it receives the metric card state object
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func,
+  ]),
 };
 
 MetricCard.defaultProps = {

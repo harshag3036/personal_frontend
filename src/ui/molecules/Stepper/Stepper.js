@@ -88,6 +88,44 @@ const Stepper = ({
     className
   ].filter(Boolean).join(' ');
   
+  // Create stepper state object for render props pattern
+  const stepperState = {
+    // Data
+    activeStep: currentStep,
+    steps,
+    
+    // Configuration
+    orientation,
+    variant,
+    size,
+    alternativeLabels,
+    nonLinear,
+    connectorType,
+    
+    // Methods
+    setStep: (index) => {
+      handleStepClick(index);
+    },
+    nextStep: () => {
+      const nextIndex = currentStep + 1;
+      if (nextIndex < steps.length) {
+        handleStepClick(nextIndex);
+      }
+    },
+    prevStep: () => {
+      const prevIndex = currentStep - 1;
+      if (prevIndex >= 0) {
+        handleStepClick(prevIndex);
+      }
+    },
+    
+    // Utilities
+    getStepState: (index) => getStepState(index, currentStep, nonLinear)
+  };
+  
+  // Check if children is a function (render props pattern)
+  const isRenderProps = typeof children === 'function';
+  
   return (
     <StepperContext.Provider
       value={{
@@ -103,16 +141,22 @@ const Stepper = ({
       }}
     >
       <div className={classNames} {...props}>
-        {Children.map(children, (child, index) => {
-          if (!React.isValidElement(child)) return null;
-          
-          // Clone the Step element to pass additional props
-          return cloneElement(child, {
-            index,
-            state: getStepState(index, currentStep, nonLinear),
-            isLast: index === Children.count(children) - 1
-          });
-        })}
+        {isRenderProps ? (
+          // Render props pattern - pass stepper state to the children function
+          children(stepperState)
+        ) : (
+          // Standard rendering with Step components
+          Children.map(children, (child, index) => {
+            if (!React.isValidElement(child)) return null;
+            
+            // Clone the Step element to pass additional props
+            return cloneElement(child, {
+              index,
+              state: getStepState(index, currentStep, nonLinear),
+              isLast: index === Children.count(children) - 1
+            });
+          })
+        )}
       </div>
     </StepperContext.Provider>
   );
@@ -135,8 +179,14 @@ Stepper.propTypes = {
   onChange: PropTypes.func,
   /** Additional CSS class */
   className: PropTypes.string,
-  /** Step components */
-  children: PropTypes.node
+  /** 
+   * Step components or render props function
+   * When a function is provided, it receives the stepper state object
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func,
+  ])
 };
 
 export default Stepper;

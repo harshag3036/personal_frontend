@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import './DatePicker.css';
 import { 
   DATEPICKER_VARIANTS, 
@@ -15,6 +16,7 @@ import {
  * A customizable date picker component that allows users to select a date.
  */
 const DatePicker = ({
+  children,
   id,
   name,
   value,
@@ -253,7 +255,94 @@ const DatePicker = ({
     
     return classes.join(' ');
   };
+  
+  // Create datePickerState object for render props
+  const datePickerState = useMemo(() => ({
+    // Current state
+    selectedDate,
+    displayDate,
+    isCalendarOpen,
+    days: generateDays(),
+    dayNames: getDayNames(),
+    
+    // Formatting
+    formattedDate: formatDate(selectedDate),
+    monthYearString: getMonthYearString(),
+    
+    // Configuration
+    format,
+    variant,
+    size,
+    disabled,
+    readOnly,
+    required,
+    clearable,
+    showTodayButton,
+    showWeekNumbers,
+    firstDayOfWeek,
+    minDate: minDate && new Date(minDate),
+    maxDate: maxDate && new Date(maxDate),
+    
+    // Actions
+    selectDate: handleDateSelect,
+    clearDate: handleClear,
+    toggleCalendar,
+    goToNextMonth,
+    goToPreviousMonth,
+    goToToday,
+    
+    // Helper methods
+    isToday,
+    isSelected,
+    isDateSelectable,
+    formatDate,
+    getWeekNumber,
+    
+    // Refs
+    containerRef,
+    
+    // CSS Classes
+    classNames: getClassNames(),
+    
+    // Constants
+    variants: DATEPICKER_VARIANTS,
+    sizes: DATEPICKER_SIZES,
+    formats: DATEPICKER_FORMATS
+  }), [
+    selectedDate,
+    displayDate,
+    isCalendarOpen,
+    format,
+    variant,
+    size,
+    disabled,
+    readOnly,
+    required,
+    clearable,
+    showTodayButton,
+    showWeekNumbers,
+    firstDayOfWeek,
+    minDate,
+    maxDate
+  ]);
 
+  // Check if using render props
+  const isRenderProps = isFunction(children);
+  
+  // If using render props, return children as a function with datePicker state
+  if (isRenderProps) {
+    return (
+      <div 
+        ref={containerRef}
+        className={getClassNames()}
+        {...restProps}
+      >
+        {children(datePickerState)}
+      </div>
+    );
+  }
+  
+  // Default rendering
   return (
     <div 
       ref={containerRef}
@@ -389,6 +478,15 @@ const getWeekNumber = (date) => {
 };
 
 DatePicker.propTypes = {
+  /** 
+   * DatePicker content or render props function
+   * If a function is provided, it will be called with the datePicker state 
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
+  
   /** Unique identifier for the input */
   id: PropTypes.string,
   

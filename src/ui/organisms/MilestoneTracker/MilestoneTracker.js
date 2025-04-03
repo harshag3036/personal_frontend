@@ -4,9 +4,10 @@
  * A component for displaying and tracking milestones in a project or activity.
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { componentExtension } from '../../utilities';
+import { isFunction } from '../../utilities/typeChecks';
 import { 
   MILESTONE_TRACKER_CLASS,
   MILESTONE_TRACKER_HEADER_CLASS,
@@ -203,21 +204,108 @@ const MilestoneTracker = ({
     extendedClassName,
   ].filter(Boolean).join(' ');
   
+  // State for selected milestone
+  const [selectedMilestoneId, setSelectedMilestoneId] = useState(null);
+  
   // Handle milestone click
   const handleMilestoneClick = (milestoneId, event) => {
-    if (extendedDisabled || extendedLoading || !extendedOnMilestoneClick) return;
+    if (extendedDisabled || extendedLoading) return;
     
-    try {
-      extendedOnMilestoneClick(milestoneId, event);
-    } catch (error) {
-      console.error('MilestoneTracker: Error in onMilestoneClick handler:', error);
+    // Update selected milestone
+    setSelectedMilestoneId(prevId => prevId === milestoneId ? null : milestoneId);
+    
+    // Call external handler if provided
+    if (extendedOnMilestoneClick) {
+      try {
+        extendedOnMilestoneClick(milestoneId, event);
+      } catch (error) {
+        console.error('MilestoneTracker: Error in onMilestoneClick handler:', error);
+      }
     }
   };
   
+  // Helper function to get milestone by ID
+  const getMilestoneById = useCallback((milestoneId) => {
+    return extendedMilestones.find(m => (m.id || '') === milestoneId);
+  }, [extendedMilestones]);
+  
+  // Format date helper (can be customized or overridden via render props)
+  const formatDate = useCallback((dateString) => {
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString();
+    } catch (e) {
+      return dateString;
+    }
+  }, []);
+  
+  // Helper to get status color
+  const getStatusColor = useCallback((status) => {
+    switch (status) {
+      case MILESTONE_STATUS.COMPLETED:
+        return 'success';
+      case MILESTONE_STATUS.IN_PROGRESS:
+        return 'primary';
+      case MILESTONE_STATUS.NOT_STARTED:
+      default:
+        return 'textColorSecondary';
+    }
+  }, []);
+  
+  // Build milestone tracker state object for render props
+  const milestoneTrackerState = {
+    // Configuration
+    variant: extendedVariant,
+    size: extendedSize,
+    interactive: extendedInteractive,
+    disabled: extendedDisabled,
+    loading: extendedLoading,
+    readonly: extendedReadonly,
+    
+    // State
+    milestones: extendedMilestones,
+    progress: extendedProgress,
+    selectedMilestoneId,
+    selectedMilestone: getMilestoneById(selectedMilestoneId),
+    
+    // Handlers and utilities
+    handleMilestoneClick,
+    getMilestoneById,
+    formatDate,
+    getStatusColor,
+    isVertical,
+    progressStyle,
+    
+    // Subcomponents
+    Milestone
+  };
+  
+  // Determine if we're using render props
+  const isRenderProps = isFunction(children);
+  
+  // If using render props, call the children function with state
+  if (isRenderProps) {
+    return (
+      <div
+        id={extendedId}
+        className={trackerClasses}
+        data-selected-milestone={selectedMilestoneId || ''}
+        data-progress={extendedProgress}
+        {...restProps}
+      >
+        {children(milestoneTrackerState)}
+      </div>
+    );
+  }
+  
+  // Otherwise, use standard component rendering
   return (
     <div
       id={extendedId}
       className={trackerClasses}
+      data-selected-milestone={selectedMilestoneId || ''}
+      data-progress={extendedProgress}
       {...restProps}
     >
       {(extendedTitle || extendedSubtitle) && (
@@ -256,7 +344,7 @@ const MilestoneTracker = ({
           ))}
         </div>
         
-        {children}
+        {!isRenderProps && children}
       </div>
       
       {extendedActions && (
@@ -310,8 +398,11 @@ MilestoneTracker.propTypes = {
   className: PropTypes.string,
   /** Extensions to apply to the tracker */
   extensions: PropTypes.arrayOf(PropTypes.string),
-  /** Additional content */
-  children: PropTypes.node,
+  /** Additional content or render props function */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
 };
 
 export default MilestoneTracker;

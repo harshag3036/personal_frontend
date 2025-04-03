@@ -1,6 +1,7 @@
 import { DROPDOWN_VARIANTS, DROPDOWN_SIZES, DROPDOWN_PLACEMENTS } from './constants';
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import './Dropdown.css';
 
 /**
@@ -143,7 +144,75 @@ const Dropdown = ({
     size,
     closeOnItemClick,
   };
+
+  // Create dropdown state object for render props
+  const dropdownState = useMemo(() => ({
+    // Current state
+    isOpen,
+    
+    // Refs
+    triggerRef,
+    menuRef,
+    dropdownRef,
+    
+    // Configuration
+    variant,
+    size,
+    placement,
+    closeOnItemClick,
+    closeOnOutsideClick,
+    
+    // Actions
+    toggle,
+    close,
+    open: () => {
+      if (!isControlled) {
+        setUncontrolledIsOpen(true);
+      }
+      
+      if (onToggle && !isOpen) {
+        onToggle(true);
+      }
+    },
+    
+    // CSS Classes
+    dropdownClasses,
+    
+    // Constants
+    variants: DROPDOWN_VARIANTS,
+    sizes: DROPDOWN_SIZES,
+    placements: DROPDOWN_PLACEMENTS
+  }), [
+    isOpen, 
+    variant, 
+    size, 
+    placement, 
+    closeOnItemClick, 
+    closeOnOutsideClick, 
+    dropdownClasses, 
+    isControlled, 
+    onToggle
+  ]);
   
+  // Check if using render props
+  const isRenderProps = isFunction(children);
+  
+  // If using render props, return children as a function with dropdown state
+  if (isRenderProps) {
+    return (
+      <DropdownContext.Provider value={contextValue}>
+        <div 
+          ref={dropdownRef}
+          className={dropdownClasses}
+          {...restProps}
+        >
+          {children(dropdownState)}
+        </div>
+      </DropdownContext.Provider>
+    );
+  }
+  
+  // Default rendering with compound components
   return (
     <DropdownContext.Provider value={contextValue}>
       <div 
@@ -158,8 +227,14 @@ const Dropdown = ({
 };
 
 Dropdown.propTypes = {
-  /** Dropdown content */
-  children: PropTypes.node.isRequired,
+  /** 
+   * Dropdown content or render props function
+   * If a function is provided, it will be called with the dropdown state
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]).isRequired,
   /** Whether the dropdown is open (controlled) */
   isOpen: PropTypes.bool,
   /** Whether the dropdown is open by default (uncontrolled) */
@@ -167,16 +242,11 @@ Dropdown.propTypes = {
   /** Callback when the dropdown is toggled */
   onToggle: PropTypes.func,
   /** Placement of the dropdown menu */
-  placement: PropTypes.oneOf([
-    'top-start', 'top', 'top-end',
-    'right-start', 'right', 'right-end',
-    'bottom-start', 'bottom', 'bottom-end',
-    'left-start', 'left', 'left-end',
-  ]),
+  placement: PropTypes.oneOf(Object.values(DROPDOWN_PLACEMENTS)),
   /** Visual variant of the dropdown */
-  variant: PropTypes.oneOf(['default', 'primary', 'secondary', 'subtle']),
+  variant: PropTypes.oneOf(Object.values(DROPDOWN_VARIANTS)),
   /** Size of the dropdown */
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  size: PropTypes.oneOf(Object.values(DROPDOWN_SIZES)),
   /** Whether to close the dropdown when an item is clicked */
   closeOnItemClick: PropTypes.bool,
   /** Whether to close the dropdown when clicking outside */

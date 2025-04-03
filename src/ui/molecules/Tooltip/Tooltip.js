@@ -25,11 +25,13 @@ const Tooltip = ({
   delay = 300,
   arrow = true,
   maxWidth = 300,
+  interactable = false,
   className = '',
   ...restProps
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [isTooltipHovered, setIsTooltipHovered] = useState(false);
   const triggerRef = useRef(null);
   const tooltipRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -211,6 +213,53 @@ const Tooltip = ({
     className
   ].filter(Boolean).join(' ');
   
+  // Create tooltip state object for render props
+  const tooltipState = {
+    isVisible,
+    position,
+    placement,
+    variant,
+    size,
+    arrow,
+    maxWidth,
+    delay,
+    // Methods
+    show: showTooltip,
+    hide: hideTooltip,
+    calculatePosition
+  };
+  
+  // Check if content is a function (render props pattern)
+  const isRenderProps = typeof content === 'function';
+  
+  // Handle tooltip hover events for interactable tooltips
+  const handleTooltipMouseEnter = () => {
+    if (interactable) {
+      setIsTooltipHovered(true);
+    }
+  };
+  
+  const handleTooltipMouseLeave = () => {
+    if (interactable) {
+      setIsTooltipHovered(false);
+      hideTooltip();
+    }
+  };
+  
+  // Adjusted hideTooltip to account for interactable tooltips
+  const handleTriggerMouseLeave = () => {
+    if (interactable) {
+      // For interactable tooltips, only hide if tooltip itself is not hovered
+      setTimeout(() => {
+        if (!isTooltipHovered) {
+          hideTooltip();
+        }
+      }, 100); // Small delay to allow mouse to move from trigger to tooltip
+    } else {
+      hideTooltip();
+    }
+  };
+  
   // Render tooltip
   const tooltipElement = isVisible && createPortal(
     <div
@@ -221,9 +270,11 @@ const Tooltip = ({
         maxWidth: `${maxWidth}px`,
       }}
       role="tooltip"
+      onMouseEnter={handleTooltipMouseEnter}
+      onMouseLeave={handleTooltipMouseLeave}
       {...restProps}
     >
-      {content}
+      {isRenderProps ? content(tooltipState) : content}
     </div>,
     document.body
   );
@@ -239,8 +290,11 @@ const Tooltip = ({
 Tooltip.propTypes = {
   /** The element that triggers the tooltip */
   children: PropTypes.element.isRequired,
-  /** The content of the tooltip */
-  content: PropTypes.node.isRequired,
+  /** The content of the tooltip or a render function that receives the tooltip state */
+  content: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]).isRequired,
   /** The placement of the tooltip relative to the trigger */
   placement: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
   /** The visual variant of the tooltip */
@@ -253,6 +307,8 @@ Tooltip.propTypes = {
   arrow: PropTypes.bool,
   /** The maximum width of the tooltip (in pixels) */
   maxWidth: PropTypes.number,
+  /** If true, user can interact with the tooltip content without it disappearing */
+  interactable: PropTypes.bool,
   /** Additional CSS class */
   className: PropTypes.string,
 };

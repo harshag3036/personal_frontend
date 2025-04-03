@@ -4,9 +4,10 @@
  * A comprehensive component for filtering activities based on various criteria.
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { componentExtension } from '../../utilities';
+import { isFunction } from '../../utilities/typeChecks';
 import { Box, Text, Button, Icon, Flex, Stack, Input, Radio, Divider } from '../../atoms';
 import { SearchInput, DatePicker, Select, Accordion, Checkbox } from '../../molecules';
 import {
@@ -480,6 +481,7 @@ const ActivityFilter = ({
   errorMessage = 'Failed to load filters. Please try again later.',
   className = '',
   extensions = [],
+  children,
   ...props
 }) => {
   // Handle filter change
@@ -631,6 +633,74 @@ const ActivityFilter = ({
     ...restProps
   } = extendedProps;
   
+  // Build activity filter state object for render props
+  const activityFilterState = useMemo(() => ({
+    // Data
+    filters,
+    activeFilters,
+    
+    // Configuration
+    title: extendedTitle,
+    subtitle: extendedSubtitle,
+    variant: extendedVariant,
+    size: extendedSize,
+    collapsible: extendedCollapsible,
+    defaultExpanded: extendedDefaultExpanded,
+    
+    // State
+    loading,
+    error,
+    
+    // Handlers
+    handleFilterChange,
+    handleClearFilters,
+    handleApplyFilters,
+    onFilterChange,
+    onClearFilters,
+    onApplyFilters,
+    
+    // Render helpers
+    renderFilter,
+    FilterSection,
+    CheckboxFilter,
+    RadioFilter,
+    RangeFilter,
+    DateRangeFilter,
+    TagFilter,
+    
+    // Constants
+    filterTypes: ACTIVITY_FILTER_TYPES,
+    filterCategories: ACTIVITY_FILTER_CATEGORIES,
+    
+    // CSS classes
+    headerClass: ACTIVITY_FILTER_HEADER_CLASS,
+    bodyClass: ACTIVITY_FILTER_BODY_CLASS,
+    footerClass: ACTIVITY_FILTER_FOOTER_CLASS,
+    titleClass: ACTIVITY_FILTER_TITLE_CLASS,
+    subtitleClass: ACTIVITY_FILTER_SUBTITLE_CLASS,
+    actionsClass: ACTIVITY_FILTER_ACTIONS_CLASS,
+    sectionClass: ACTIVITY_FILTER_SECTION_CLASS,
+    sectionTitleClass: ACTIVITY_FILTER_SECTION_TITLE_CLASS,
+    sectionContentClass: ACTIVITY_FILTER_SECTION_CONTENT_CLASS,
+    checkboxGroupClass: ACTIVITY_FILTER_CHECKBOX_GROUP_CLASS,
+    radioGroupClass: ACTIVITY_FILTER_RADIO_GROUP_CLASS,
+    rangeClass: ACTIVITY_FILTER_RANGE_CLASS,
+    searchClass: ACTIVITY_FILTER_SEARCH_CLASS,
+    tagListClass: ACTIVITY_FILTER_TAG_LIST_CLASS,
+    tagClass: ACTIVITY_FILTER_TAG_CLASS,
+    emptyClass: ACTIVITY_FILTER_EMPTY_CLASS,
+    loadingClass: ACTIVITY_FILTER_LOADING_CLASS,
+    errorClass: ACTIVITY_FILTER_ERROR_CLASS
+  }), [
+    filters, activeFilters, extendedTitle, extendedSubtitle,
+    extendedVariant, extendedSize, extendedCollapsible, extendedDefaultExpanded,
+    loading, error, handleFilterChange, handleClearFilters, handleApplyFilters,
+    onFilterChange, onClearFilters, onApplyFilters, renderFilter
+  ]);
+  
+  // Determine if we're using render props
+  const isRenderProps = isFunction(children);
+  
   // Combine class names
   const filterClasses = [
     ACTIVITY_FILTER_CLASS,
@@ -677,6 +747,16 @@ const ActivityFilter = ({
     );
   }
 
+  // If using render props, call the children function with the activity filter state
+  if (isRenderProps) {
+    return (
+      <div className={filterClasses} {...restProps}>
+        {children(activityFilterState)}
+      </div>
+    );
+  }
+  
+  // Otherwise, use standard component structure
   return (
     <div className={filterClasses} {...restProps}>
       {/* Header */}
@@ -739,6 +819,11 @@ const ActivityFilter = ({
 };
 
 ActivityFilter.propTypes = {
+  /** Children nodes or render props function */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   /** Filter panel title */
   title: PropTypes.string,
   /** Filter panel subtitle */

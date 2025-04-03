@@ -4,9 +4,10 @@
  * A compound component for displaying activity information with customizable sections.
  */
 
-import React from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { componentExtension } from '../../utilities';
+import { isFunction } from '../../utilities/typeChecks';
 import { 
   ACTIVITY_CARD_CLASS,
   ACTIVITY_CARD_HEADER_CLASS,
@@ -176,8 +177,14 @@ const ActivityCard = ({
     extendedClassName,
   ].filter(Boolean).join(' ');
   
+  // Add theme state with default to light
+  const [theme, setTheme] = useState('light');
+  
+  // Add internal expanded state
+  const [isExpanded, setIsExpanded] = useState(extendedExpanded);
+  
   // Handle click event
-  const handleClick = (event) => {
+  const handleClick = useCallback((event) => {
     if (extendedDisabled || extendedLoading) return;
     
     if (extendedOnClick) {
@@ -187,7 +194,96 @@ const ActivityCard = ({
         console.error('ActivityCard: Error in onClick handler:', error);
       }
     }
-  };
+  }, [extendedDisabled, extendedLoading, extendedOnClick]);
+  
+  // Toggle expanded state
+  const toggleExpanded = useCallback(() => {
+    setIsExpanded(prev => !prev);
+  }, []);
+  
+  // Toggle theme
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  }, []);
+  
+  // Actions handlers
+  const handleLike = useCallback((event) => {
+    event.stopPropagation();
+    // Like functionality would be implemented by consumer
+  }, []);
+  
+  const handleShare = useCallback((event) => {
+    event.stopPropagation();
+    // Share functionality would be implemented by consumer
+  }, []);
+  
+  const handleSave = useCallback((event) => {
+    event.stopPropagation();
+    // Save functionality would be implemented by consumer
+  }, []);
+  
+  const handleComplete = useCallback((event) => {
+    event.stopPropagation();
+    // Complete functionality would be implemented by consumer
+  }, []);
+  
+  // Build activity card state object for render props
+  const activityCardState = useMemo(() => ({
+    // Configuration
+    id: extendedId,
+    title: extendedTitle,
+    subtitle: extendedSubtitle,
+    description: extendedDescription,
+    icon: extendedIcon,
+    avatar: extendedAvatar,
+    metadata: extendedMetadata,
+    actions: extendedActions,
+    variant: extendedVariant,
+    size: extendedSize,
+    status: extendedStatus,
+    type: extendedType,
+    
+    // State
+    selected: extendedSelected,
+    disabled: extendedDisabled,
+    loading: extendedLoading,
+    highlighted: extendedHighlighted,
+    compact: extendedCompact,
+    expanded: isExpanded,
+    theme,
+    
+    // Handlers
+    handleClick,
+    toggleExpanded,
+    toggleTheme,
+    handleLike,
+    handleShare,
+    handleSave,
+    handleComplete,
+    
+    // CSS classes
+    headerClass: ACTIVITY_CARD_HEADER_CLASS,
+    bodyClass: ACTIVITY_CARD_BODY_CLASS,
+    footerClass: ACTIVITY_CARD_FOOTER_CLASS,
+    iconClass: ACTIVITY_CARD_ICON_CLASS,
+    avatarClass: ACTIVITY_CARD_AVATAR_CLASS,
+    titleClass: ACTIVITY_CARD_TITLE_CLASS,
+    subtitleClass: ACTIVITY_CARD_SUBTITLE_CLASS,
+    descriptionClass: ACTIVITY_CARD_DESCRIPTION_CLASS,
+    metadataClass: ACTIVITY_CARD_METADATA_CLASS,
+    actionsClass: ACTIVITY_CARD_ACTIONS_CLASS,
+  }), [
+    extendedId, extendedTitle, extendedSubtitle, extendedDescription, 
+    extendedIcon, extendedAvatar, extendedMetadata, extendedActions,
+    extendedVariant, extendedSize, extendedStatus, extendedType,
+    extendedSelected, extendedDisabled, extendedLoading, 
+    extendedHighlighted, extendedCompact, isExpanded, theme,
+    handleClick, toggleExpanded, toggleTheme,
+    handleLike, handleShare, handleSave, handleComplete
+  ]);
+  
+  // Determine if we're using render props
+  const isRenderProps = isFunction(children);
   
   // Determine if we need to render the header
   const hasHeader = extendedIcon || extendedAvatar || extendedTitle || extendedSubtitle;
@@ -195,6 +291,26 @@ const ActivityCard = ({
   // Determine if we need to render the footer
   const hasFooter = extendedMetadata || extendedActions;
   
+  // If using render props, call the children function with state
+  if (isRenderProps) {
+    return (
+      <div
+        id={extendedId}
+        className={cardClasses}
+        onClick={handleClick}
+        tabIndex={extendedOnClick && !extendedDisabled ? 0 : undefined}
+        role={extendedOnClick ? 'button' : undefined}
+        aria-disabled={extendedDisabled || undefined}
+        data-theme={theme}
+        data-expanded={isExpanded ? 'true' : 'false'}
+        {...restProps}
+      >
+        {children(activityCardState)}
+      </div>
+    );
+  }
+  
+  // Otherwise use standard component structure
   return (
     <div
       id={extendedId}
@@ -203,6 +319,8 @@ const ActivityCard = ({
       tabIndex={extendedOnClick && !extendedDisabled ? 0 : undefined}
       role={extendedOnClick ? 'button' : undefined}
       aria-disabled={extendedDisabled || undefined}
+      data-theme={theme}
+      data-expanded={isExpanded ? 'true' : 'false'}
       {...restProps}
     >
       {hasHeader && (
@@ -307,8 +425,11 @@ ActivityCard.propTypes = {
   className: PropTypes.string,
   /** Extensions to apply to the card */
   extensions: PropTypes.arrayOf(PropTypes.string),
-  /** Card content */
-  children: PropTypes.node,
+  /** Card content or render props function */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
 };
 
 export default ActivityCard;

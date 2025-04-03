@@ -662,6 +662,57 @@ const Calendar = ({
     className
   ].filter(Boolean).join(' ');
   
+  // Create a calendar context object with all state and handlers
+  const calendarContext = {
+    // State
+    currentDate,
+    currentView,
+    selected,
+    events,
+    year,
+    month,
+    today,
+    
+    // View information
+    views,
+    
+    // Handlers
+    navigateToPrev,
+    navigateToNext,
+    navigateToToday,
+    handleViewChange,
+    handleDateSelect,
+    handleEventClick,
+    
+    // Helper functions
+    isDateDisabled,
+    getEventsForDate,
+    isSameDay,
+    isDateInRange,
+    isWeekend,
+    formatTime,
+    getMonthName,
+    getWeekdayNames,
+    getTitle,
+    
+    // Render methods
+    renderMonthView,
+    renderWeekView,
+    renderDayView,
+    renderAgendaView,
+    renderView
+  };
+  
+  // Check if children is a function (render props pattern)
+  if (typeof props.children === 'function') {
+    return (
+      <div className={calendarClasses}>
+        {props.children(calendarContext)}
+      </div>
+    );
+  }
+  
+  // Default rendering if not using render props
   return (
     <div className={calendarClasses} {...props}>
       {headerToolbar && (
@@ -724,6 +775,14 @@ const Calendar = ({
 };
 
 Calendar.propTypes = {
+  /** 
+   * Optional children as a render prop function that receives the calendar context
+   * and returns React elements
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   /** The initial date to display */
   date: PropTypes.instanceOf(Date),
   /** Array of events to display */

@@ -53,6 +53,7 @@ const SearchInput = ({
   onFocus,
   onBlur,
   onClear,
+  children,
   ...restProps
 }) => {
   // State
@@ -159,44 +160,100 @@ const SearchInput = ({
     };
   }, []);
 
+  // Create search input state object for render props pattern
+  const searchInputState = {
+    // Data
+    value,
+    isFocused,
+    
+    // Configuration
+    variant,
+    size,
+    placeholder,
+    clearable,
+    disabled,
+    isLoading,
+    
+    // References
+    inputRef,
+    
+    // Methods
+    setValue: (newValue) => {
+      setValue(newValue);
+      if (onChange) {
+        // Clear previous debounce timer
+        if (debounceTimerRef.current) {
+          clearTimeout(debounceTimerRef.current);
+        }
+        
+        // Set new debounce timer
+        debounceTimerRef.current = setTimeout(() => {
+          onChange(newValue);
+        }, debounceTime);
+      }
+    },
+    handleChange,
+    handleFocus,
+    handleBlur,
+    handleClear,
+    
+    // Utilities
+    startLoading: () => {
+      // This is just a placeholder, actual loading state is controlled via props
+      console.log('Set isLoading to true in parent component');
+    },
+    stopLoading: () => {
+      // This is just a placeholder, actual loading state is controlled via props
+      console.log('Set isLoading to false in parent component');
+    }
+  };
+  
+  // Check if children is a function (render props pattern)
+  const isRenderProps = typeof children === 'function';
+  
   return (
     <Element className={searchInputClasses} style={style} {...restProps}>
-      <div className="ui-search-input__container">
-        <div className="ui-search-input__icon">
-          <Icon name="search" />
-        </div>
-        
-        <input
-          ref={inputRef}
-          type="text"
-          className="ui-search-input__field"
-          placeholder={placeholder}
-          value={value}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          disabled={disabled}
-          aria-label={placeholder}
-        />
-        
-        {isLoading && (
-          <div className="ui-search-input__loading">
-            <Icon name="spinner" className="ui-search-input__loading-icon" />
+      {isRenderProps ? (
+        // Render props pattern - pass search input state to the children function
+        children(searchInputState)
+      ) : (
+        <div className="ui-search-input__container">
+          <div className="ui-search-input__icon">
+            <Icon name="search" />
           </div>
-        )}
-        
-        {clearable && value && !isLoading && (
-          <button
-            type="button"
-            className="ui-search-input__clear"
-            onClick={handleClear}
-            aria-label="Clear search"
-            tabIndex={0}
-          >
-            <Icon name="close" />
-          </button>
-        )}
-      </div>
+          
+          <input
+            ref={inputRef}
+            type="text"
+            className="ui-search-input__field"
+            placeholder={placeholder}
+            value={value}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            disabled={disabled}
+            aria-label={placeholder}
+          />
+          
+          {isLoading && (
+            <div className="ui-search-input__loading">
+              <Icon name="spinner" className="ui-search-input__loading-icon" />
+            </div>
+          )}
+          
+          {clearable && value && !isLoading && (
+            <button
+              type="button"
+              className="ui-search-input__clear"
+              onClick={handleClear}
+              aria-label="Clear search"
+              tabIndex={0}
+            >
+              <Icon name="close" />
+            </button>
+          )}
+        </div>
+      )}
     </Element>
   );
 };
@@ -240,6 +297,14 @@ SearchInput.propTypes = {
   onBlur: PropTypes.func,
   /** Callback fired when the clear button is clicked */
   onClear: PropTypes.func,
+  /** 
+   * SearchInput content or render props function
+   * When a function is provided, it receives the search input state object
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ])
 };
 
 export default SearchInput;

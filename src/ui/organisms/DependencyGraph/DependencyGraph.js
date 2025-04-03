@@ -556,6 +556,60 @@ const DependencyGraph = ({
     extendedClassName,
   ].filter(Boolean).join(' ');
   
+  // Create dependency graph context with all state and handlers
+  const dependencyGraphContext = {
+    // Basic props
+    id: extendedId,
+    title: extendedTitle,
+    subtitle: extendedSubtitle,
+    nodes: extendedNodes,
+    edges: extendedEdges,
+    controls: extendedControls,
+    legend: extendedLegend,
+    actions: extendedActions,
+    
+    // Configuration
+    variant: extendedVariant,
+    size: extendedSize,
+    layout: extendedLayout,
+    interactive: extendedInteractive,
+    draggable: extendedDraggable,
+    zoomable: extendedZoomable,
+    disabled: extendedDisabled,
+    loading: extendedLoading,
+    readonly: extendedReadonly,
+    
+    // State
+    nodePositions,
+    
+    // Handlers
+    handleNodeClick,
+    handleNodeDragStart,
+    handleNodeDrag,
+    handleNodeDragEnd,
+    
+    // Refs
+    canvasRef,
+    
+    // Render helpers
+    Node,
+    Edge
+  };
+  
+  // Check if children is a function (render props pattern)
+  if (typeof children === 'function') {
+    return (
+      <div
+        id={extendedId}
+        className={graphClasses}
+        {...restProps}
+      >
+        {children(dependencyGraphContext)}
+      </div>
+    );
+  }
+  
+  // Default rendering if not using render props
   return (
     <div
       id={extendedId}
@@ -620,7 +674,7 @@ const DependencyGraph = ({
           )}
         </div>
         
-        {children}
+        {!typeof children === 'function' && children}
       </div>
       
       {extendedActions && (
@@ -698,8 +752,11 @@ DependencyGraph.propTypes = {
   className: PropTypes.string,
   /** Extensions to apply to the graph */
   extensions: PropTypes.arrayOf(PropTypes.string),
-  /** Additional content */
-  children: PropTypes.node,
+  /** Additional content or render props function */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
 };
 
 export default DependencyGraph;

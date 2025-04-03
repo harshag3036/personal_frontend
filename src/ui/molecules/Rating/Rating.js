@@ -26,6 +26,7 @@ const Rating = ({
   showValue = false,
   name,
   className,
+  children,
   ...props
 }) => {
   const [value, setValue] = useState(initialValue);
@@ -105,6 +106,43 @@ const Rating = ({
     className
   ].filter(Boolean).join(' ');
   
+  // Create rating state object for render props pattern
+  const ratingState = {
+    // Data
+    value,
+    hoverValue,
+    items,
+    max,
+    icon,
+    
+    // Configuration
+    size,
+    variant,
+    precision,
+    readOnly,
+    disabled,
+    showValue,
+    
+    // Methods
+    setValue: (newValue) => {
+      handleClick(newValue);
+    },
+    setHoverValue: (newValue) => {
+      handleMouseEnter(newValue);
+    },
+    clearHover: () => {
+      handleMouseLeave();
+    },
+    
+    // Utilities
+    isFilled,
+    isHalf,
+    getIcon
+  };
+  
+  // Check if children is a function (render props pattern)
+  const isRenderProps = typeof children === 'function';
+  
   return (
     <div 
       className={classNames}
@@ -113,48 +151,56 @@ const Rating = ({
       aria-label="Rating"
       {...props}
     >
-      {items.map((itemValue) => {
-        const filled = isFilled(itemValue);
-        const half = isHalf(itemValue);
-        
-        return (
-          <button
-            key={itemValue}
-            type="button"
-            className="ui-rating__item"
-            onMouseEnter={() => handleMouseEnter(itemValue)}
-            onClick={() => handleClick(itemValue)}
-            aria-checked={value === itemValue}
-            aria-posinset={itemValue}
-            aria-setsize={max}
-            role="radio"
-            tabIndex={readOnly ? -1 : 0}
-            disabled={disabled}
-          >
-            <span className="ui-rating__label">
-              {itemValue} of {max}
+      {isRenderProps ? (
+        // Render props pattern - pass rating state to the children function
+        children(ratingState)
+      ) : (
+        // Standard rendering
+        <>
+          {items.map((itemValue) => {
+            const filled = isFilled(itemValue);
+            const half = isHalf(itemValue);
+            
+            return (
+              <button
+                key={itemValue}
+                type="button"
+                className="ui-rating__item"
+                onMouseEnter={() => handleMouseEnter(itemValue)}
+                onClick={() => handleClick(itemValue)}
+                aria-checked={value === itemValue}
+                aria-posinset={itemValue}
+                aria-setsize={max}
+                role="radio"
+                tabIndex={readOnly ? -1 : 0}
+                disabled={disabled}
+              >
+                <span className="ui-rating__label">
+                  {itemValue} of {max}
+                </span>
+                <span 
+                  className={`ui-rating__icon ${filled ? 'ui-rating__icon--filled' : ''} ${half ? 'ui-rating__icon--half' : ''}`}
+                >
+                  <Icon name={icon} />
+                </span>
+              </button>
+            );
+          })}
+          
+          {showValue && (
+            <span className="ui-rating__value">
+              {value}
             </span>
-            <span 
-              className={`ui-rating__icon ${filled ? 'ui-rating__icon--filled' : ''} ${half ? 'ui-rating__icon--half' : ''}`}
-            >
-              <Icon name={icon} />
-            </span>
-          </button>
-        );
-      })}
-      
-      {showValue && (
-        <span className="ui-rating__value">
-          {value}
-        </span>
-      )}
-      
-      {name && (
-        <input 
-          type="hidden" 
-          name={name} 
-          value={value} 
-        />
+          )}
+          
+          {name && (
+            <input 
+              type="hidden" 
+              name={name} 
+              value={value} 
+            />
+          )}
+        </>
       )}
     </div>
   );
@@ -182,7 +228,15 @@ Rating.propTypes = {
   /** The name attribute for the hidden input */
   name: PropTypes.string,
   /** Additional CSS class */
-  className: PropTypes.string
+  className: PropTypes.string,
+  /** 
+   * Rating content or render props function
+   * When a function is provided, it receives the rating state object
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func,
+  ])
 };
 
 export default Rating;

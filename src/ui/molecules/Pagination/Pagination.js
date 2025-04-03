@@ -2,6 +2,7 @@ import { PAGINATION_VARIANTS, PAGINATION_SIZES, PAGINATION_SHAPES } from './cons
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Flex, Button, Text, Icon } from '../../atoms';
+import { isFunction } from '../../utilities/typeChecks';
 import './Pagination.css';
 
 /**
@@ -19,6 +20,7 @@ import './Pagination.css';
  * ```
  */
 const Pagination = ({
+  children,
   currentPage,
   totalPages,
   onPageChange,
@@ -129,6 +131,81 @@ const Pagination = ({
     className,
   ].filter(Boolean).join(' ');
   
+  // Create pagination state object for render props
+  const paginationState = useMemo(() => ({
+    // Current state
+    currentPage: validatedCurrentPage,
+    totalPages,
+    range,
+    
+    // Configuration
+    siblingCount: validatedSiblingCount,
+    boundaryCount: validatedBoundaryCount,
+    showFirstButton,
+    showLastButton,
+    showPrevButton,
+    showNextButton,
+    size,
+    variant,
+    shape,
+    
+    // Actions
+    goToPage: handlePageChange,
+    goToFirstPage: handleFirstPage,
+    goToLastPage: handleLastPage,
+    goToPrevPage: handlePrevPage,
+    goToNextPage: handleNextPage,
+    
+    // Helper state
+    isFirstPage: validatedCurrentPage === 1,
+    isLastPage: validatedCurrentPage === totalPages,
+    
+    // CSS Classes
+    paginationClasses,
+    
+    // Constants
+    variants: PAGINATION_VARIANTS,
+    sizes: PAGINATION_SIZES,
+    shapes: PAGINATION_SHAPES
+  }), [
+    validatedCurrentPage,
+    totalPages,
+    range,
+    validatedSiblingCount,
+    validatedBoundaryCount,
+    showFirstButton,
+    showLastButton,
+    showPrevButton,
+    showNextButton,
+    size,
+    variant,
+    shape,
+    handlePageChange,
+    handleFirstPage,
+    handleLastPage,
+    handlePrevPage,
+    handleNextPage,
+    paginationClasses
+  ]);
+  
+  // Check if using render props
+  const isRenderProps = isFunction(children);
+  
+  // If using render props, return children as a function with pagination state
+  if (isRenderProps) {
+    return (
+      <Flex 
+        as="nav" 
+        className={paginationClasses} 
+        aria-label="Pagination" 
+        {...restProps}
+      >
+        {children(paginationState)}
+      </Flex>
+    );
+  }
+  
+  // Default rendering
   return (
     <Flex 
       as="nav" 
@@ -229,6 +306,14 @@ const Pagination = ({
 };
 
 Pagination.propTypes = {
+  /** 
+   * Pagination content or render props function
+   * If a function is provided, it will be called with the pagination state 
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   /** Current page number (1-based) */
   currentPage: PropTypes.number.isRequired,
   /** Total number of pages */
@@ -248,11 +333,11 @@ Pagination.propTypes = {
   /** Whether to show the next page button */
   showNextButton: PropTypes.bool,
   /** Size of the pagination buttons */
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  size: PropTypes.oneOf(Object.values(PAGINATION_SIZES)),
   /** Visual variant of the pagination */
-  variant: PropTypes.oneOf(['default', 'outline', 'ghost', 'minimal']),
+  variant: PropTypes.oneOf(Object.values(PAGINATION_VARIANTS)),
   /** Shape of the pagination buttons */
-  shape: PropTypes.oneOf(['rounded', 'square', 'pill']),
+  shape: PropTypes.oneOf(Object.values(PAGINATION_SHAPES)),
   /** Additional CSS class */
   className: PropTypes.string,
 };

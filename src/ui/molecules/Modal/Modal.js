@@ -1,7 +1,8 @@
 import { MODAL_SIZES, MODAL_VARIANTS } from './constants';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import './Modal.css';
 
 /**
@@ -144,6 +145,71 @@ const Modal = ({
     contentClassName
   ].filter(Boolean).join(' ');
 
+  // Create modal state object for render props
+  const modalState = useMemo(() => ({
+    // Current state
+    isOpen,
+    isMounted,
+    
+    // Configuration
+    size,
+    variant,
+    closeOnEsc,
+    closeOnOverlayClick,
+    returnFocusOnClose,
+    
+    // Refs
+    modalRef,
+    initialFocusRef,
+    finalFocusRef,
+    previousActiveElement,
+    
+    // Actions
+    close: onClose,
+    handleOverlayClick,
+    
+    // CSS Classes
+    modalClasses,
+    overlayClasses,
+    contentClasses,
+    
+    // Constants
+    sizes: MODAL_SIZES,
+    variants: MODAL_VARIANTS,
+    
+    // Helper methods
+    getFocusableElements: () => {
+      if (!modalRef.current) return [];
+      return Array.from(modalRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      ));
+    },
+    focusFirst: () => {
+      const elements = modalState.getFocusableElements();
+      if (elements.length > 0) elements[0].focus();
+    },
+    focusLast: () => {
+      const elements = modalState.getFocusableElements();
+      if (elements.length > 0) elements[elements.length - 1].focus();
+    }
+  }), [
+    isOpen, 
+    isMounted, 
+    size, 
+    variant, 
+    closeOnEsc, 
+    closeOnOverlayClick, 
+    returnFocusOnClose,
+    onClose, 
+    handleOverlayClick, 
+    modalClasses, 
+    overlayClasses, 
+    contentClasses
+  ]);
+
+  // Check if using render props
+  const isRenderProps = isFunction(children);
+
   // Don't render anything if not mounted or not open
   if (!isMounted || !isOpen) return null;
 
@@ -163,7 +229,7 @@ const Modal = ({
         {...restProps}
       >
         <div className={contentClasses}>
-          {children}
+          {isRenderProps ? children(modalState) : children}
         </div>
       </div>
     </div>,
@@ -172,16 +238,22 @@ const Modal = ({
 };
 
 Modal.propTypes = {
-  /** Modal content */
-  children: PropTypes.node.isRequired,
+  /** 
+   * Modal content or render props function
+   * If a function is provided, it will be called with the modal state 
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]).isRequired,
   /** Whether the modal is open */
   isOpen: PropTypes.bool,
   /** Callback when the modal should close */
   onClose: PropTypes.func,
   /** Size of the modal */
-  size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl', 'full']),
+  size: PropTypes.oneOf(Object.values(MODAL_SIZES)),
   /** Visual variant of the modal */
-  variant: PropTypes.oneOf(['default', 'alert', 'info', 'success', 'warning', 'error']),
+  variant: PropTypes.oneOf(Object.values(MODAL_VARIANTS)),
   /** Whether to close the modal when the Escape key is pressed */
   closeOnEsc: PropTypes.bool,
   /** Whether to close the modal when the overlay is clicked */

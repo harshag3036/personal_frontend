@@ -16,6 +16,7 @@ import './TimePicker.css';
  * TimePicker Component
  * 
  * A customizable time picker component that allows users to select a time.
+ * Supports render props pattern for complete customization of the time selection interface.
  * 
  * @example
  * ```jsx
@@ -27,6 +28,22 @@ import './TimePicker.css';
  * 
  * // With seconds and custom step
  * <TimePicker showSeconds step={TIMEPICKER_STEP.MINUTE} onChange={handleTimeChange} />
+ * 
+ * // With render props for custom UI
+ * <TimePicker value={time} onChange={setTime} format={TIMEPICKER_FORMATS.TWELVE_HOUR}>
+ *   {(timeState) => (
+ *     <CustomTimePickerUI
+ *       hours={timeState.hours}
+ *       minutes={timeState.minutes}
+ *       selectedHour={timeState.selectedHour}
+ *       selectedMinute={timeState.selectedMinute}
+ *       handleHourSelect={timeState.handleHourSelect}
+ *       handleMinuteSelect={timeState.handleMinuteSelect}
+ *       handleNowClick={timeState.handleNowClick}
+ *       handleClearClick={timeState.handleClearClick}
+ *     />
+ *   )}
+ * </TimePicker>
  * ```
  */
 const TimePicker = (props) => {
@@ -339,6 +356,62 @@ const TimePicker = (props) => {
     return classes.join(' ');
   };
 
+  // Create timeState object for render props
+  const timeState = {
+    // Data
+    hours,
+    minutes,
+    seconds,
+    inputValue,
+    format,
+    
+    // Selection state
+    selectedHour,
+    selectedMinute,
+    selectedSecond,
+    selectedMeridiem,
+    isOpen,
+    
+    // Config state
+    showSeconds,
+    showMeridiem,
+    clearable,
+    disabled,
+    readOnly,
+    required,
+    error,
+    errorMessage,
+    
+    // Handlers
+    handleHourSelect,
+    handleMinuteSelect,
+    handleSecondSelect,
+    handleMeridiemSelect,
+    handleInputChange,
+    handleTimeSelection,
+    handleNowClick,
+    handleClearClick,
+    handleOpen: () => !disabled && !readOnly && setIsOpen(true),
+    handleClose: () => setIsOpen(false),
+    handleToggle: () => !disabled && !readOnly && setIsOpen(!isOpen),
+    
+    // Utils
+    formatTimeValue
+  };
+  
+  // Check if children is a function (render props pattern)
+  const isRenderProps = typeof props.children === 'function';
+  
+  // If using render props, pass the time state to the render function
+  if (isRenderProps) {
+    return (
+      <Component className={getClassNames()} style={style} {...rest}>
+        {props.children(timeState)}
+      </Component>
+    );
+  }
+  
+  // Default UI if not using render props
   return (
     <Component className={getClassNames()} style={style} {...rest}>
       <div className={`${CLASS_PREFIX}-input-container`} ref={inputRef}>
@@ -535,6 +608,15 @@ TimePicker.propTypes = {
   
   /** Error message to display */
   errorMessage: PropTypes.string,
+  
+  /** 
+   * Render props function to completely customize the TimePicker UI.
+   * It receives the timeState object containing all data and handlers.
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func,
+  ]),
 };
 
 TimePicker.defaultProps = {

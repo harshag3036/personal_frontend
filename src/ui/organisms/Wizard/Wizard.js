@@ -749,6 +749,29 @@ const Wizard = forwardRef(({
     );
   };
   
+  // Check if children is a function (render props pattern)
+  if (typeof children === 'function') {
+    return (
+      <WizardContext.Provider value={contextValue}>
+        <div 
+          ref={ref}
+          className={wizardClasses}
+          style={style}
+          role={WIZARD_ARIA.ROLE}
+          aria-label={WIZARD_ARIA.LABEL}
+          data-variant={variant}
+          data-size={size}
+          data-current-step={currentStep}
+          data-total-steps={totalSteps}
+          {...props}
+        >
+          {children(contextValue)}
+        </div>
+      </WizardContext.Provider>
+    );
+  }
+  
+  // Default rendering if not using render props
   return (
     <WizardContext.Provider value={contextValue}>
       <div 
@@ -774,7 +797,14 @@ const Wizard = forwardRef(({
 Wizard.displayName = 'Wizard';
 
 Wizard.propTypes = {
-  children: PropTypes.node,
+  /** 
+   * Children as React nodes or a render prop function 
+   * that receives wizard context and returns React elements
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   variant: PropTypes.oneOf(Object.values(WIZARD_VARIANTS)),
   size: PropTypes.oneOf(Object.values(WIZARD_SIZES)),
   withBorder: PropTypes.bool,

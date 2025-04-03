@@ -193,7 +193,9 @@ const Form = ({
         noValidate
         {...restProps}
       >
-        {children}
+        {typeof children === 'function'
+          ? children(formContextValue)
+          : children}
       </form>
     </FormContext.Provider>
   );
@@ -210,8 +212,14 @@ Form.propTypes = {
   className: PropTypes.string,
   /** Extensions to apply to the form */
   extensions: PropTypes.arrayOf(PropTypes.string),
-  /** Form content */
-  children: PropTypes.node.isRequired,
+  /** 
+   * Form content - can be React nodes or a render props function 
+   * that receives form context and returns React elements
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]).isRequired,
 };
 
 /**

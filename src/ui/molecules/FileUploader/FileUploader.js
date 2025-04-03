@@ -18,7 +18,8 @@ import './FileUploader.css';
  * FileUploader Component
  * 
  * A versatile file upload component that supports drag and drop, file previews,
- * and various customization options.
+ * and various customization options. Also supports render props for complete
+ * customization of the UI.
  * 
  * @example
  * ```jsx
@@ -41,6 +42,24 @@ import './FileUploader.css';
  *   onChange={handleFileChange}
  *   onUpload={handleFileUpload}
  * />
+ * 
+ * // With render props for complete customization
+ * <FileUploader
+ *   multiple={true}
+ *   maxSize={10 * 1024 * 1024}
+ *   onChange={handleFileChange}
+ *   onUpload={handleFileUpload}
+ * >
+ *   {(uploaderState) => (
+ *     <YourCustomUI 
+ *       files={uploaderState.files}
+ *       isUploading={uploaderState.state === 'uploading'}
+ *       onBrowse={uploaderState.handleBrowseClick}
+ *       onRemove={uploaderState.handleRemoveFile}
+ *       onUpload={uploaderState.handleUpload}
+ *     />
+ *   )}
+ * </FileUploader>
  * ```
  */
 const FileUploader = ({
@@ -66,6 +85,7 @@ const FileUploader = ({
   onUpload,
   onRemove,
   onError,
+  children,
   ...restProps
 }) => {
   // Refs
@@ -390,6 +410,59 @@ const FileUploader = ({
     }
   }, [dragAndDrop, handleDragEnter, handleDragOver, handleDragLeave, handleDrop]);
 
+  // Create uploaderState for render props
+  const uploaderState = {
+    // File state
+    files,
+    state,
+    error,
+    uploadProgress,
+    
+    // File operations
+    handleBrowseClick,
+    handleFileSelect,
+    handleRemoveFile,
+    handleUpload,
+    
+    // Refs
+    fileInputRef,
+    dropzoneRef,
+    
+    // Utility functions
+    formatFileSize,
+    getFileIcon,
+    
+    // Configuration
+    disabled,
+    multiple,
+    maxFiles,
+    maxSize,
+    acceptedFileTypes,
+    dragAndDrop,
+    autoUpload,
+  };
+
+  // If children is a function, use render props pattern
+  if (typeof children === 'function') {
+    return (
+      <Element className={fileUploaderClasses} style={style} {...restProps}>
+        <input
+          ref={fileInputRef}
+          type="file"
+          className="ui-file-uploader__input"
+          accept={acceptedFileTypes}
+          multiple={multiple}
+          onChange={handleFileSelect}
+          disabled={disabled}
+          aria-hidden="true"
+          tabIndex="-1"
+        />
+        {children(uploaderState)}
+      </Element>
+    );
+  }
+
+  // Otherwise, render the default UI
   return (
     <Element className={fileUploaderClasses} style={style} {...restProps}>
       {/* Hidden file input */}

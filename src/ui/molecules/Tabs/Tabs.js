@@ -1,6 +1,7 @@
 import { TAB_VARIANTS, TAB_SIZES } from './constants';
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import React, { useState, createContext, useContext, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import './Tabs.css';
 
 // Create a context for the tabs state
@@ -56,6 +57,40 @@ const Tabs = ({
     className
   ].filter(Boolean).join(' ');
 
+  // Create tabs state object for render props
+  const tabsState = useMemo(() => ({
+    // Current state
+    activeTab,
+    
+    // Configuration
+    variant,
+    size,
+    
+    // Actions
+    setActiveTab: handleTabChange,
+    
+    // CSS Classes
+    tabsClasses,
+    
+    // Constants
+    variants: TAB_VARIANTS,
+    sizes: TAB_SIZES
+  }), [activeTab, variant, size, tabsClasses, handleTabChange]);
+  
+  // Check if using render props
+  const isRenderProps = isFunction(children);
+  
+  // If using render props, call the children function with the tabs state
+  if (isRenderProps) {
+    return (
+      <TabsContext.Provider value={{ activeTab, setActiveTab: handleTabChange }}>
+        <div className={tabsClasses} {...restProps}>
+          {children(tabsState)}
+        </div>
+      </TabsContext.Provider>
+    );
+  }
+
   // Clone children to add index prop to TabPanel components
   let tabPanelIndex = 0;
   const childrenWithProps = React.Children.map(children, (child) => {
@@ -70,6 +105,7 @@ const Tabs = ({
     return child;
   });
 
+  // Default rendering with compound components
   return (
     <TabsContext.Provider value={{ activeTab, setActiveTab: handleTabChange }}>
       <div className={tabsClasses} {...restProps}>
@@ -80,14 +116,20 @@ const Tabs = ({
 };
 
 Tabs.propTypes = {
-  /** Tab content */
-  children: PropTypes.node.isRequired,
+  /** 
+   * Tab content or render props function
+   * If a function is provided, it will be called with the tabs state 
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]).isRequired,
   /** Index of the default active tab */
   defaultTab: PropTypes.number,
   /** Visual variant of the tabs */
-  variant: PropTypes.oneOf(['default', 'pills', 'underline', 'contained']),
+  variant: PropTypes.oneOf(Object.values(TAB_VARIANTS)),
   /** Size of the tabs */
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  size: PropTypes.oneOf(Object.values(TAB_SIZES)),
   /** Callback function when tab changes */
   onChange: PropTypes.func,
   /** Additional CSS class names */

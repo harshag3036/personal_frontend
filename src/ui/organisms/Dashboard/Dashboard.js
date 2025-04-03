@@ -6,8 +6,9 @@
  * various sections like header, sidebar, main content, widgets, and footer.
  */
 
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import './Dashboard.css';
 import {
   DASHBOARD_VARIANTS,
@@ -50,29 +51,96 @@ const Dashboard = ({
   onRefresh,
   ...rest
 }) => {
-  // Determine if we're using compound components or simple props
-  const isCompoundComponent = React.Children.count(children) > 0;
+  // Add state for dashboard layout editing
+  const [currentLayout, setCurrentLayout] = useState(layout);
+  const [editMode, setEditMode] = useState(false);
+  const [visibleWidgets, setVisibleWidgets] = useState(widgets.map(widget => widget.id));
+
+  // Determine if we're using compound components, render props, or simple props
+  const isRenderProps = isFunction(children);
+  const isCompoundComponent = !isRenderProps && React.Children.count(children) > 0;
 
   // Create context value
   const contextValue = useMemo(() => ({
     variant,
     size,
-    layout,
+    layout: currentLayout,
     withBorder,
     withShadow,
     withPadding,
     withGap,
-    withBackground
+    withBackground,
+    editMode,
+    visibleWidgets
   }), [
     variant,
     size,
-    layout,
+    currentLayout,
     withBorder,
     withShadow,
     withPadding,
     withGap,
-    withBackground
+    withBackground,
+    editMode,
+    visibleWidgets
   ]);
+  
+  // Build dashboard state object to pass to render function
+  const dashboardState = {
+    // Configuration props
+    variant,
+    size,
+    layout: currentLayout,
+    withHeader,
+    withSidebar,
+    withFooter,
+    withBorder,
+    withShadow,
+    withPadding,
+    withGap,
+    withBackground,
+    
+    // State
+    loading,
+    error,
+    editMode,
+    widgets,
+    visibleWidgets: widgets.filter(widget => visibleWidgets.includes(widget.id || '')),
+    hiddenWidgets: widgets.filter(widget => !visibleWidgets.includes(widget.id || '')),
+    
+    // Handlers
+    toggleLayout: (newLayout) => setCurrentLayout(newLayout),
+    toggleEditMode: () => setEditMode(prev => !prev),
+    setEditMode,
+    
+    // Widget operations
+    moveWidget: (id, direction) => {
+      // Implementation would go here
+      console.log(`Move widget ${id} ${direction}`);
+    },
+    
+    resizeWidget: (id, size) => {
+      // Implementation would go here
+      console.log(`Resize widget ${id} to ${size}`);
+    },
+    
+    hideWidget: (id) => {
+      setVisibleWidgets(prev => prev.filter(widgetId => widgetId !== id));
+    },
+    
+    showWidget: (id) => {
+      setVisibleWidgets(prev => [...prev, id]);
+    },
+    
+    // Sub-components
+    Header: DashboardHeader,
+    Sidebar: DashboardSidebar,
+    Main: DashboardMain,
+    Widgets: DashboardWidgets,
+    Widget: DashboardWidget,
+    Footer: DashboardFooter,
+    Empty: DashboardEmpty
+  };
 
   // Generate class names
   const classNames = [
@@ -90,11 +158,44 @@ const Dashboard = ({
     className
   ].filter(Boolean).join(' ');
 
+  // If using render props, call the children function with state
+  if (isRenderProps) {
+    return (
+      <DashboardContext.Provider value={contextValue}>
+        <div 
+          className={classNames} 
+          style={style} 
+          data-edit-mode={editMode ? 'true' : 'false'} 
+          data-layout={currentLayout}
+          {...rest}
+        >
+          {loading && (
+            <div className={`${DASHBOARD_CLASS_PREFIX}__loading-overlay`}>
+              <Spinner size="lg" />
+            </div>
+          )}
+          {error && (
+            <div className={`${DASHBOARD_CLASS_PREFIX}__error`}>
+              {typeof error === 'string' ? error : 'An error occurred while loading the dashboard.'}
+            </div>
+          )}
+          {children(dashboardState)}
+        </div>
+      </DashboardContext.Provider>
+    );
+  }
+  
   // If using compound components, render children within context provider
   if (isCompoundComponent) {
     return (
       <DashboardContext.Provider value={contextValue}>
-        <div className={classNames} style={style} {...rest}>
+        <div 
+          className={classNames} 
+          style={style} 
+          data-edit-mode={editMode ? 'true' : 'false'} 
+          data-layout={currentLayout}
+          {...rest}
+        >
           {loading && (
             <div className={`${DASHBOARD_CLASS_PREFIX}__loading-overlay`}>
               <Spinner size="lg" />
@@ -111,7 +212,7 @@ const Dashboard = ({
     );
   }
 
-  // Otherwise, render using props
+  // Otherwise, render using props (default implementation)
   return (
     <DashboardContext.Provider value={contextValue}>
       <div className={classNames} style={style} {...rest}>
@@ -185,7 +286,10 @@ Dashboard.propTypes = {
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   className: PropTypes.string,
   style: PropTypes.object,
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   title: PropTypes.string,
   description: PropTypes.string,
   widgets: PropTypes.arrayOf(

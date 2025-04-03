@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect, useCallback, useRef, forwardRef, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import { 
   SIDEBAR_VARIANTS,
   SIDEBAR_SIZES,
@@ -373,8 +374,40 @@ const Sidebar = forwardRef(({
     className || ''
   ].filter(Boolean).join(' ');
 
-  // Find and clone children with appropriate props
-  const renderChildren = () => {
+  // Get state and handlers to pass to render prop function
+  const sidebarState = {
+    // State properties
+    variant,
+    size,
+    position,
+    width,
+    state: currentState,
+    isExpanded: currentState === SIDEBAR_STATES.EXPANDED,
+    isCollapsed: currentState === SIDEBAR_STATES.COLLAPSED,
+    isHidden: currentState === SIDEBAR_STATES.HIDDEN,
+    isFixed: fixed,
+    isSticky: sticky,
+    isOverlay: overlay,
+    withShadow,
+    withBorder,
+    withBackdrop,
+    pushContent,
+    
+    // Handlers
+    toggleSidebar: handleToggle,
+    handleBackdropClick,
+    
+    // Component references
+    Header: SidebarHeader,
+    Content: SidebarContent,
+    Footer: SidebarFooter,
+    Item: SidebarItem,
+    Group: SidebarGroup,
+    Divider: SidebarDivider
+  };
+
+  // Find and clone children with appropriate props (for non-render-props usage)
+  const renderStandardChildren = () => {
     let header = null;
     let content = null;
     let footer = null;
@@ -439,6 +472,17 @@ const Sidebar = forwardRef(({
     );
   };
 
+  // Render using either standard children or render props pattern
+  const renderContent = () => {
+    // If children is a function, use render props pattern
+    if (isFunction(children)) {
+      return children(sidebarState);
+    }
+    
+    // Otherwise, use standard children approach
+    return renderStandardChildren();
+  };
+
   return (
     <aside 
       ref={ref}
@@ -454,7 +498,7 @@ const Sidebar = forwardRef(({
       data-width={width}
       {...props}
     >
-      {renderChildren()}
+      {renderContent()}
     </aside>
   );
 });
@@ -462,7 +506,10 @@ const Sidebar = forwardRef(({
 Sidebar.displayName = 'Sidebar';
 
 Sidebar.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   variant: PropTypes.oneOf(Object.values(SIDEBAR_VARIANTS)),
   size: PropTypes.oneOf(Object.values(SIDEBAR_SIZES)),
   position: PropTypes.oneOf(Object.values(SIDEBAR_POSITIONS)),

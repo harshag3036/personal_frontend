@@ -79,11 +79,12 @@
  * ```
  */
 
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { componentExtension } from '../../utilities';
 import { isResponsiveObject } from '../../utilities/responsive-props';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
+import { isFunction } from '../../utilities/typeChecks';
 import Box from '../../atoms/Box';
 import Text from '../../atoms/Text';
 import { 
@@ -141,6 +142,7 @@ const Select = forwardRef(({
   className = '',
   style = {},
   extensions = [],
+  children,
   ...props
 }, ref) => {
   // State for dropdown open/close
@@ -485,7 +487,83 @@ const Select = forwardRef(({
     </svg>
   );
   
-  // Use Box for consistent rendering and polymorphic support
+  // Create select state object for render props
+  const selectState = useMemo(() => ({
+    // Current state
+    isOpen: extendedIsOpen,
+    value: extendedValue,
+    options: extendedOptions,
+    highlightedIndex,
+    selectedOption,
+    
+    // Configuration
+    placeholder: extendedPlaceholder,
+    variant: extendedVariant,
+    size: extendedSize,
+    state: extendedState,
+    disabled: extendedDisabled,
+    required: extendedRequired,
+    fullWidth: extendedFullWidth,
+    
+    // Actions
+    toggle: extendedOnToggle,
+    select: handleOptionSelect,
+    setHighlightedIndex,
+    
+    // Refs
+    selectRef,
+    dropdownRef,
+    
+    // Helper methods
+    isOptionSelected: (option) => option.value === extendedValue,
+    isOptionHighlighted: (index) => index === highlightedIndex,
+    
+    // CSS Classes
+    selectWrapperClasses,
+    dropdownClasses: "ds-select-dropdown",
+    containerClasses: `ds-select-container ${extendedIsOpen ? 'ds-select-open' : ''}`,
+    
+    // Constants
+    variants: SELECT_VARIANTS,
+    sizes: SELECT_SIZES,
+    states: SELECT_STATES,
+  }), [
+    extendedIsOpen,
+    extendedValue,
+    extendedOptions,
+    highlightedIndex,
+    selectedOption,
+    extendedPlaceholder,
+    extendedVariant,
+    extendedSize,
+    extendedState,
+    extendedDisabled,
+    extendedRequired,
+    extendedFullWidth,
+    extendedOnToggle,
+    handleOptionSelect,
+    selectWrapperClasses
+  ]);
+  
+  // Check if using render props
+  const isRenderProps = isFunction(children);
+  
+  // If using render props, return children as a function with select state
+  if (isRenderProps) {
+    return (
+      <Box
+        as={extendedAs}
+        className={selectWrapperClasses} 
+        ref={combinedRef}
+        onKeyDown={handleKeyDown}
+        {...restProps}
+      >
+        {children(selectState)}
+      </Box>
+    );
+  }
+  
+  // Default rendering
   return (
     <Box
       as={extendedAs}
@@ -565,6 +643,14 @@ const Select = forwardRef(({
 Select.propTypes = {
   /** Element to render the Select as */
   ...polymorphicPropTypes,
+  /** 
+   * Select content or render props function
+   * If a function is provided, it will be called with the select state 
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   /** Array of options to display in the select */
   options: PropTypes.arrayOf(
     PropTypes.shape({

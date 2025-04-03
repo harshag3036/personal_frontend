@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect, useCallback, useRef, forwardRef, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import { 
   NAVIGATION_VARIANTS,
   NAVIGATION_SIZES,
@@ -256,6 +257,8 @@ const Navigation = forwardRef(({
 }, ref) => {
   const [isExpanded, setIsExpanded] = useState(expanded);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [expandedMenus, setExpandedMenus] = useState({});
+  const [activeRoute, setActiveRoute] = useState(null);
   const collapseId = useRef(`navigation-collapse-${Math.random().toString(36).substr(2, 9)}`);
 
   // Handle scroll effect for transparent navigation
@@ -275,6 +278,19 @@ const Navigation = forwardRef(({
   // Toggle mobile menu
   const handleToggle = useCallback(() => {
     setIsExpanded(prev => !prev);
+  }, []);
+  
+  // Toggle submenu expanded state
+  const toggleSubmenu = useCallback((menuId) => {
+    setExpandedMenus(prev => ({
+      ...prev,
+      [menuId]: !prev[menuId]
+    }));
+  }, []);
+  
+  // Set active route
+  const navigateTo = useCallback((routeId) => {
+    setActiveRoute(routeId);
   }, []);
 
   // Determine position class
@@ -301,8 +317,44 @@ const Navigation = forwardRef(({
     className || ''
   ].filter(Boolean).join(' ');
 
-  // Find and clone children with appropriate props
-  const renderChildren = () => {
+  // Build navigation state object for render props
+  const navigationState = {
+    // Configuration
+    variant,
+    size,
+    position,
+    alignment,
+    breakpoint,
+    collapsible,
+    withShadow,
+    withBorder,
+    transparent,
+    fixed,
+    sticky,
+    
+    // State
+    isExpanded,
+    isScrolled,
+    expandedMenus,
+    activeRoute,
+    
+    // Handlers
+    toggleExpand: handleToggle,
+    toggleSubmenu,
+    navigateTo,
+    
+    // Sub-components
+    Brand: NavigationBrand,
+    Items: NavigationItems,
+    Item: NavigationItem,
+    Actions: NavigationActions
+  };
+  
+  // Determine if we're using render props
+  const isRenderProps = isFunction(children);
+  
+  // Find and clone children with appropriate props if not using render props
+  const renderCompoundChildren = () => {
     let brand = null;
     let items = null;
     let actions = null;
@@ -346,14 +398,34 @@ const Navigation = forwardRef(({
     );
   };
 
+  // If using render props, pass state object to children function
+  if (isRenderProps) {
+    return (
+      <nav 
+        ref={ref}
+        className={navigationClasses}
+        data-expanded={isExpanded ? 'true' : 'false'}
+        data-scrolled={isScrolled ? 'true' : 'false'}
+        {...props}
+      >
+        <div className={NAVIGATION_CLASS_NAMES.CONTAINER}>
+          {children(navigationState)}
+        </div>
+      </nav>
+    );
+  }
+
+  // Otherwise use compound components
   return (
     <nav 
       ref={ref}
       className={navigationClasses}
+      data-expanded={isExpanded ? 'true' : 'false'}
+      data-scrolled={isScrolled ? 'true' : 'false'}
       {...props}
     >
       <div className={NAVIGATION_CLASS_NAMES.CONTAINER}>
-        {renderChildren()}
+        {renderCompoundChildren()}
       </div>
     </nav>
   );
@@ -362,7 +434,10 @@ const Navigation = forwardRef(({
 Navigation.displayName = 'Navigation';
 
 Navigation.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   variant: PropTypes.oneOf(Object.values(NAVIGATION_VARIANTS)),
   size: PropTypes.oneOf(Object.values(NAVIGATION_SIZES)),
   position: PropTypes.oneOf(Object.values(NAVIGATION_POSITIONS)),

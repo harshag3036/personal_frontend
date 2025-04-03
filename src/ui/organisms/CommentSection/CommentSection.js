@@ -4,9 +4,10 @@
  * A comprehensive component for displaying and managing comments and discussions.
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { componentExtension } from '../../utilities';
+import { isFunction } from '../../utilities/typeChecks';
 import { Box, Text, Button, Avatar, Icon, Flex, Stack } from '../../atoms';
 import { Dropdown, Menu, Textarea } from '../../molecules';
 import {
@@ -322,6 +323,7 @@ const CommentSection = ({
   disabled = false,
   className = '',
   extensions = [],
+  children,
   ...props
 }) => {
   // State
@@ -421,6 +423,76 @@ const CommentSection = ({
     ...restProps
   } = extendedProps;
   
+  // Build comment section state object for render props
+  const commentSectionState = useMemo(() => ({
+    // Data
+    comments,
+    sortedComments,
+    
+    // Configuration
+    title: extendedTitle,
+    subtitle: extendedSubtitle,
+    variant: extendedVariant,
+    size: extendedSize,
+    readOnly: extendedReadOnly,
+    disabled: extendedDisabled,
+    sortOptions,
+    maxCommentLength,
+    
+    // State
+    loading,
+    error,
+    commentText,
+    sortOption,
+    isSubmitting,
+    
+    // Handlers
+    setCommentText,
+    handleSortChange,
+    handleSubmitComment,
+    onAddComment,
+    onEditComment,
+    onDeleteComment,
+    onReplyToComment,
+    onLikeComment,
+    onSortChange,
+    
+    // Components
+    Comment,
+    
+    // Utility functions
+    sortComments,
+    
+    // Constants
+    commentTypes: COMMENT_SECTION_COMMENT_TYPES,
+    sortOptionTypes: COMMENT_SECTION_SORT_OPTIONS,
+    
+    // CSS classes
+    headerClass: COMMENT_SECTION_HEADER_CLASS,
+    bodyClass: COMMENT_SECTION_BODY_CLASS,
+    footerClass: COMMENT_SECTION_FOOTER_CLASS,
+    titleClass: COMMENT_SECTION_TITLE_CLASS,
+    subtitleClass: COMMENT_SECTION_SUBTITLE_CLASS,
+    actionsClass: COMMENT_SECTION_ACTIONS_CLASS,
+    commentClass: COMMENT_SECTION_COMMENT_CLASS,
+    formClass: COMMENT_SECTION_FORM_CLASS,
+    formTextareaClass: COMMENT_SECTION_FORM_TEXTAREA_CLASS,
+    formActionsClass: COMMENT_SECTION_FORM_ACTIONS_CLASS,
+    emptyClass: COMMENT_SECTION_EMPTY_CLASS,
+    loadingClass: COMMENT_SECTION_LOADING_CLASS,
+    errorClass: COMMENT_SECTION_ERROR_CLASS
+  }), [
+    comments, sortedComments, extendedTitle, extendedSubtitle, 
+    extendedVariant, extendedSize, extendedReadOnly, extendedDisabled,
+    sortOptions, maxCommentLength, loading, error, commentText, sortOption,
+    isSubmitting, setCommentText, handleSortChange, handleSubmitComment,
+    onAddComment, onEditComment, onDeleteComment, onReplyToComment,
+    onLikeComment, onSortChange, sortComments
+  ]);
+  
+  // Determine if we're using render props
+  const isRenderProps = isFunction(children);
+  
   // Combine class names
   const sectionClasses = [
     COMMENT_SECTION_CLASS,
@@ -469,6 +541,16 @@ const CommentSection = ({
     );
   }
 
+  // If using render props, call the children function with the comment section state
+  if (isRenderProps) {
+    return (
+      <div className={sectionClasses} {...restProps}>
+        {children(commentSectionState)}
+      </div>
+    );
+  }
+  
+  // Otherwise, use standard component structure
   return (
     <div className={sectionClasses} {...restProps}>
       {/* Header */}
@@ -565,6 +647,11 @@ const CommentSection = ({
 };
 
 CommentSection.propTypes = {
+  /** Children nodes or render props function */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]),
   /** Section title */
   title: PropTypes.string,
   /** Section subtitle */

@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { isFunction } from '../../utilities/typeChecks';
 import { ACCORDION_VARIANTS, ACCORDION_SIZES } from './constants';
 import './Accordion.css';
 
@@ -88,7 +89,46 @@ const Accordion = ({
     variant,
     size,
   };
+
+  // Create accordion state object for render props
+  const accordionState = useMemo(() => ({
+    // State
+    expandedItems,
+    
+    // Configuration
+    allowMultiple,
+    variant,
+    size,
+    
+    // Actions
+    toggleItem,
+    
+    // CSS Classes
+    accordionClasses,
+    
+    // Constants
+    variants: ACCORDION_VARIANTS,
+    sizes: ACCORDION_SIZES
+  }), [expandedItems, allowMultiple, variant, size, accordionClasses]);
   
+  // Check if using render props
+  const isRenderProps = isFunction(children);
+  
+  // If using render props, return children as a function with accordion state
+  if (isRenderProps) {
+    return (
+      <AccordionContext.Provider value={contextValue}>
+        <div 
+          className={accordionClasses}
+          {...restProps}
+        >
+          {children(accordionState)}
+        </div>
+      </AccordionContext.Provider>
+    );
+  }
+  
+  // Default rendering with compound components
   return (
     <AccordionContext.Provider value={contextValue}>
       <div 
@@ -108,8 +148,14 @@ const Accordion = ({
 };
 
 Accordion.propTypes = {
-  /** Accordion items */
-  children: PropTypes.node.isRequired,
+  /** 
+   * Accordion items or render props function
+   * If a function is provided, it will be called with the accordion state
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ]).isRequired,
   /** Index or array of indices of the expanded items by default */
   defaultIndex: PropTypes.oneOfType([
     PropTypes.number,

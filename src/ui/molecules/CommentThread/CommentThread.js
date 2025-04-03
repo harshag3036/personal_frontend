@@ -265,7 +265,31 @@ const CommentItem = ({
 /**
  * CommentThread Component
  * 
- * Displays a comment and its nested replies
+ * Displays a comment and its nested replies. Also supports render props for
+ * complete customization of comment appearance and interactions.
+ * 
+ * @example
+ * ```jsx
+ * // Using render props for custom comment thread UI
+ * <CommentThread
+ *   comment={comment}
+ *   replies={replies}
+ *   onReply={handleReply}
+ *   onEdit={handleEdit}
+ *   onDelete={handleDelete}
+ * >
+ *   {(threadState) => (
+ *     <YourCustomCommentUI
+ *       comment={threadState.comment}
+ *       replies={threadState.replies}
+ *       isEditing={threadState.isEditing}
+ *       onToggleEdit={threadState.handleToggleEdit}
+ *       onSubmitEdit={threadState.handleEdit}
+ *       onReply={threadState.handleReply}
+ *     />
+ *   )}
+ * </CommentThread>
+ * ```
  * 
  * @param {Object} props - Component props
  * @returns {JSX.Element} - Rendered component
@@ -294,8 +318,15 @@ const CommentThread = ({
   allowReport = DEFAULT_PROPS.allowReport,
   allowReactions = DEFAULT_PROPS.allowReactions,
   className,
+  children,
   ...restProps
 }) => {
+  // State for editing and replying
+  const [isEditing, setIsEditing] = useState(false);
+  const [isReplying, setIsReplying] = useState(showReplyForm);
+  const [editContent, setEditContent] = useState(comment?.content || '');
+  const [replyContent, setReplyContent] = useState('');
+
   // Apply responsive props
   const responsiveProps = useResponsiveProps({
     variant,
@@ -318,6 +349,116 @@ const CommentThread = ({
   const effectiveDepth = Math.min(depth, responsiveProps.maxNestingDepth);
   const canNestFurther = effectiveDepth < responsiveProps.maxNestingDepth;
 
+  // Handle editing
+  const handleToggleEdit = () => setIsEditing(!isEditing);
+  const handleEditContentChange = (e) => setEditContent(e.target.value);
+  const handleEdit = () => {
+    if (onEdit && editContent.trim()) {
+      onEdit(comment.id, editContent);
+      setIsEditing(false);
+    }
+  };
+
+  // Handle replying
+  const handleToggleReply = () => setIsReplying(!isReplying);
+  const handleReplyContentChange = (e) => setReplyContent(e.target.value);
+  const handleReply = () => {
+    if (onReply && replyContent.trim()) {
+      onReply(comment.id, replyContent);
+      setReplyContent('');
+      setIsReplying(false);
+    }
+  };
+
+  // Handle reactions
+  const handleReaction = (reactionType) => {
+    if (onReaction) {
+      onReaction(comment.id, reactionType);
+    }
+  };
+
+  // Format date utility
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffMinutes = Math.floor(diffTime / (1000 * 60));
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffMinutes < 60) {
+      return `${diffMinutes} ${diffMinutes === 1 ? 'minute' : 'minutes'} ago`;
+    } else if (diffHours < 24) {
+      return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+    } else if (diffDays < 7) {
+      return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
+  };
+
+  // Check if user has reacted with a specific reaction
+  const hasReacted = (reactionType) => {
+    return comment.reactions && 
+           comment.reactions[reactionType] && 
+           comment.reactions[reactionType].users && 
+           comment.reactions[reactionType].users.includes(comment.currentUserId || '');
+  };
+
+  // Create thread state for render props
+  const threadState = {
+    // Comment data
+    comment,
+    replies,
+    depth: effectiveDepth,
+    canNestFurther,
+    
+    // UI state
+    isEditing,
+    isReplying,
+    editContent,
+    replyContent,
+    
+    // Configuration
+    variant: responsiveProps.variant,
+    size: responsiveProps.size,
+    connectorType: responsiveProps.connectorType,
+    connectorColor: responsiveProps.connectorColor,
+    maxNestingDepth: responsiveProps.maxNestingDepth,
+    showReactions: responsiveProps.showReactions,
+    showTimestamp: responsiveProps.showTimestamp,
+    showAuthor: responsiveProps.showAuthor,
+    allowReply: responsiveProps.allowReply && canNestFurther,
+    allowEdit: responsiveProps.allowEdit,
+    allowDelete: responsiveProps.allowDelete,
+    allowReport: responsiveProps.allowReport,
+    allowReactions: responsiveProps.allowReactions,
+    
+    // User permissions
+    isAuthor: comment.userId === (comment.currentUserId || ''),
+    
+    // Handler methods
+    handleToggleEdit,
+    handleEditContentChange,
+    handleEdit,
+    handleToggleReply,
+    handleReplyContentChange,
+    handleReply,
+    handleReaction,
+    handleDelete: () => onDelete && onDelete(comment.id),
+    handleReport: () => onReport && onReport(comment.id),
+    
+    // Utility functions
+    formatDate,
+    hasReacted,
+  };
+
+  // If children is a function, use render props pattern
+  if (typeof children === 'function') {
+    return children(threadState);
+  }
+
+  // Otherwise, render the default UI
   return (
     <Box className={`ui-comment-thread ${className || ''}`} {...restProps}>
       <CommentItem
@@ -453,6 +594,8 @@ CommentThread.propTypes = {
   allowReactions: PropTypes.bool,
   /** Additional class name */
   className: PropTypes.string,
+  /** Render props function for custom UI */
+  children: PropTypes.func,
 };
 
 CommentThread.defaultProps = DEFAULT_PROPS;
