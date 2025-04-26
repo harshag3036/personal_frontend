@@ -1,65 +1,52 @@
 /**
  * Input Component Constants
  * 
- * This file contains constants used by the Input component.
+ * This file defines constants used by the Input component.
  */
 
-// Import breakpoints from responsive-props utility
-import { breakpoints } from '../../utilities/responsive-props';
-
-// Export Input CSS class for external use
+/**
+ * Main CSS class name for the Input component
+ */
 export const INPUT_CLASS = 'ui-input';
 
-// Export Input variants for external use
-export const INPUT_VARIANTS = {
-  DEFAULT: 'default',
-  FILLED: 'filled',
-  OUTLINED: 'outlined',
-};
-
-// Export Input sizes for external use
+/**
+ * Input component sizes
+ */
 export const INPUT_SIZES = {
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
+  XS: 'xs',
+  SM: 'sm',
+  MD: 'md',
+  LG: 'lg',
+  XL: 'xl',
 };
 
-// Export Input states for external use
-export const INPUT_STATES = {
-  DEFAULT: 'default',
-  SUCCESS: 'success',
-  ERROR: 'error',
-  WARNING: 'warning',
-};
-
-// Export Input modifiers for external use
-export const INPUT_MODIFIERS = {
-  // Size modifiers
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
-  
-  // Variant modifiers
-  DEFAULT: 'default',
+/**
+ * Input component variants
+ */
+export const INPUT_VARIANTS = {
+  OUTLINE: 'outline',
   FILLED: 'filled',
-  OUTLINED: 'outlined',
-  
-  // State modifiers
-  DEFAULT_STATE: 'default',
-  SUCCESS: 'success',
-  ERROR: 'error',
-  WARNING: 'warning',
-  
-  // Layout modifiers
-  FULL_WIDTH: 'full-width',
-  DISABLED: 'disabled',
-  
-  // Responsive modifiers
-  RESPONSIVE: 'responsive',
-  RESPONSIVE_SM: 'responsive-sm',
-  RESPONSIVE_MD: 'responsive-md',
-  RESPONSIVE_LG: 'responsive-lg',
+  FLUSHED: 'flushed',
+  UNSTYLED: 'unstyled',
 };
 
-// Export breakpoints from responsive-props utility
-export const INPUT_BREAKPOINTS = breakpoints;
+/**
+ * Common input types
+ */
+export const INPUT_TYPES = {
+  TEXT: 'text',
+  PASSWORD: 'password',
+  EMAIL: 'email',
+  NUMBER: 'number',
+  TEL: 'tel',
+  URL: 'url',
+  SEARCH: 'search',
+  DATE: 'date',
+  TIME: 'time',
+  DATETIME_LOCAL: 'datetime-local',
+  MONTH: 'month',
+  WEEK: 'week',
+  COLOR: 'color',
+  FILE: 'file',
+  HIDDEN: 'hidden',
+};

@@ -1,91 +1,203 @@
 /**
  * Stack Component Styles
  * 
- * This file contains styles for the Stack component.
- * The Stack component is a specialized version of Flex with a simpler API.
+ * This file contains styles for the Stack component with improved support
+ * for stacking, spacing, and dividers.
  */
 
-/* Base Stack Styles */
+/* Base Stack styles */
 .ui-stack {
-  width: 100%;
+  display: flex;
   box-sizing: border-box;
+  width: 100%;
 }
 
-/* Stack Directions */
-.ui-stack--vertical {
-  /* Styles are inherited from Flex component */
-  flex-direction: column;
-}
-
-.ui-stack--horizontal {
-  /* Styles are inherited from Flex component */
+/* Stack directions */
+.ui-stack--row {
   flex-direction: row;
 }
 
-/* Dividers for vertical stack */
-.ui-stack--vertical.ui-stack--dividers > *:not(:last-child) {
-  border-bottom: 1px solid var(--color-border-medium, #e0e0e0);
-  padding-bottom: var(--spacing-md, 1rem);
+.ui-stack--column {
+  flex-direction: column;
 }
 
-/* Dividers for horizontal stack */
-.ui-stack--horizontal.ui-stack--dividers > *:not(:last-child) {
-  border-right: 1px solid var(--color-border-medium, #e0e0e0);
-  padding-right: var(--spacing-md, 1rem);
+.ui-stack--row-reverse {
+  flex-direction: row-reverse;
 }
 
-/* Support for custom responsive styles */
-.ui-stack[style*="--responsive-styles"] {
-  /* This selector targets Stack components with responsive styles */
-  /* The actual styles are applied via inline style in the component */
-  display: flex; /* Ensure the element maintains flex display */
+.ui-stack--column-reverse {
+  flex-direction: column-reverse;
 }
 
-/* Responsive Adjustments - using the same breakpoints as responsive-props.js */
-@media (max-width: 576px) { /* xs */
-  /* Force horizontal stacks to become vertical on small screens */
-  .ui-stack--horizontal {
+/* Stack items */
+.ui-stack__item {
+  position: relative;
+  /* Dividers will be positioned relative to this */
+}
+
+/* Stack with dividers */
+.ui-stack--dividers .ui-stack__divider {
+  background-color: var(--color-border-light);
+}
+
+/* Row direction dividers */
+.ui-stack--row.ui-stack--dividers .ui-stack__divider {
+  position: absolute;
+  top: 0;
+  right: calc(var(--spacing-md) / -2);
+  width: 1px;
+  height: 100%;
+  transform: translateX(50%);
+  z-index: 1;
+}
+
+/* Column direction dividers */
+.ui-stack--column.ui-stack--dividers .ui-stack__divider {
+  position: absolute;
+  bottom: calc(var(--spacing-md) / -2);
+  left: 0;
+  height: 1px;
+  width: 100%;
+  transform: translateY(50%);
+  z-index: 1;
+}
+
+/* Spacing variations - for row direction */
+.ui-stack--row.ui-stack--spacing-none > .ui-stack__item:not(:last-child) {
+  margin-right: 0;
+}
+
+.ui-stack--row.ui-stack--spacing-xs > .ui-stack__item:not(:last-child) {
+  margin-right: var(--spacing-xs);
+}
+
+.ui-stack--row.ui-stack--spacing-sm > .ui-stack__item:not(:last-child) {
+  margin-right: var(--spacing-sm);
+}
+
+.ui-stack--row.ui-stack--spacing-md > .ui-stack__item:not(:last-child) {
+  margin-right: var(--spacing-md);
+}
+
+.ui-stack--row.ui-stack--spacing-lg > .ui-stack__item:not(:last-child) {
+  margin-right: var(--spacing-lg);
+}
+
+.ui-stack--row.ui-stack--spacing-xl > .ui-stack__item:not(:last-child) {
+  margin-right: var(--spacing-xl);
+}
+
+.ui-stack--row.ui-stack--spacing-2xl > .ui-stack__item:not(:last-child) {
+  margin-right: var(--spacing-2xl);
+}
+
+.ui-stack--row.ui-stack--spacing-3xl > .ui-stack__item:not(:last-child) {
+  margin-right: var(--spacing-3xl);
+}
+
+/* Spacing variations - for column direction */
+.ui-stack--column.ui-stack--spacing-none > .ui-stack__item:not(:last-child) {
+  margin-bottom: 0;
+}
+
+.ui-stack--column.ui-stack--spacing-xs > .ui-stack__item:not(:last-child) {
+  margin-bottom: var(--spacing-xs);
+}
+
+.ui-stack--column.ui-stack--spacing-sm > .ui-stack__item:not(:last-child) {
+  margin-bottom: var(--spacing-sm);
+}
+
+.ui-stack--column.ui-stack--spacing-md > .ui-stack__item:not(:last-child) {
+  margin-bottom: var(--spacing-md);
+}
+
+.ui-stack--column.ui-stack--spacing-lg > .ui-stack__item:not(:last-child) {
+  margin-bottom: var(--spacing-lg);
+}
+
+.ui-stack--column.ui-stack--spacing-xl > .ui-stack__item:not(:last-child) {
+  margin-bottom: var(--spacing-xl);
+}
+
+.ui-stack--column.ui-stack--spacing-2xl > .ui-stack__item:not(:last-child) {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.ui-stack--column.ui-stack--spacing-3xl > .ui-stack__item:not(:last-child) {
+  margin-bottom: var(--spacing-3xl);
+}
+
+/* Responsive spacing for dividers */
+.ui-stack--row.ui-stack--spacing-xs .ui-stack__divider {
+  right: calc(var(--spacing-xs) / -2);
+}
+
+.ui-stack--row.ui-stack--spacing-sm .ui-stack__divider {
+  right: calc(var(--spacing-sm) / -2);
+}
+
+.ui-stack--row.ui-stack--spacing-md .ui-stack__divider {
+  right: calc(var(--spacing-md) / -2);
+}
+
+.ui-stack--row.ui-stack--spacing-lg .ui-stack__divider {
+  right: calc(var(--spacing-lg) / -2);
+}
+
+.ui-stack--row.ui-stack--spacing-xl .ui-stack__divider {
+  right: calc(var(--spacing-xl) / -2);
+}
+
+.ui-stack--column.ui-stack--spacing-xs .ui-stack__divider {
+  bottom: calc(var(--spacing-xs) / -2);
+}
+
+.ui-stack--column.ui-stack--spacing-sm .ui-stack__divider {
+  bottom: calc(var(--spacing-sm) / -2);
+}
+
+.ui-stack--column.ui-stack--spacing-md .ui-stack__divider {
+  bottom: calc(var(--spacing-md) / -2);
+}
+
+.ui-stack--column.ui-stack--spacing-lg .ui-stack__divider {
+  bottom: calc(var(--spacing-lg) / -2);
+}
+
+.ui-stack--column.ui-stack--spacing-xl .ui-stack__divider {
+  bottom: calc(var(--spacing-xl) / -2);
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  /* Stack items in column on mobile by default */
+  .ui-stack[data-stack-responsive="true"] {
     flex-direction: column;
   }
   
-  /* Update dividers for responsive horizontal stacks */
-  .ui-stack--horizontal.ui-stack--dividers > *:not(:last-child) {
-    border-right: none;
-    padding-right: 0;
-    border-bottom: 1px solid var(--color-border-medium, #e0e0e0);
-    padding-bottom: var(--spacing-md, 1rem);
-  }
-  
-  /* Responsive stack */
-  .ui-stack--responsive {
-    flex-direction: column;
-  }
-  
-  .ui-stack--responsive.ui-stack--dividers > *:not(:last-child) {
-    border-right: none;
-    padding-right: 0;
-    border-bottom: 1px solid var(--color-border-medium, #e0e0e0);
-    padding-bottom: var(--spacing-md, 1rem);
+  /* Adjust dividers for responsive stacks */
+  .ui-stack[data-stack-responsive="true"].ui-stack--row.ui-stack--dividers .ui-stack__divider {
+    width: 100%;
+    height: 1px;
+    top: auto;
+    right: 0;
+    bottom: calc(var(--spacing-md) / -2);
+    transform: translateY(50%);
   }
 }
 
-@media (min-width: 576px) and (max-width: 767px) { /* sm */
-  .ui-stack--responsive-sm {
-    /* Specific styles for small screens */
-    gap: var(--spacing-sm);
-  }
+/* Stack with hidden dividers */
+.ui-stack--dividers.ui-stack--hidden-dividers .ui-stack__divider {
+  opacity: 0;
 }
 
-@media (min-width: 768px) and (max-width: 991px) { /* md */
-  .ui-stack--responsive-md {
-    /* Specific styles for medium screens */
-    gap: var(--spacing-md);
-  }
+/* Hover effect to show dividers */
+.ui-stack--dividers.ui-stack--hover-dividers:hover .ui-stack__divider {
+  opacity: 1;
 }
 
-@media (min-width: 992px) { /* lg */
-  .ui-stack--responsive-lg {
-    /* Specific styles for large screens */
-    gap: var(--spacing-lg);
-  }
+/* Support for Stack that maintains equal size for children */
+.ui-stack--equal > .ui-stack__item {
+  flex: 1;
 }

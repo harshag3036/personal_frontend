@@ -1,8 +1,7 @@
 /**
  * Badge Component
  * 
- * A customizable badge component with support for variants, sizes, and responsive props.
- * This component can be rendered as different HTML elements using the `as` prop.
+ * A customizable badge component for statuses, counts, and labels.
  */
 
 export { default } from './Badge';
@@ -11,7 +10,5 @@ export { default } from './Badge';
 export {
   BADGE_CLASS,
   BADGE_VARIANTS,
-  BADGE_SIZES,
-  BADGE_MODIFIERS,
-  BADGE_BREAKPOINTS
+  BADGE_SIZES
 } from './constants';

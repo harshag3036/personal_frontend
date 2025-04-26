@@ -156,6 +156,68 @@
   gap: 16px;
 }
 
+/* Notification Button Styling */
+.notification-button {
+  padding: 6px !important;
+  opacity: 0.85;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  color: rgb(51, 65, 85) !important;
+  position: relative;
+  border-radius: 50% !important;
+  transform: scale(0.9);
+}
+
+.notification-button .MuiSvgIcon-root {
+  font-size: 1.7rem !important;
+  stroke-width: 0.3px;
+  stroke: currentColor;
+  filter: saturate(0.9);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@keyframes pulseNotification {
+  0% {
+    transform: scale(0.95);
+    filter: saturate(0.9);
+  }
+  50% {
+    transform: scale(1);
+    filter: saturate(1.1);
+  }
+  100% {
+    transform: scale(0.95);
+    filter: saturate(0.9);
+  }
+}
+
+.notification-button:hover {
+  opacity: 1;
+  background: transparent !important;
+  color: rgb(51, 65, 85) !important;
+}
+
+.notification-button:hover .MuiSvgIcon-root {
+  animation: pulseNotification 3s ease-in-out infinite;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 50%;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
 /* Theme Switcher Styling */
 .profile-section .ds-button {
   padding: 6px 12px !important;
@@ -303,6 +365,83 @@
   opacity: 1;
 }
 
+/* Notification Menu Styling */
+.notification-menu .MuiPaper-root {
+  background: rgba(255, 255, 255, 0.97) !important;
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08),
+              0 2px 8px rgba(15, 23, 42, 0.03) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 16px !important;
+  margin-top: 12px !important;
+  min-width: 320px !important;
+  max-width: 90vw !important;
+  max-height: 480px !important;
+  overflow: hidden !important;
+  backdrop-filter: blur(10px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(160%) !important;
+  transform-origin: top center;
+  animation: menuReveal 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-header {
+  padding: 16px 20px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgb(30, 41, 59);
+}
+
+.notification-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 16px 20px !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+  transition: all 0.3s ease;
+}
+
+.notification-item:hover {
+  background-color: rgba(248, 250, 252, 0.8);
+}
+
+.notification-item-unread {
+  position: relative;
+}
+
+.notification-item-unread::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+}
+
+.notification-footer {
+  padding: 12px 20px;
+  text-align: center;
+  border-top: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.notification-footer a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
 @media (max-width: 600px) {
   .toolbar {
     padding: 8px 16px !important;
@@ -318,5 +457,10 @@
 
   .nav-button .MuiButton-startIcon {
     margin-right: 4px !important;
+  }
+
+  .notification-menu .MuiPaper-root {
+    min-width: 280px !important;
+    max-width: 95vw !important;
   }
 }

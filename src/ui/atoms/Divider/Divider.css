@@ -2,91 +2,188 @@
  * Divider Component Styles
  * 
  * This file contains styles for the Divider component.
- * The Divider component is used to visually separate content.
+ * The Divider component is used to separate content areas.
  */
 
 /* Base Divider Styles */
 .ui-divider {
-  border: none;
-  margin: 0;
-  padding: 0;
-  flex-shrink: 0;
   box-sizing: border-box;
+  margin: var(--spacing-md) 0;
+  background-color: var(--color-border-light);
+  border: none;
+  position: relative;
 }
 
-/* Divider Orientations */
+/* Horizontal Divider */
 .ui-divider--horizontal {
-  display: block;
   width: 100%;
+  border-top-width: 0;
+  border-bottom-width: 0;
+  border-top-style: none;
+  border-bottom-style: none;
 }
 
+/* Vertical Divider */
 .ui-divider--vertical {
   display: inline-block;
-  align-self: stretch;
   height: 100%;
+  margin: 0 var(--spacing-md);
+  border-left-width: 0;
+  border-right-width: 0;
+  border-left-style: none;
+  border-right-style: none;
 }
 
-/* Divider with text */
-.ui-divider--with-text {
+/* Divider Sizes for Horizontal */
+.ui-divider--horizontal.ui-divider--xs {
+  height: 1px;
+}
+
+.ui-divider--horizontal.ui-divider--sm {
+  height: 2px;
+}
+
+.ui-divider--horizontal.ui-divider--md {
+  height: 4px;
+}
+
+.ui-divider--horizontal.ui-divider--lg {
+  height: 6px;
+}
+
+.ui-divider--horizontal.ui-divider--xl {
+  height: 8px;
+}
+
+/* Divider Sizes for Vertical */
+.ui-divider--vertical.ui-divider--xs {
+  width: 1px;
+}
+
+.ui-divider--vertical.ui-divider--sm {
+  width: 2px;
+}
+
+.ui-divider--vertical.ui-divider--md {
+  width: 4px;
+}
+
+.ui-divider--vertical.ui-divider--lg {
+  width: 6px;
+}
+
+.ui-divider--vertical.ui-divider--xl {
+  width: 8px;
+}
+
+/* Divider Variants */
+.ui-divider--solid {
+  /* Already has default styling */
+}
+
+.ui-divider--dashed {
+  background-image: linear-gradient(
+    to right,
+    var(--color-border-light) 50%,
+    transparent 50%
+  );
+  background-size: 16px 1px;
+  background-repeat: repeat-x;
+}
+
+.ui-divider--vertical.ui-divider--dashed {
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-border-light) 50%,
+    transparent 50%
+  );
+  background-size: 1px 16px;
+  background-repeat: repeat-y;
+}
+
+.ui-divider--dotted {
+  background-image: linear-gradient(
+    to right,
+    var(--color-border-light) 50%,
+    transparent 50%
+  );
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+}
+
+.ui-divider--vertical.ui-divider--dotted {
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-border-light) 50%,
+    transparent 50%
+  );
+  background-size: 1px 8px;
+  background-repeat: repeat-y;
+}
+
+/* Divider with Label */
+.ui-divider--with-label {
   display: flex;
   align-items: center;
-  text-align: center;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  border: 0;
+  background: none;
+  margin: var(--spacing-lg) 0;
+  height: auto;
 }
 
-.ui-divider--with-text::before,
-.ui-divider--with-text::after {
+.ui-divider--with-label::before,
+.ui-divider--with-label::after {
   content: '';
+}
+
+.ui-divider__line {
   flex: 1;
-  border-bottom: 1px solid var(--color-border-medium, #e0e0e0);
+  height: 1px;
+  background-color: var(--color-border-light);
 }
 
-.ui-divider--with-text::before {
-  margin-right: var(--spacing-md, 1rem);
+.ui-divider__label {
+  padding: 0 var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
-.ui-divider--with-text::after {
-  margin-left: var(--spacing-md, 1rem);
+/* Different theme support */
+.theme-dark .ui-divider {
+  background-color: var(--color-border-dark, #555);
 }
 
-/* Support for custom responsive styles */
-.ui-divider[style*="--responsive-styles"] {
-  /* This selector targets Divider components with responsive styles */
-  /* The actual styles are applied via inline style in the component */
-  display: block; /* Ensure the element maintains proper display */
+.theme-dark .ui-divider__line {
+  background-color: var(--color-border-dark, #555);
 }
 
-/* Responsive Adjustments - using the same breakpoints as responsive-props.js */
-@media (max-width: 576px) { /* xs */
-  .ui-divider--responsive {
-    /* Specific styles for extra small screens */
-    margin-top: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
+.theme-dark .ui-divider--dashed,
+.theme-dark .ui-divider--dotted {
+  background-image: linear-gradient(
+    to right,
+    var(--color-border-dark, #555) 50%,
+    transparent 50%
+  );
+}
+
+.theme-dark .ui-divider--vertical.ui-divider--dashed,
+.theme-dark .ui-divider--vertical.ui-divider--dotted {
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-border-dark, #555) 50%,
+    transparent 50%
+  );
+}
+
+/* Responsive support */
+@media (max-width: 576px) {
+  .ui-divider--with-label {
+    margin: var(--spacing-md) 0;
   }
-}
-
-@media (min-width: 576px) and (max-width: 767px) { /* sm */
-  .ui-divider--responsive-sm {
-    /* Specific styles for small screens */
-    margin-top: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) { /* md */
-  .ui-divider--responsive-md {
-    /* Specific styles for medium screens */
-    margin-top: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
-  }
-}
-
-@media (min-width: 992px) { /* lg */
-  .ui-divider--responsive-lg {
-    /* Specific styles for large screens */
-    margin-top: var(--spacing-xl);
-    margin-bottom: var(--spacing-xl);
+  
+  .ui-divider__label {
+    padding: 0 var(--spacing-sm);
+    font-size: var(--font-size-xs);
   }
 }

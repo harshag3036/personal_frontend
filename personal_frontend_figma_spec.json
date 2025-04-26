@@ -1,0 +1,498 @@
+{
+  "document": {
+    "id": "personal-frontend-app",
+    "name": "Personal Frontend App",
+    "type": "DOCUMENT",
+    "children": [
+      {
+        "id": "design-system",
+        "name": "Design System",
+        "type": "CANVAS",
+        "children": [
+          {
+            "id": "colors",
+            "name": "Colors",
+            "type": "FRAME",
+            "backgroundColor": {"r": 1, "g": 1, "b": 1, "a": 1},
+            "children": [
+              {
+                "id": "wisdom-500",
+                "name": "Wisdom 500",
+                "type": "RECTANGLE",
+                "x": 0,
+                "y": 0,
+                "width": 100,
+                "height": 100,
+                "fills": [{"type": "SOLID", "color": {"r": 0.078, "g": 0.259, "b": 0.447}}]
+              },
+              {
+                "id": "harmony-500",
+                "name": "Harmony 500",
+                "type": "RECTANGLE",
+                "x": 120,
+                "y": 0,
+                "width": 100,
+                "height": 100,
+                "fills": [{"type": "SOLID", "color": {"r": 0.169, "g": 0.478, "b": 0.388}}]
+              },
+              {
+                "id": "compassion-500",
+                "name": "Compassion 500",
+                "type": "RECTANGLE",
+                "x": 240,
+                "y": 0,
+                "width": 100,
+                "height": 100,
+                "fills": [{"type": "SOLID", "color": {"r": 0.627, "g": 0.188, "b": 0.412}}]
+              },
+              {
+                "id": "truth-500",
+                "name": "Truth 500",
+                "type": "RECTANGLE",
+                "x": 360,
+                "y": 0,
+                "width": 100,
+                "height": 100,
+                "fills": [{"type": "SOLID", "color": {"r": 0.29, "g": 0.173, "b": 0.561}}]
+              }
+            ]
+          },
+          {
+            "id": "typography",
+            "name": "Typography",
+            "type": "FRAME",
+            "x": 0,
+            "y": 120,
+            "backgroundColor": {"r": 1, "g": 1, "b": 1, "a": 1},
+            "children": [
+              {
+                "id": "heading-1",
+                "name": "Heading 1",
+                "type": "TEXT",
+                "x": 0,
+                "y": 0,
+                "width": 300,
+                "height": 40,
+                "characters": "Heading 1",
+                "style": {
+                  "fontFamily": "Arial",
+                  "fontWeight": 700,
+                  "fontSize": 28,
+                  "textAlignHorizontal": "LEFT"
+                }
+              },
+              {
+                "id": "body-text",
+                "name": "Body Text",
+                "type": "TEXT",
+                "x": 0,
+                "y": 60,
+                "width": 300,
+                "height": 24,
+                "characters": "Body Text",
+                "style": {
+                  "fontFamily": "Arial",
+                  "fontWeight": 400,
+                  "fontSize": 16,
+                  "textAlignHorizontal": "LEFT"
+                }
+              }
+            ]
+          },
+          {
+            "id": "components",
+            "name": "Components",
+            "type": "FRAME",
+            "x": 0,
+            "y": 220,
+            "backgroundColor": {"r": 1, "g": 1, "b": 1, "a": 1},
+            "children": [
+              {
+                "id": "button-primary",
+                "name": "Button - Primary",
+                "type": "FRAME",
+                "x": 0,
+                "y": 0,
+                "width": 120,
+                "height": 40,
+                "cornerRadius": 4,
+                "fills": [{"type": "SOLID", "color": {"r": 0.078, "g": 0.259, "b": 0.447}}],
+                "children": [
+                  {
+                    "id": "button-text",
+                    "name": "Button Text",
+                    "type": "TEXT",
+                    "x": 10,
+                    "y": 10,
+                    "width": 100,
+                    "height": 20,
+                    "characters": "Button",
+                    "style": {
+                      "fontFamily": "Arial",
+                      "fontWeight": 500,
+                      "fontSize": 14,
+                      "textAlignHorizontal": "CENTER",
+                      "fills": [{"type": "SOLID", "color": {"r": 1, "g": 1, "b": 1}}]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "badge",
+                "name": "Badge",
+                "type": "FRAME",
+                "x": 0,
+                "y": 60,
+                "width": 70,
+                "height": 24,
+                "cornerRadius": 12,
+                "fills": [{"type": "SOLID", "color": {"r": 0.078, "g": 0.259, "b": 0.447}}],
+                "children": [
+                  {
+                    "id": "badge-text",
+                    "name": "Badge Text",
+                    "type": "TEXT",
+                    "x": 10,
+                    "y": 4,
+                    "width": 50,
+                    "height": 16,
+                    "characters": "Badge",
+                    "style": {
+                      "fontFamily": "Arial",
+                      "fontWeight": 500,
+                      "fontSize": 12,
+                      "textAlignHorizontal": "CENTER",
+                      "fills": [{"type": "SOLID", "color": {"r": 1, "g": 1, "b": 1}}]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "communities-page",
+        "name": "Communities Page",
+        "type": "CANVAS",
+        "children": [
+          {
+            "id": "light-theme",
+            "name": "Light Theme",
+            "type": "FRAME",
+            "width": 1200,
+            "height": 900,
+            "backgroundColor": {"r": 0.98, "g": 0.984, "b": 1, "a": 1},
+            "children": [
+              {
+                "id": "header",
+                "name": "Header",
+                "type": "FRAME",
+                "x": 30,
+                "y": 30,
+                "width": 1140,
+                "height": 80,
+                "backgroundColor": {"r": 0.98, "g": 0.984, "b": 1, "a": 1},
+                "children": [
+                  {
+                    "id": "title",
+                    "name": "Title",
+                    "type": "TEXT",
+                    "x": 0,
+                    "y": 0,
+                    "width": 300,
+                    "height": 40,
+                    "characters": "Communities",
+                    "style": {
+                      "fontFamily": "Arial",
+                      "fontWeight": 700,
+                      "fontSize": 28,
+                      "textAlignHorizontal": "LEFT",
+                      "fills": [{"type": "SOLID", "color": {"r": 0.118, "g": 0.161, "b": 0.231}}]
+                    }
+                  },
+                  {
+                    "id": "subtitle",
+                    "name": "Subtitle",
+                    "type": "TEXT",
+                    "x": 0,
+                    "y": 40,
+                    "width": 500,
+                    "height": 24,
+                    "characters": "Find and join communities based on your interests",
+                    "style": {
+                      "fontFamily": "Arial",
+                      "fontWeight": 400,
+                      "fontSize": 16,
+                      "textAlignHorizontal": "LEFT",
+                      "fills": [{"type": "SOLID", "color": {"r": 0.278, "g": 0.333, "b": 0.412}}]
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "search-filters",
+                "name": "Search Filters",
+                "type": "FRAME",
+                "x": 30,
+                "y": 130,
+                "width": 1140,
+                "height": 50,
+                "backgroundColor": {"r": 0.98, "g": 0.984, "b": 1, "a": 1},
+                "children": [
+                  {
+                    "id": "search-input",
+                    "name": "Search Input",
+                    "type": "RECTANGLE",
+                    "x": 0,
+                    "y": 0,
+                    "width": 800,
+                    "height": 40,
+                    "cornerRadius": 4,
+                    "fills": [{"type": "SOLID", "color": {"r": 1, "g": 1, "b": 1}}],
+                    "strokes": [{"type": "SOLID", "color": {"r": 0.882, "g": 0.906, "b": 0.941}}]
+                  },
+                  {
+                    "id": "category-select",
+                    "name": "Category Select",
+                    "type": "RECTANGLE",
+                    "x": 820,
+                    "y": 0,
+                    "width": 320,
+                    "height": 40,
+                    "cornerRadius": 4,
+                    "fills": [{"type": "SOLID", "color": {"r": 1, "g": 1, "b": 1}}],
+                    "strokes": [{"type": "SOLID", "color": {"r": 0.882, "g": 0.906, "b": 0.941}}]
+                  }
+                ]
+              },
+              {
+                "id": "create-button",
+                "name": "Create Button",
+                "type": "RECTANGLE",
+                "x": 30,
+                "y": 200,
+                "width": 1140,
+                "height": 50,
+                "cornerRadius": 4,
+                "fills": [{"type": "SOLID", "color": {"r": 0.078, "g": 0.259, "b": 0.447}}]
+              },
+              {
+                "id": "tabs",
+                "name": "Tabs",
+                "type": "FRAME",
+                "x": 30,
+                "y": 270,
+                "width": 1140,
+                "height": 40,
+                "backgroundColor": {"r": 0.98, "g": 0.984, "b": 1, "a": 1},
+                "strokes": [{"type": "SOLID", "color": {"r": 0.882, "g": 0.906, "b": 0.941}}],
+                "children": [
+                  {
+                    "id": "open-tab",
+                    "name": "Open Tab",
+                    "type": "RECTANGLE",
+                    "x": 0,
+                    "y": 0,
+                    "width": 150,
+                    "height": 40,
+                    "fills": [{"type": "SOLID", "color": {"r": 0.98, "g": 0.984, "b": 1}}],
+                    "strokes": [{"type": "SOLID", "color": {"r": 0.078, "g": 0.259, "b": 0.447}}]
+                  },
+                  {
+                    "id": "private-tab",
+                    "name": "Private Tab",
+                    "type": "RECTANGLE",
+                    "x": 150,
+                    "y": 0,
+                    "width": 150,
+                    "height": 40,
+                    "fills": [{"type": "SOLID", "color": {"r": 0.98, "g": 0.984, "b": 1}}]
+                  }
+                ]
+              },
+              {
+                "id": "community-cards",
+                "name": "Community Cards",
+                "type": "FRAME",
+                "x": 30,
+                "y": 330,
+                "width": 1140,
+                "height": 500,
+                "backgroundColor": {"r": 0.98, "g": 0.984, "b": 1, "a": 1},
+                "layoutMode": "HORIZONTAL",
+                "itemSpacing": 20,
+                "children": [
+                  {
+                    "id": "card-1",
+                    "name": "Card 1",
+                    "type": "RECTANGLE",
+                    "width": 360,
+                    "height": 280,
+                    "cornerRadius": 4,
+                    "fills": [{"type": "SOLID", "color": {"r": 1, "g": 1, "b": 1}}],
+                    "strokes": [{"type": "SOLID", "color": {"r": 0.882, "g": 0.906, "b": 0.941}}]
+                  },
+                  {
+                    "id": "card-2",
+                    "name": "Card 2",
+                    "type": "RECTANGLE",
+                    "width": 360,
+                    "height": 280,
+                    "cornerRadius": 4,
+                    "fills": [{"type": "SOLID", "color": {"r": 1, "g": 1, "b": 1}}],
+                    "strokes": [{"type": "SOLID", "color": {"r": 0.882, "g": 0.906, "b": 0.941}}]
+                  },
+                  {
+                    "id": "card-3",
+                    "name": "Card 3",
+                    "type": "RECTANGLE",
+                    "width": 360,
+                    "height": 280,
+                    "cornerRadius": 4,
+                    "fills": [{"type": "SOLID", "color": {"r": 1, "g": 1, "b": 1}}],
+                    "strokes": [{"type": "SOLID", "color": {"r": 0.882, "g": 0.906, "b": 0.941}}]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "dark-theme",
+            "name": "Dark Theme",
+            "type": "FRAME",
+            "x": 1300,
+            "y": 0,
+            "width": 1200,
+            "height": 900,
+            "backgroundColor": {"r": 0.059, "g": 0.09, "b": 0.165, "a": 1},
+            "children": [
+              {
+                "id": "dark-header",
+                "name": "Header",
+                "type": "FRAME",
+                "x": 30,
+                "y": 30,
+                "width": 1140,
+                "height": 80,
+                "backgroundColor": {"r": 0.059, "g": 0.09, "b": 0.165, "a": 1},
+                "children": [
+                  {
+                    "id": "dark-title",
+                    "name": "Title",
+                    "type": "TEXT",
+                    "x": 0,
+                    "y": 0,
+                    "width": 300,
+                    "height": 40,
+                    "characters": "Communities",
+                    "style": {
+                      "fontFamily": "Arial",
+                      "fontWeight": 700,
+                      "fontSize": 28,
+                      "textAlignHorizontal": "LEFT",
+                      "fills": [{"type": "SOLID", "color": {"r": 0.98, "g": 0.984, "b": 1}}]
+                    }
+                  },
+                  {
+                    "id": "dark-subtitle",
+                    "name": "Subtitle",
+                    "type": "TEXT",
+                    "x": 0,
+                    "y": 40,
+                    "width": 500,
+                    "height": 24,
+                    "characters": "Find and join communities based on your interests",
+                    "style": {
+                      "fontFamily": "Arial",
+                      "fontWeight": 400,
+                      "fontSize": 16,
+                      "textAlignHorizontal": "LEFT",
+                      "fills": [{"type": "SOLID", "color": {"r": 0.792, "g": 0.835, "b": 0.882}}]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "activity-card",
+        "name": "Activity Card",
+        "type": "CANVAS",
+        "children": [
+          {
+            "id": "activity-card-frame",
+            "name": "Activity Card",
+            "type": "FRAME",
+            "width": 360,
+            "height": 280,
+            "backgroundColor": {"r": 1, "g": 1, "b": 1, "a": 1},
+            "cornerRadius": 4,
+            "strokes": [{"type": "SOLID", "color": {"r": 0.882, "g": 0.906, "b": 0.941}}],
+            "children": [
+              {
+                "id": "color-strip",
+                "name": "Color Strip",
+                "type": "RECTANGLE",
+                "x": 0,
+                "y": 0,
+                "width": 360,
+                "height": 4,
+                "fills": [{"type": "SOLID", "color": {"r": 0.078, "g": 0.259, "b": 0.447}}]
+              },
+              {
+                "id": "card-title",
+                "name": "Card Title",
+                "type": "TEXT",
+                "x": 20,
+                "y": 20,
+                "width": 320,
+                "height": 28,
+                "characters": "Activity Title",
+                "style": {
+                  "fontFamily": "Arial",
+                  "fontWeight": 600,
+                  "fontSize": 18,
+                  "textAlignHorizontal": "LEFT",
+                  "fills": [{"type": "SOLID", "color": {"r": 0.118, "g": 0.161, "b": 0.231}}]
+                }
+              },
+              {
+                "id": "badge-container",
+                "name": "Badge Container",
+                "type": "FRAME",
+                "x": 20,
+                "y": 58,
+                "width": 70,
+                "height": 24,
+                "cornerRadius": 12,
+                "fills": [{"type": "SOLID", "color": {"r": 0.078, "g": 0.259, "b": 0.447}}],
+                "children": [
+                  {
+                    "id": "badge-text",
+                    "name": "Badge Text",
+                    "type": "TEXT",
+                    "x": 10,
+                    "y": 4,
+                    "width": 50,
+                    "height": 16,
+                    "characters": "Active",
+                    "style": {
+                      "fontFamily": "Arial",
+                      "fontWeight": 500,
+                      "fontSize": 12,
+                      "textAlignHorizontal": "CENTER",
+                      "fills": [{"type": "SOLID", "color": {"r": 1, "g": 1, "b": 1}}]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

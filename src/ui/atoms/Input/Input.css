@@ -1,314 +1,226 @@
 /**
  * Input Component Styles
  * 
- * This file contains styles for the Input component.
- * The Input component is a fundamental building block for user input.
+ * This file contains styles for the Input component with improved support
+ * for variants, states, and theming.
  */
 
-/* Base Input Styles */
-.ui-input-wrapper {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: var(--spacing-4);
-  width: fit-content;
-  box-sizing: border-box;
-}
-
-.ui-input__container {
+/* Base Input styles */
+.ui-input {
   position: relative;
-  display: flex;
+  display: inline-flex;
+  flex-direction: row;
   align-items: center;
   width: 100%;
+  transition: all 0.2s ease;
 }
 
+/* Input field */
 .ui-input__field {
-  font-family: var(--font-family-primary);
+  width: 100%;
+  border: 1px solid var(--color-border-light);
   background-color: var(--color-background-secondary);
   color: var(--color-text-primary);
-  border: 1px solid var(--color-border-medium);
-  border-radius: var(--border-radius-sm);
-  transition: all var(--transition-default);
-  width: 100%;
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  padding: 8px 12px;
   outline: none;
-  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .ui-input__field:focus {
-  border-color: var(--color-brand-500);
-  box-shadow: 0 0 0 2px var(--color-brand-100);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary-light);
 }
 
-.ui-input__field::placeholder {
-  color: var(--color-text-tertiary);
+.ui-input__field[data-focus-border-color]:focus {
+  border-color: var(--color-data-focus-border-color, var(--color-primary));
+  box-shadow: 0 0 0 1px var(--color-data-focus-border-color-light, var(--color-primary-light));
 }
 
-.ui-input__label {
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-1);
-}
-
-.ui-input__required {
-  color: var(--color-error-500);
-  margin-left: var(--spacing-1);
-}
-
-.ui-input__helper-text {
-  font-family: var(--font-family-primary);
+/* Input sizes */
+.ui-input--xs .ui-input__field {
   font-size: var(--font-size-xs);
-  color: var(--color-text-tertiary);
-  margin-top: var(--spacing-1);
+  padding: 4px 8px;
 }
 
-.ui-input__helper-text--error {
-  color: var(--color-error-500);
-}
-
-.ui-input__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text-tertiary);
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.ui-input__icon--start {
-  left: var(--spacing-3);
-}
-
-.ui-input__icon--end {
-  right: var(--spacing-3);
-}
-
-/* Input Sizes - these match the INPUT_SIZES constants in index.js */
-.ui-input--small .ui-input__field {
-  padding: var(--spacing-1) var(--spacing-2);
-  font-size: var(--font-size-xs);
-  height: 2rem;
-}
-
-.ui-input--small .ui-input__icon {
-  font-size: var(--font-size-md);
-}
-
-.ui-input--small .ui-input__container:has(.ui-input__icon--start) .ui-input__field {
-  padding-left: var(--spacing-6);
-}
-
-.ui-input--small .ui-input__container:has(.ui-input__icon--end) .ui-input__field {
-  padding-right: var(--spacing-6);
-}
-
-.ui-input--medium .ui-input__field {
-  padding: var(--spacing-2) var(--spacing-3);
+.ui-input--sm .ui-input__field {
   font-size: var(--font-size-sm);
-  height: 2.5rem;
+  padding: 6px 10px;
 }
 
-.ui-input--medium .ui-input__icon {
+.ui-input--md .ui-input__field {
+  font-size: var(--font-size-base);
+  padding: 8px 12px;
+}
+
+.ui-input--lg .ui-input__field {
   font-size: var(--font-size-lg);
+  padding: 10px 14px;
 }
 
-.ui-input--medium .ui-input__container:has(.ui-input__icon--start) .ui-input__field {
-  padding-left: var(--spacing-8);
-}
-
-.ui-input--medium .ui-input__container:has(.ui-input__icon--end) .ui-input__field {
-  padding-right: var(--spacing-8);
-}
-
-.ui-input--large .ui-input__field {
-  padding: var(--spacing-3) var(--spacing-4);
-  font-size: var(--font-size-md);
-  height: 3rem;
-}
-
-.ui-input--large .ui-input__icon {
+.ui-input--xl .ui-input__field {
   font-size: var(--font-size-xl);
+  padding: 12px 16px;
 }
 
-.ui-input--large .ui-input__container:has(.ui-input__icon--start) .ui-input__field {
-  padding-left: var(--spacing-10);
-}
-
-.ui-input--large .ui-input__container:has(.ui-input__icon--end) .ui-input__field {
-  padding-right: var(--spacing-10);
-}
-
-/* Input Variants - these match the INPUT_VARIANTS constants in index.js */
-.ui-input--default .ui-input__field {
-  background-color: var(--color-background-secondary);
-  border: 1px solid var(--color-border-medium);
+/* Input variants */
+.ui-input--outline .ui-input__field {
+  border: 1px solid var(--color-border-light);
+  background-color: transparent;
 }
 
 .ui-input--filled .ui-input__field {
-  background-color: var(--color-background-tertiary);
   border: 1px solid transparent;
-}
-
-.ui-input--filled .ui-input__field:focus {
-  background-color: var(--color-background-secondary);
-  border-color: var(--color-brand-500);
-}
-
-.ui-input--outlined .ui-input__field {
-  background-color: transparent;
-  border: 1px solid var(--color-border-medium);
-}
-
-/* Input States - these match the INPUT_STATES constants in index.js */
-.ui-input--success .ui-input__field {
-  border-color: var(--color-success-500);
-}
-
-.ui-input--success .ui-input__field:focus {
-  box-shadow: 0 0 0 2px var(--color-success-100);
-}
-
-.ui-input--error .ui-input__field {
-  border-color: var(--color-error-500);
-}
-
-.ui-input--error .ui-input__field:focus {
-  box-shadow: 0 0 0 2px var(--color-error-100);
-}
-
-.ui-input--warning .ui-input__field {
-  border-color: var(--color-warning-500);
-}
-
-.ui-input--warning .ui-input__field:focus {
-  box-shadow: 0 0 0 2px var(--color-warning-100);
-}
-
-/* Disabled Input */
-.ui-input--disabled .ui-input__field {
-  background-color: var(--color-background-disabled);
-  border-color: var(--color-border-light);
-  color: var(--color-text-disabled);
-  cursor: not-allowed;
-}
-
-.ui-input--disabled .ui-input__label,
-.ui-input--disabled .ui-input__helper-text,
-.ui-input--disabled .ui-input__icon {
-  color: var(--color-text-disabled);
-}
-
-/* Full Width Input */
-.ui-input--full-width {
-  width: 100%;
-}
-
-/* Support for custom responsive styles */
-.ui-input-wrapper[style*="--responsive-styles"] {
-  /* This selector targets Input components with responsive styles */
-  /* The actual styles are applied via inline style in the component */
-  display: flex; /* Ensure the element maintains flex display */
-  flex-direction: column;
-}
-
-/* Additional Input Types */
-/* Password Input */
-.ui-input__field[type="password"] {
-  letter-spacing: 0.1em;
-}
-
-/* Number Input */
-.ui-input__field[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
-  appearance: textfield;
-}
-
-.ui-input__field[type="number"]::-webkit-outer-spin-button,
-.ui-input__field[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  appearance: none;
-  margin: 0;
-}
-
-/* Search Input */
-.ui-input__field[type="search"] {
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.ui-input__field[type="search"]::-webkit-search-decoration,
-.ui-input__field[type="search"]::-webkit-search-cancel-button,
-.ui-input__field[type="search"]::-webkit-search-results-button,
-.ui-input__field[type="search"]::-webkit-search-results-decoration {
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-/* Dark Theme Adjustments */
-.theme-dark .ui-input__field {
-  background-color: var(--color-background-secondary);
-  color: var(--color-text-primary);
-}
-
-.theme-dark .ui-input--filled .ui-input__field {
   background-color: var(--color-background-tertiary);
 }
 
-.theme-dark .ui-input--filled .ui-input__field:focus {
-  background-color: var(--color-background-secondary);
+.ui-input--flushed .ui-input__field {
+  border: none;
+  border-bottom: 1px solid var(--color-border-light);
+  border-radius: 0;
+  background-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
 }
 
-.theme-dark .ui-input--disabled .ui-input__field {
+.ui-input--unstyled .ui-input__field {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Input states */
+.ui-input--invalid .ui-input__field {
+  border-color: var(--color-error);
+}
+
+.ui-input--invalid .ui-input__field:focus {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 1px var(--color-error-light);
+}
+
+.ui-input--disabled .ui-input__field,
+.ui-input__field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
   background-color: var(--color-background-disabled);
-  color: var(--color-text-disabled);
 }
 
-/* Responsive Adjustments - using the same breakpoints as responsive-props.js */
-@media (max-width: 576px) { /* xs */
-  .ui-input-wrapper {
-    margin-bottom: var(--spacing-3);
+.ui-input--readonly .ui-input__field,
+.ui-input__field:read-only {
+  background-color: var(--color-background-readonly);
+  border-color: var(--color-border-light);
+}
+
+/* Input group */
+.ui-input__group {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+
+.ui-input__wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* Input addons */
+.ui-input__addon {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-background-tertiary);
+  border: 1px solid var(--color-border-light);
+  padding: 0 12px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.ui-input__addon--left {
+  border-right: none;
+  border-top-left-radius: var(--border-radius-md);
+  border-bottom-left-radius: var(--border-radius-md);
+}
+
+.ui-input__addon--right {
+  border-left: none;
+  border-top-right-radius: var(--border-radius-md);
+  border-bottom-right-radius: var(--border-radius-md);
+}
+
+/* Adjust field borders when used with addons */
+.ui-input__addon--left + .ui-input__wrapper .ui-input__field {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.ui-input__wrapper + .ui-input__addon--right .ui-input__field {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Input icons */
+.ui-input__icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ui-input__icon--left {
+  left: 10px;
+}
+
+.ui-input__icon--right {
+  right: 10px;
+}
+
+/* Adjust input padding when used with icons */
+.ui-input__wrapper:has(.ui-input__icon--left) .ui-input__field {
+  padding-left: 36px;
+}
+
+.ui-input__wrapper:has(.ui-input__icon--right) .ui-input__field {
+  padding-right: 36px;
+}
+
+/* Border radius overrides */
+.ui-input__field[style*="borderRadius"] {
+  border-radius: var(--border-radius, var(--border-radius-md));
+}
+
+/* Focus management */
+.ui-input__field:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary-light);
+}
+
+.ui-input--invalid .ui-input__field:focus-visible {
+  outline: none;
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 1px var(--color-error-light);
+}
+
+/* Placeholder styling */
+.ui-input__field::placeholder {
+  color: var(--color-text-placeholder);
+  opacity: 1;
+}
+
+/* Accessibility - high contrast mode support */
+@media screen and (forced-colors: active) {
+  .ui-input__field {
+    border: 1px solid CanvasText;
   }
   
-  .ui-input--medium .ui-input__field {
-    padding: var(--spacing-1) var(--spacing-2);
-    height: 2.25rem;
-  }
-  
-  .ui-input--large .ui-input__field {
-    padding: var(--spacing-2) var(--spacing-3);
-    height: 2.5rem;
-  }
-  
-  .ui-input--responsive .ui-input__field {
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-xs);
-    height: 2rem;
-  }
-}
-
-@media (min-width: 576px) and (max-width: 767px) { /* sm */
-  .ui-input--responsive-sm .ui-input__field {
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-sm);
-    height: 2.25rem;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) { /* md */
-  .ui-input--responsive-md .ui-input__field {
-    padding: var(--spacing-2) var(--spacing-3);
-    font-size: var(--font-size-sm);
-    height: 2.5rem;
-  }
-}
-
-@media (min-width: 992px) { /* lg */
-  .ui-input--responsive-lg .ui-input__field {
-    padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--font-size-md);
-    height: 3rem;
+  .ui-input__field:focus {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 }

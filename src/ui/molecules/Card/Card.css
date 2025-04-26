@@ -1,144 +1,183 @@
 /**
  * Card Component Styles
  * 
- * This file contains styles for the Card component.
- * The Card component is a customizable container with support for variants, responsive props, and polymorphic rendering.
+ * This file contains styles for the Card component with improved support
+ * for variants, states, and theming.
  */
 
-/* Base Card Styles */
+/* Base Card styles */
 .ui-card {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--color-background-secondary);
+  position: relative;
   border-radius: var(--border-radius-md);
   overflow: hidden;
-  transition: all var(--transition-default);
+  transition: all 0.2s ease;
+}
+
+/* Card body */
+.ui-card__body {
   position: relative;
-  box-sizing: border-box;
-}
-
-/* Card Elements */
-.ui-card__content {
-  padding: var(--spacing-6);
-  flex: 1;
-}
-
-.ui-card__header {
-  padding: var(--spacing-4) var(--spacing-6);
-  border-bottom: 1px solid var(--color-border-medium);
-  font-weight: var(--font-weight-semibold);
-}
-
-.ui-card__footer {
-  padding: var(--spacing-4) var(--spacing-6);
-  border-top: 1px solid var(--color-border-medium);
-  background-color: var(--color-background-tertiary);
-}
-
-/* Empty Card State */
-.ui-card__empty {
-  color: var(--color-text-tertiary);
-  font-style: italic;
-  text-align: center;
-  padding: var(--spacing-4);
-  border: 1px dashed var(--color-border-medium);
-  border-radius: var(--border-radius-sm);
-  margin: var(--spacing-2) 0;
-}
-
-/* Card Variants */
-.ui-card--default {
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--color-border-medium);
-}
-
-.ui-card--elevated {
-  box-shadow: var(--shadow-md);
-  border: none;
-}
-
-.ui-card--outlined {
-  box-shadow: none;
-  border: 1px solid var(--color-border-medium);
-}
-
-.ui-card--interactive {
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--color-border-medium);
-  cursor: pointer;
-  transition: all var(--transition-default);
-}
-
-.ui-card--interactive:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.ui-card--interactive:active {
-  box-shadow: var(--shadow-sm);
-  transform: translateY(0);
-}
-
-/* Full Width Card */
-.ui-card--full-width {
   width: 100%;
 }
 
-/* Support for custom responsive styles */
-.ui-card[style*="--responsive-styles"] {
-  /* This selector targets Card components with responsive styles */
-  /* The actual styles are applied via inline style in the component */
-  display: flex; /* Ensure the display property is explicitly set */
+/* Card header */
+.ui-card__header {
+  width: 100%;
+  border-bottom: 1px solid var(--color-border-light);
+  padding-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
 }
 
-/* Dark Theme Adjustments */
-.theme-dark .ui-card {
+/* Card footer */
+.ui-card__footer {
+  width: 100%;
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+/* Card variants */
+.ui-card--default {
   background-color: var(--color-background-secondary);
+  border: none;
 }
 
-.theme-dark .ui-card__footer {
+.ui-card--elevated {
+  background-color: var(--color-background-secondary);
+  border: none;
+  box-shadow: var(--shadow-md);
+}
+
+.ui-card--outline {
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border-light);
+}
+
+.ui-card--filled {
   background-color: var(--color-background-tertiary);
+  border: none;
 }
 
-.theme-dark .ui-card__empty {
-  border-color: var(--color-border-medium);
-  color: var(--color-text-tertiary);
+.ui-card--interactive {
+  cursor: pointer;
 }
 
-/* Responsive Adjustments - using the same breakpoints as responsive-props.js */
-@media (max-width: 576px) { /* xs */
-  .ui-card__content {
-    padding: var(--spacing-4);
+/* Card hover effects */
+.ui-card--hoverable:hover,
+.ui-card--interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Card sizes - these affect padding */
+.ui-card--xs {
+  padding: var(--spacing-xs);
+}
+
+.ui-card--sm {
+  padding: var(--spacing-sm);
+}
+
+.ui-card--md {
+  padding: var(--spacing-md);
+}
+
+.ui-card--lg {
+  padding: var(--spacing-lg);
+}
+
+.ui-card--xl {
+  padding: var(--spacing-xl);
+}
+
+/* Card with focus styles for accessibility */
+.ui-card--interactive:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Card states */
+.ui-card--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Card with image */
+.ui-card__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.ui-card__image--top {
+  margin-bottom: var(--spacing-md);
+  margin-top: calc(var(--spacing-md) * -1);
+  margin-left: calc(var(--spacing-md) * -1);
+  margin-right: calc(var(--spacing-md) * -1);
+  border-top-left-radius: var(--border-radius-md);
+  border-top-right-radius: var(--border-radius-md);
+}
+
+.ui-card__image--bottom {
+  margin-top: var(--spacing-md);
+  margin-bottom: calc(var(--spacing-md) * -1);
+  margin-left: calc(var(--spacing-md) * -1);
+  margin-right: calc(var(--spacing-md) * -1);
+  border-bottom-left-radius: var(--border-radius-md);
+  border-bottom-right-radius: var(--border-radius-md);
+}
+
+/* Card overlay for interactive elements */
+.ui-card__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.ui-card--interactive:hover .ui-card__overlay {
+  opacity: 1;
+}
+
+/* Card divider */
+.ui-card__divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-border-light);
+  margin: var(--spacing-md) 0;
+}
+
+/* Card groups - for displaying multiple cards in a row */
+.ui-card-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+/* Utility classes to enhance card layouts */
+.ui-card--flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.ui-card--flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Accessibility - high contrast mode support */
+@media screen and (forced-colors: active) {
+  .ui-card {
+    border: 1px solid CanvasText;
   }
   
-  .ui-card__header,
-  .ui-card__footer {
-    padding: var(--spacing-3) var(--spacing-4);
-  }
-  
-  .ui-card__empty {
-    padding: var(--spacing-3);
-  }
-  
-  .ui-card--responsive {
-    border-radius: var(--border-radius-sm);
-  }
-}
-
-@media (min-width: 576px) and (max-width: 767px) { /* sm */
-  .ui-card--responsive-sm {
-    border-radius: var(--border-radius-md);
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) { /* md */
-  .ui-card--responsive-md {
-    border-radius: var(--border-radius-md);
-  }
-}
-
-@media (min-width: 992px) { /* lg */
-  .ui-card--responsive-lg {
-    border-radius: var(--border-radius-lg);
+  .ui-card--interactive:focus-visible {
+    outline: 2px solid Highlight;
   }
 }

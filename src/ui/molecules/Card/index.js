@@ -1,7 +1,7 @@
 /**
  * Card Component
  * 
- * A customizable card component with support for variants, responsive props, and polymorphic rendering.
+ * A customizable container component with variants, states, and theming support.
  */
 
 export { default } from './Card';
@@ -10,6 +10,6 @@ export { default } from './Card';
 export {
   CARD_CLASS,
   CARD_VARIANTS,
-  CARD_MODIFIERS,
-  CARD_BREAKPOINTS
+  CARD_SIZES,
+  CARD_ELEVATIONS
 } from './constants';

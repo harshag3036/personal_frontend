@@ -58,11 +58,39 @@ export const ActivityProvider = ({ children }) => {
         id: activity.id || Date.now().toString(),
         createdAt: activity.createdAt || new Date().toISOString(),
         status: activity.status || 'active',
-        participants: activity.participants || []
+        participants: activity.participants || [],
+        isGlobal: activity.isGlobal || false
       };
 
       console.log('Adding new activity:', newActivity);
       console.log('Current activities:', activities);
+
+      setActivities(prev => {
+        const newState = [...prev, newActivity];
+        console.log('New activities state:', newState);
+        localStorage.setItem('activities', JSON.stringify(newState));
+        resolve(newActivity);
+        return newState;
+      });
+    });
+  };
+  
+  // Add a global activity (not tied to any community)
+  const addGlobalActivity = (activity) => {
+    return new Promise((resolve) => {
+      const newActivity = {
+        ...activity,
+        id: activity.id || Date.now().toString(),
+        createdAt: activity.createdAt || new Date().toISOString(),
+        status: activity.status || 'active',
+        participants: activity.participants || [],
+        isGlobal: true,
+        // Explicitly set these to null to indicate it's a global activity
+        circleId: null,
+        communityId: null
+      };
+
+      console.log('Adding new global activity:', newActivity);
 
       setActivities(prev => {
         const newState = [...prev, newActivity];
@@ -180,6 +208,28 @@ export const ActivityProvider = ({ children }) => {
     
     console.log('Filtered activities:', filtered);
     return filtered;
+  };
+  
+  // Get all activities regardless of community
+  const getAllActivities = () => {
+    return activities;
+  };
+  
+  // Get activities that are not tied to any community (global activities)
+  const getGlobalActivities = () => {
+    return activities.filter(activity => 
+      !activity.circleId && !activity.communityId
+    );
+  };
+  
+  // Get activities that the current user is participating in
+  const getUserActivities = () => {
+    if (!user) return [];
+    
+    return activities.filter(activity => 
+      activity.participants?.some(p => p.id === user.id) ||
+      activity.createdBy?.id === user.id
+    );
   };
 
   const joinActivity = (activityId, participant) => {
@@ -654,9 +704,13 @@ export const ActivityProvider = ({ children }) => {
   const value = {
     activities,
     addActivity,
+    addGlobalActivity,
     updateActivity,
     deleteActivity,
     getActivities,
+    getAllActivities,
+    getGlobalActivities,
+    getUserActivities,
     joinActivity,
     leaveActivity,
     updateParticipantRole,

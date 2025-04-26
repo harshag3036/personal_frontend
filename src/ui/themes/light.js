@@ -27,7 +27,7 @@ const lightTheme = {
     border: {
       light: 'rgba(0, 0, 0, 0.05)',
       medium: colorPalette.neutral[200], // #E2E8F0
-      focus: colorPalette.brand[500], // #144272
+      focus: colorPalette.wisdom[500], // #144272
     },
   },
   shadows: {

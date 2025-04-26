@@ -1,70 +1,32 @@
 /**
  * Badge Component Constants
  * 
- * This file contains constants used by the Badge component.
+ * This file defines constants used by the Badge component.
  */
 
-// Import breakpoints from responsive-props utility
-import { breakpoints } from '../../utilities/responsive-props';
-
-// Badge CSS class for external use
+/**
+ * Main CSS class name for the Badge component
+ */
 export const BADGE_CLASS = 'ui-badge';
 
-// Badge variants for external use
+/**
+ * Badge component variants
+ */
 export const BADGE_VARIANTS = {
-  DEFAULT: 'default',
   PRIMARY: 'primary',
   SECONDARY: 'secondary',
   SUCCESS: 'success',
-  WARNING: 'warning',
   ERROR: 'error',
+  WARNING: 'warning',
   INFO: 'info',
-  OUTLINE: 'outline',
 };
 
-// Badge sizes for external use
+/**
+ * Badge component sizes
+ */
 export const BADGE_SIZES = {
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
+  XS: 'xs',
+  SM: 'sm',
+  MD: 'md',
+  LG: 'lg',
 };
-
-// Badge modifiers for external use
-export const BADGE_MODIFIERS = {
-  // Size modifiers
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
-  
-  // Variant modifiers
-  DEFAULT: 'default',
-  PRIMARY: 'primary',
-  SECONDARY: 'secondary',
-  SUCCESS: 'success',
-  WARNING: 'warning',
-  ERROR: 'error',
-  INFO: 'info',
-  OUTLINE: 'outline',
-  
-  // Shape modifiers
-  PILL: 'pill',
-  DOT: 'dot',
-  
-  // Interaction modifiers
-  CLICKABLE: 'clickable',
-  
-  // Responsive modifiers
-  RESPONSIVE: 'responsive',
-  RESPONSIVE_SM: 'responsive-sm',
-  RESPONSIVE_MD: 'responsive-md',
-  RESPONSIVE_LG: 'responsive-lg',
-  
-  // Position modifiers
-  TOP_RIGHT: 'top-right',
-  TOP_LEFT: 'top-left',
-  BOTTOM_RIGHT: 'bottom-right',
-  BOTTOM_LEFT: 'bottom-left',
-};
-
-// Export breakpoints
-export const BADGE_BREAKPOINTS = breakpoints;

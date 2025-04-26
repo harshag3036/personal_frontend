@@ -1,214 +1,156 @@
+import React, { forwardRef } from 'react';
+import PropTypes from 'prop-types';
+import Box from '../Box';
+import { SWITCH_CLASS, SWITCH_SIZES, SWITCH_VARIANTS } from './constants';
+import './Switch.css';
+
 /**
  * Switch Component
  * 
- * A customizable toggle switch component that can be used as an alternative to a checkbox.
- * The Switch component is used to toggle between two states: on and off.
+ * A toggle switch component that provides a visual toggle between two states.
  * 
  * @example
+ * ```jsx
  * // Basic usage
- * <Switch />
+ * <Switch checked={isEnabled} onChange={handleToggle} />
  * 
  * // With label
- * <Switch label="Dark Mode" />
+ * <Switch checked={isEnabled} onChange={handleToggle} label="Enable feature" />
  * 
- * // Controlled component
- * <Switch checked={isDarkMode} onChange={handleDarkModeChange} />
- * 
- * // With variant and size
- * <Switch variant="primary" size="large" />
- * 
- * // Disabled state
- * <Switch disabled />
- * 
- * // With responsive props
- * <Switch size={{ base: 'small', md: 'medium', lg: 'large' }} />
+ * // With custom styling
+ * <Switch 
+ *   checked={isEnabled} 
+ *   onChange={handleToggle} 
+ *   variant="success" 
+ *   size="lg" 
+ *   disabled={isDisabled} 
+ * />
+ * ```
  */
-
-import React, { forwardRef } from 'react';
-import PropTypes from 'prop-types';
-import { polymorphicPropTypes } from '../../utilities/polymorphic';
-import { isResponsiveObject, createResponsiveStyles } from '../../utilities/responsive-props';
-import {
-  SWITCH_CLASS,
-  SWITCH_VARIANTS,
-  SWITCH_SIZES,
-  SWITCH_STATES,
-  SWITCH_MODIFIERS,
-} from './constants';
-import './Switch.css';
-
-const Switch = forwardRef(function Switch(props, ref) {
-  const {
-    as: Element = 'label',
-    className,
-    style,
-    variant = SWITCH_VARIANTS.PRIMARY,
-    size = SWITCH_SIZES.MEDIUM,
-    checked,
-    defaultChecked,
-    disabled = false,
-    label,
-    labelPosition = 'right',
-    id,
-    name,
-    value,
-    onChange,
-    onFocus,
-    onBlur,
-    ariaLabel,
-    ...rest
-  } = props;
-
-  // Process responsive props
-  const responsiveProps = {
-    variant,
-    size,
-  };
+const Switch = forwardRef(({
+  checked = false,
+  defaultChecked,
+  disabled = false,
+  variant = SWITCH_VARIANTS.PRIMARY,
+  size = SWITCH_SIZES.MD,
+  label,
+  labelPosition = 'right',
+  onChange,
+  id,
+  name,
+  className = '',
+  ...restProps
+}, ref) => {
+  // Process switch props
+  const isControlled = checked !== undefined;
+  const switchId = id || `switch-${Math.random().toString(36).substring(2, 9)}`;
   
-  // Generate responsive styles if needed
-  let responsiveStyles = '';
-  const hasResponsiveProps = Object.values(responsiveProps).some(isResponsiveObject);
-  
-  if (hasResponsiveProps) {
-    // We'll handle these with classes, but we need to track if they're responsive
-    const responsiveClasses = {};
-    
-    if (isResponsiveObject(variant)) {
-      responsiveClasses.variant = variant;
-    }
-    
-    if (isResponsiveObject(size)) {
-      responsiveClasses.size = size;
-    }
-    
-    // Create a CSS string for responsive styles
-    responsiveStyles = JSON.stringify(responsiveClasses);
-  }
-
-  // Determine base classes based on non-responsive props
-  const baseVariantClass = !isResponsiveObject(variant) ? `${SWITCH_CLASS}--${variant.toLowerCase()}` : '';
-  const baseSizeClass = !isResponsiveObject(size) ? `${SWITCH_CLASS}--${size.toLowerCase()}` : '';
-  
-  // Combine class names
+  // Build class names
   const switchClasses = [
     SWITCH_CLASS,
-    baseVariantClass,
-    baseSizeClass,
+    `${SWITCH_CLASS}--${variant}`,
+    `${SWITCH_CLASS}--${size}`,
     disabled ? `${SWITCH_CLASS}--disabled` : '',
-    label ? `${SWITCH_CLASS}--with-label` : '',
-    label && labelPosition ? `${SWITCH_CLASS}--label-${labelPosition}` : '',
     className
   ].filter(Boolean).join(' ');
   
-  // Combine styles
-  const combinedStyle = {
-    ...style,
+  // Handle change
+  const handleChange = (e) => {
+    if (disabled) return;
+    if (onChange) onChange(e);
   };
   
-  // If we have responsive styles, add them as a data attribute
-  if (responsiveStyles) {
-    combinedStyle['--responsive-styles'] = responsiveStyles;
-  }
-
-  // Generate a unique ID if one is not provided
-  const switchId = id || `switch-${Math.random().toString(36).substring(2, 11)}`;
-
-  return (
-    <Element
-      ref={ref}
-      className={switchClasses}
-      style={combinedStyle}
-      {...rest}
+  // Render switch with label if provided
+  const switchElement = (
+    <Box
+      as="label"
+      htmlFor={switchId}
+      className={`${SWITCH_CLASS}-container`}
+      display="inline-flex"
+      alignItems="center"
+      opacity={disabled ? 0.5 : 1}
+      cursor={disabled ? 'not-allowed' : 'pointer'}
+      {...restProps}
     >
-      <input
-        type="checkbox"
-        id={switchId}
-        className={`${SWITCH_CLASS}__input`}
-        checked={checked}
-        defaultChecked={defaultChecked}
-        disabled={disabled}
-        name={name}
-        value={value}
-        onChange={onChange}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        aria-label={ariaLabel || label}
-      />
-      <span className={`${SWITCH_CLASS}__track`}>
-        <span className={`${SWITCH_CLASS}__thumb`} />
-      </span>
-      {label && (
-        <span className={`${SWITCH_CLASS}__label`}>{label}</span>
+      {label && labelPosition === 'left' && (
+        <Box as="span" className={`${SWITCH_CLASS}-label`} marginRight="2">
+          {label}
+        </Box>
       )}
-    </Element>
+      
+      <Box
+        className={switchClasses}
+        position="relative"
+        display="inline-block"
+      >
+        <Box
+          as="input"
+          type="checkbox"
+          id={switchId}
+          name={name}
+          checked={isControlled ? checked : undefined}
+          defaultChecked={!isControlled ? defaultChecked : undefined}
+          disabled={disabled}
+          onChange={handleChange}
+          className={`${SWITCH_CLASS}__input`}
+          ref={ref}
+        />
+        <Box
+          className={`${SWITCH_CLASS}__track`}
+          display="block"
+        />
+        <Box
+          className={`${SWITCH_CLASS}__thumb`}
+          display="block"
+          position="absolute"
+        />
+      </Box>
+      
+      {label && labelPosition === 'right' && (
+        <Box as="span" className={`${SWITCH_CLASS}-label`} marginLeft="2">
+          {label}
+        </Box>
+      )}
+    </Box>
   );
+  
+  return switchElement;
 });
 
+Switch.displayName = 'Switch';
+
 Switch.propTypes = {
-  /** The HTML element to render the switch as */
-  ...polymorphicPropTypes,
-  
-  /** Additional CSS class names */
-  className: PropTypes.string,
-  
-  /** Additional inline styles */
-  style: PropTypes.object,
-  
-  /** The visual style variant of the switch */
-  variant: PropTypes.oneOfType([
-    PropTypes.oneOf(Object.values(SWITCH_VARIANTS)),
-    PropTypes.object, // For responsive props
-  ]),
-  
-  /** The size of the switch */
-  size: PropTypes.oneOfType([
-    PropTypes.oneOf(Object.values(SWITCH_SIZES)),
-    PropTypes.object, // For responsive props
-  ]),
-  
-  /** Whether the switch is checked (controlled) */
+  /** Whether the switch is checked */
   checked: PropTypes.bool,
-  
   /** Default checked state (uncontrolled) */
   defaultChecked: PropTypes.bool,
-  
   /** Whether the switch is disabled */
   disabled: PropTypes.bool,
-  
-  /** Optional label to display with the switch */
+  /** Switch variant/color */
+  variant: PropTypes.oneOf(Object.values(SWITCH_VARIANTS)),
+  /** Switch size */
+  size: PropTypes.oneOf(Object.values(SWITCH_SIZES)),
+  /** Text label for the switch */
   label: PropTypes.node,
-  
-  /** Position of the label relative to the switch */
+  /** Position of the label */
   labelPosition: PropTypes.oneOf(['left', 'right']),
-  
+  /** Callback when the state changes */
+  onChange: PropTypes.func,
   /** ID for the input element */
   id: PropTypes.string,
-  
   /** Name for the input element */
   name: PropTypes.string,
-  
-  /** Value for the input element */
-  value: PropTypes.string,
-  
-  /** Callback when the switch state changes */
-  onChange: PropTypes.func,
-  
-  /** Callback when the switch receives focus */
-  onFocus: PropTypes.func,
-  
-  /** Callback when the switch loses focus */
-  onBlur: PropTypes.func,
-  
-  /** Accessibility label for screen readers */
-  ariaLabel: PropTypes.string,
+  /** Additional CSS class names */
+  className: PropTypes.string,
 };
 
 Switch.defaultProps = {
-  as: 'label',
-  variant: SWITCH_VARIANTS.PRIMARY,
-  size: SWITCH_SIZES.MEDIUM,
+  checked: false,
   disabled: false,
+  variant: SWITCH_VARIANTS.PRIMARY,
+  size: SWITCH_SIZES.MD,
   labelPosition: 'right',
+  className: '',
 };
 
 export default Switch;

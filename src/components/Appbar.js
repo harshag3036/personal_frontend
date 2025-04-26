@@ -9,7 +9,7 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
-import ThemeSwitcher from './ThemeSwitcher';
+import Notifications from './Notifications';
 import '../styles/shared.css';
 import './Appbar.css';
 
@@ -84,7 +84,7 @@ export default function Appbar() {
             </Button>
             <Button 
               color="inherit" 
-              onClick={() => navigate('/activities')}
+              onClick={() => navigate('/activities-master')}
               className="nav-button"
               startIcon={<SportsEsportsIcon />}
             >
@@ -100,7 +100,7 @@ export default function Appbar() {
             </Button>
           </div>
           <div className="profile-section">
-            <ThemeSwitcher />
+            <Notifications />
             {isAuthenticated ? (
               <>
                 <IconButton
@@ -129,6 +129,7 @@ export default function Appbar() {
                   }}
                 >
                   {!isGuest && <MenuItem onClick={handleProfileNav}>Profile</MenuItem>}
+                  <MenuItem onClick={() => { handleMenuClose(); navigate('/settings'); }}>Settings</MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
               </>

@@ -1,8 +1,8 @@
 /**
  * Box Component Styles
  * 
- * This file contains styles for the Box component.
- * The Box component is a fundamental building block for layouts.
+ * This file contains enhanced styles for the Box component.
+ * The Box component is the fundamental building block for layouts.
  */
 
 /* Base Box styles */
@@ -11,7 +11,14 @@
   position: relative;
 }
 
-/* Box modifiers - these match the BOX_MODIFIERS constants in index.js */
+/* Responsive properties support */
+.ui-box[data-responsive="true"] {
+  /* Create a stacking context to ensure correct layering */
+  isolation: isolate;
+  z-index: 0;
+}
+
+/* Box modifiers - these match the BOX_MODIFIERS constants */
 .ui-box--full-width {
   width: 100%;
 }
@@ -34,7 +41,7 @@
   justify-content: center;
 }
 
-/* Responsive container styles - using the same breakpoints as responsive-props.js */
+/* Responsive container styles */
 @media (max-width: 576px) { /* xs */
   .ui-box--responsive {
     width: 100%;
@@ -89,13 +96,6 @@
   }
 }
 
-/* Support for custom responsive styles */
-.ui-box[style*="--responsive-styles"] {
-  /* This selector targets Box components with responsive styles */
-  /* The actual styles are applied via inline style in the component */
-  display: block; /* Ensure the element is a block element */
-}
-
 /* Support for common spacing patterns */
 .ui-box--gutter {
   padding-left: var(--spacing-md);
@@ -148,4 +148,52 @@
 .ui-box--sticky {
   position: sticky;
   top: 0;
+}
+
+/* Enhanced container presets for common layouts */
+.ui-box--container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+.ui-box--container-fluid {
+  width: 100%;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+.ui-box--container-narrow {
+  width: 100%;
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+/* Enhanced box modifiers for common layout patterns */
+.ui-box--card {
+  background-color: var(--color-background-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-box--section {
+  padding-top: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+}
+
+.ui-box--clickable {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ui-box--clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }

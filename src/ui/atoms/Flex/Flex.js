@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Box, { BOX_CLASS } from '../Box';
+import Box from '../Box';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
-import { isResponsiveObject, createResponsiveStyles, flexPropConfig } from '../../utilities/responsive-props';
+import { isResponsiveObject } from '../../utilities/responsive-props';
 import { FLEX_CLASS, FLEX_DIRECTIONS, FLEX_ALIGNMENTS, FLEX_JUSTIFICATIONS, FLEX_WRAPS, FLEX_GAP_SIZES } from './constants';
 import './Flex.css';
 
 /**
- * Flex Component
+ * Enhanced Flex Component
  * 
- * A flexbox container with alignment props.
- * This component extends the Box component with flexbox-specific properties.
+ * A flexbox container with improved handling of layout properties.
+ * This component extends the enhanced Box component with flexbox-specific properties.
  * 
  * @example
  * ```jsx
@@ -36,11 +36,6 @@ import './Flex.css';
  *   <div>Item 1</div>
  *   <div>Item 2</div>
  * </Flex>
- * 
- * // With BEM modifiers
- * <Flex className="ui-flex--center-all ui-flex--gap-md">
- *   <div>Centered Content</div>
- * </Flex>
  * ```
  */
 const Flex = ({
@@ -51,84 +46,51 @@ const Flex = ({
   justify = 'flex-start',
   wrap = 'nowrap',
   gap,
-  className = '',
-  style = {},
+  columnGap,
+  rowGap,
+  flex,
   flexGrow,
   flexShrink,
   flexBasis,
-  flex,
   order,
   alignSelf,
+  className = '',
   ...restProps
 }) => {
-  // Process responsive props
-  const responsiveProps = {
-    direction,
-    align,
-    justify,
-    wrap,
-    gap,
-    flexGrow,
-    flexShrink,
-    flexBasis,
-    flex,
-    order,
-    alignSelf,
-  };
-  
-  // Generate responsive styles if needed
-  let responsiveStyles = '';
-  const hasResponsiveProps = Object.values(responsiveProps).some(isResponsiveObject);
-  
-  if (hasResponsiveProps) {
-    responsiveStyles = createResponsiveStyles(
-      {
-        flexDirection: direction,
-        alignItems: align,
-        justifyContent: justify,
-        flexWrap: wrap,
-        gap: gap && `var(--spacing-${gap})`,
-        flexGrow,
-        flexShrink,
-        flexBasis,
-        flex,
-        order,
-        alignSelf,
-      },
-      flexPropConfig
-    );
-  }
-  
-  // Combine styles
-  const combinedStyle = {
+  // Process flexbox-specific styles
+  const flexStyles = {
     display: 'flex',
-    ...(direction && !isResponsiveObject(direction) && { flexDirection: direction }),
-    ...(align && !isResponsiveObject(align) && { alignItems: align }),
-    ...(justify && !isResponsiveObject(justify) && { justifyContent: justify }),
-    ...(wrap && !isResponsiveObject(wrap) && { flexWrap: wrap }),
-    ...(gap && !isResponsiveObject(gap) && { gap: `var(--spacing-${gap})` }),
-    ...(flexGrow !== undefined && !isResponsiveObject(flexGrow) && { flexGrow }),
-    ...(flexShrink !== undefined && !isResponsiveObject(flexShrink) && { flexShrink }),
-    ...(flexBasis !== undefined && !isResponsiveObject(flexBasis) && { flexBasis }),
-    ...(flex !== undefined && !isResponsiveObject(flex) && { flex }),
-    ...(order !== undefined && !isResponsiveObject(order) && { order }),
-    ...(alignSelf !== undefined && !isResponsiveObject(alignSelf) && { alignSelf }),
-    ...style,
   };
   
-  // If we have responsive styles, add them as a data attribute
-  if (responsiveStyles) {
-    combinedStyle['--responsive-styles'] = responsiveStyles;
+  // Add appropriate classes for flex modifiers
+  let flexClasses = [FLEX_CLASS];
+  
+  // Add user-provided class
+  if (className) {
+    flexClasses.push(className);
   }
   
-  // Combine class names using BEM convention
-  const flexClasses = [FLEX_CLASS, className].filter(Boolean).join(' ');
+  // Convert classes array to string
+  const combinedClassName = flexClasses.join(' ');
   
   return (
-    <Box 
+    <Box
       as={as}
-      className={flexClasses}
-      style={combinedStyle}
+      className={combinedClassName}
+      flexDirection={direction}
+      alignItems={align}
+      justifyContent={justify}
+      flexWrap={wrap}
+      gap={gap}
+      columnGap={columnGap}
+      rowGap={rowGap}
+      flex={flex}
+      flexGrow={flexGrow}
+      flexShrink={flexShrink}
+      flexBasis={flexBasis}
+      order={order}
+      alignSelf={alignSelf}
+      {...flexStyles}
       {...restProps}
     >
       {children}
@@ -164,6 +126,25 @@ Flex.propTypes = {
   /** Gap between items (xs, sm, md, lg, xl) or responsive object */
   gap: PropTypes.oneOfType([
     PropTypes.oneOf(FLEX_GAP_SIZES),
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  /** Column gap between items (xs, sm, md, lg, xl) or responsive object */
+  columnGap: PropTypes.oneOfType([
+    PropTypes.oneOf(FLEX_GAP_SIZES),
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  /** Row gap between items (xs, sm, md, lg, xl) or responsive object */
+  rowGap: PropTypes.oneOfType([
+    PropTypes.oneOf(FLEX_GAP_SIZES),
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  /** Flex shorthand property or responsive object */
+  flex: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
     PropTypes.object,
   ]),
   /** Flex grow property or responsive object */
@@ -182,12 +163,6 @@ Flex.propTypes = {
     PropTypes.number,
     PropTypes.object,
   ]),
-  /** Flex shorthand property or responsive object */
-  flex: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
-  ]),
   /** Order property or responsive object */
   order: PropTypes.oneOfType([
     PropTypes.number,
@@ -200,8 +175,6 @@ Flex.propTypes = {
   ]),
   /** Additional CSS class names */
   className: PropTypes.string,
-  /** Additional inline styles */
-  style: PropTypes.object,
 };
 
 Flex.defaultProps = {
@@ -210,7 +183,6 @@ Flex.defaultProps = {
   justify: 'flex-start',
   wrap: 'nowrap',
   className: '',
-  style: {},
 };
 
 export default Flex;

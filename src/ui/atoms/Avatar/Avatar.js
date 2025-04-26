@@ -1,138 +1,145 @@
-import { AVATAR_MODIFIERS, AVATAR_STATUS, AVATAR_SHAPES, AVATAR_SIZES, AVATAR_CLASS, AVATAR_GROUP_CLASS } from './constants';
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { polymorphicPropTypes, VALID_ELEMENTS } from '../../utilities/polymorphic';
+import Box from '../Box';
+import { AVATAR_CLASS, AVATAR_SIZES, AVATAR_VARIANTS } from './constants';
 import './Avatar.css';
 
 /**
  * Avatar Component
  * 
- * A versatile avatar component that displays user profile images or initials.
- * This component is used to represent users throughout the application.
+ * A component to display user avatars with images or fallback initials.
  * 
  * @example
  * ```jsx
  * // With image
- * <Avatar src="/path/to/image.jpg" alt="User Name" />
+ * <Avatar src="https://example.com/avatar.jpg" name="John Doe" size="md" />
  * 
- * // With initials fallback
- * <Avatar initials="JD" />
+ * // Without image (shows initials)
+ * <Avatar name="John Doe" size="lg" />
  * 
- * // With custom size and shape
+ * // Custom styling
  * <Avatar 
- *   src="/path/to/image.jpg" 
- *   alt="User Name" 
+ *   name="John Doe" 
+ *   backgroundColor="primary.500" 
+ *   color="white" 
  *   size="lg" 
- *   shape="square" 
- * />
- * 
- * // With status indicator
- * <Avatar 
- *   src="/path/to/image.jpg" 
- *   alt="User Name" 
- *   status="online" 
+ *   border="2px solid"
+ *   borderColor="primary.300"
  * />
  * ```
  */
 const Avatar = ({
-  as: Element = 'div',
+  name,
   src,
-  alt,
-  initials,
-  size = 'md',
-  shape = 'circle',
-  status,
+  srcSet,
+  size = AVATAR_SIZES.MD,
+  variant = AVATAR_VARIANTS.CIRCLE,
   backgroundColor,
+  color,
   className = '',
-  style = {},
   ...restProps
 }) => {
-  const [imageError, setImageError] = useState(false);
+  // Process avatar props
+  const processedSize = size || AVATAR_SIZES.MD;
+  const processedVariant = variant || AVATAR_VARIANTS.CIRCLE;
   
-  // Handle image load error
-  const handleError = () => {
-    setImageError(true);
+  // Generate initials from name
+  const getInitials = (name) => {
+    if (!name) return '?';
+    
+    const nameParts = name.split(' ').filter(Boolean);
+    
+    if (nameParts.length === 0) return '?';
+    if (nameParts.length === 1) return nameParts[0].charAt(0).toUpperCase();
+    
+    return (
+      nameParts[0].charAt(0).toUpperCase() + 
+      nameParts[nameParts.length - 1].charAt(0).toUpperCase()
+    );
   };
   
-  // Determine if we should show initials (no image or image error)
-  const showInitials = !src || imageError;
-  
-  // Combine all styles
-  const combinedStyle = {
-    ...(backgroundColor && { backgroundColor: `var(--color-${backgroundColor})` }),
-    ...style,
+  // Handle image error (show initials fallback)
+  const handleError = (e) => {
+    e.target.style.display = 'none';
   };
   
-  // Combine class names using BEM convention
+  // Build class names
   const avatarClasses = [
-    'ui-avatar',
-    `ui-avatar--size-${size}`,
-    `ui-avatar--shape-${shape}`,
-    status && `ui-avatar--status-${status}`,
-    showInitials && 'ui-avatar--initials',
+    AVATAR_CLASS,
+    `${AVATAR_CLASS}--${processedSize}`,
+    `${AVATAR_CLASS}--${processedVariant}`,
     className
   ].filter(Boolean).join(' ');
   
   return (
-    <Element 
+    <Box
       className={avatarClasses}
-      style={combinedStyle}
+      position="relative"
+      display="inline-flex"
+      alignItems="center"
+      justifyContent="center"
+      overflow="hidden"
+      backgroundColor={backgroundColor || 'neutral.300'}
+      color={color || 'text.primary'}
       {...restProps}
     >
-      {!showInitials && (
-        <img 
-          src={src} 
-          alt={alt || 'Avatar'} 
-          className="ui-avatar__image"
+      {/* Fallback with initials */}
+      <Box
+        className={`${AVATAR_CLASS}__initials`}
+        as="span"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        width="100%"
+        height="100%"
+      >
+        {getInitials(name)}
+      </Box>
+      
+      {/* Image if provided */}
+      {src && (
+        <Box
+          as="img"
+          className={`${AVATAR_CLASS}__image`}
+          src={src}
+          srcSet={srcSet}
+          alt={name || 'Avatar'}
           onError={handleError}
+          width="100%"
+          height="100%"
+          objectFit="cover"
+          position="absolute"
+          top="0"
+          left="0"
         />
       )}
-      
-      {showInitials && (
-        <span className="ui-avatar__initials" aria-hidden="true">
-          {initials || (alt ? alt.charAt(0) : '?')}
-        </span>
-      )}
-      
-      {status && (
-        <span 
-          className={`ui-avatar__status ui-avatar__status--${status}`}
-          aria-label={`Status: ${status}`}
-        />
-      )}
-    </Element>
+    </Box>
   );
 };
 
 Avatar.propTypes = {
-  /** Element to render the Avatar as */
-  ...polymorphicPropTypes,
+  /** User name (used for initials fallback and alt text) */
+  name: PropTypes.string,
   /** Image source URL */
   src: PropTypes.string,
-  /** Alternative text for the image */
-  alt: PropTypes.string,
-  /** Initials to display when no image is available */
-  initials: PropTypes.string,
-  /** Size of the avatar (xs, sm, md, lg, xl) */
-  size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
-  /** Shape of the avatar (circle, square, rounded) */
-  shape: PropTypes.oneOf(['circle', 'square', 'rounded']),
-  /** Status indicator (online, offline, away, busy) */
-  status: PropTypes.oneOf(['online', 'offline', 'away', 'busy']),
-  /** Background color from design tokens (for initials display) */
+  /** Image source set for responsive images */
+  srcSet: PropTypes.string,
+  /** Avatar size */
+  size: PropTypes.oneOf(Object.values(AVATAR_SIZES)),
+  /** Avatar shape variant */
+  variant: PropTypes.oneOf(Object.values(AVATAR_VARIANTS)),
+  /** Background color (for initials fallback) */
   backgroundColor: PropTypes.string,
+  /** Text color (for initials) */
+  color: PropTypes.string,
   /** Additional CSS class names */
   className: PropTypes.string,
-  /** Additional inline styles */
-  style: PropTypes.object,
 };
 
 Avatar.defaultProps = {
-  as: 'div',
-  size: 'md',
-  shape: 'circle',
+  size: AVATAR_SIZES.MD,
+  variant: AVATAR_VARIANTS.CIRCLE,
   className: '',
-  style: {},
 };
 
 export default Avatar;

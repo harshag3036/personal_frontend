@@ -1,7 +1,7 @@
 /**
  * Divider Component
  * 
- * A component for visually separating content.
+ * A customizable divider component for creating visual separations.
  */
 
 export { default } from './Divider';
@@ -9,7 +9,6 @@ export { default } from './Divider';
 // Re-export constants from constants.js
 export {
   DIVIDER_CLASS,
-  DIVIDER_ORIENTATIONS,
-  DIVIDER_MODIFIERS,
-  DIVIDER_BREAKPOINTS
+  DIVIDER_VARIANTS,
+  DIVIDER_ORIENTATIONS
 } from './constants';

@@ -1,36 +1,38 @@
 /**
  * Divider Component Constants
  * 
- * This file contains constants used by the Divider component.
+ * This file defines constants used by the Divider component.
  */
 
-// Import breakpoints from responsive-props utility
-import { breakpoints } from '../../utilities/responsive-props';
-
-// Divider CSS class for external use
+/**
+ * Main CSS class name for the Divider component
+ */
 export const DIVIDER_CLASS = 'ui-divider';
 
-// Divider orientations for external use
+/**
+ * Divider component orientations
+ */
 export const DIVIDER_ORIENTATIONS = {
   HORIZONTAL: 'horizontal',
   VERTICAL: 'vertical',
 };
 
-// Divider modifiers for external use
-export const DIVIDER_MODIFIERS = {
-  // Orientation modifiers
-  HORIZONTAL: 'horizontal',
-  VERTICAL: 'vertical',
-  
-  // Feature modifiers
-  WITH_TEXT: 'with-text',
-  
-  // Responsive modifiers
-  RESPONSIVE: 'responsive',
-  RESPONSIVE_SM: 'responsive-sm',
-  RESPONSIVE_MD: 'responsive-md',
-  RESPONSIVE_LG: 'responsive-lg',
+/**
+ * Divider component variants
+ */
+export const DIVIDER_VARIANTS = {
+  SOLID: 'solid',
+  DASHED: 'dashed',
+  DOTTED: 'dotted',
 };
 
-// Export breakpoints from responsive-props utility
-export const DIVIDER_BREAKPOINTS = breakpoints;
+/**
+ * Divider component sizes (thickness)
+ */
+export const DIVIDER_SIZES = {
+  XS: 'xs', // 1px
+  SM: 'sm', // 2px
+  MD: 'md', // 4px
+  LG: 'lg', // 6px
+  XL: 'xl', // 8px
+};

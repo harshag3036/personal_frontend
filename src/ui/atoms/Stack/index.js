@@ -1,8 +1,7 @@
 /**
  * Stack Component
  * 
- * A component for stacking elements vertically or horizontally with consistent spacing.
- * This component is a specialized version of Flex with a simpler API.
+ * A customizable layout component for stacking elements with consistent spacing.
  */
 
 export { default } from './Stack';
@@ -11,6 +10,9 @@ export { default } from './Stack';
 export {
   STACK_CLASS,
   STACK_DIRECTIONS,
-  STACK_MODIFIERS,
-  STACK_BREAKPOINTS
+  STACK_SPACING,
+  STACK_ALIGNMENTS,
+  STACK_JUSTIFICATIONS,
+  STACK_WRAPS,
+  STACK_DIVIDER_TYPES
 } from './constants';

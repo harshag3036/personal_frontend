@@ -5,8 +5,7 @@
  */
 
 import React from 'react';
-import { useTheme } from '../ui';
-import { Button } from '../ui';
+import { useTheme, Button } from '../ui';
 
 /**
  * Theme Switcher Component
@@ -22,11 +21,13 @@ const ThemeSwitcher = () => {
   
   return (
     <Button
-      variant="outlined"
+      variant="outline"
+      size="small"
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+      style={{ marginRight: '16px' }}
     >
-      {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+      {theme === 'light' ? '🌙' : '☀️'}
     </Button>
   );
 };

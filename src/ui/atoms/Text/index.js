@@ -1,8 +1,7 @@
 /**
  * Text Component
  * 
- * A component for displaying text with consistent styling.
- * This component extends the Box component with typography-specific properties.
+ * A customizable typography component with support for variants, responsive props, and theming.
  */
 
 export { default } from './Text';
@@ -11,9 +10,9 @@ export { default } from './Text';
 export {
   TEXT_CLASS,
   TEXT_VARIANTS,
+  TEXT_SIZES,
   TEXT_WEIGHTS,
   TEXT_TRANSFORMS,
-  TEXT_ALIGNS,
-  TEXT_MODIFIERS,
-  TEXT_BREAKPOINTS
+  TEXT_DECORATIONS,
+  TEXT_ALIGNMENTS
 } from './constants';

@@ -99,8 +99,16 @@ const Communities = () => {
     <div className="communities-container">
       <div className="communities-header">
         <h1>Communities</h1>
-        <div className="user-avatar">
-          {/* Avatar will be added here */}
+        <div className="header-actions">
+          <button 
+            className="view-refactored-button"
+            onClick={() => navigate('/community-refactored')}
+          >
+            Try New UI
+          </button>
+          <div className="user-avatar">
+            {/* Avatar will be added here */}
+          </div>
         </div>
       </div>
 

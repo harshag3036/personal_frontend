@@ -1,253 +1,117 @@
-/**
- * Card Component
- * 
- * A customizable card component with support for variants, responsive props, and polymorphic rendering.
- * 
- * @example
- * ```jsx
- * // Basic usage
- * <Card>Content</Card>
- * 
- * // With header and footer
- * <Card header="Header" footer="Footer">Content</Card>
- * 
- * // Different variants
- * <Card variant="elevated">Elevated Card</Card>
- * <Card variant="outlined">Outlined Card</Card>
- * <Card variant="interactive" onClick={handleClick}>Interactive Card</Card>
- * 
- * // Responsive props
- * <Card 
- *   variant={{ base: "default", md: "elevated" }}
- *   padding={{ base: "sm", md: "md", lg: "lg" }}
- * >
- *   Responsive Card
- * </Card>
- * 
- * // Polymorphic rendering
- * <Card as="section">Card as section</Card>
- * ```
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import Box from '../../atoms/Box';
 import { polymorphicPropTypes } from '../../utilities/polymorphic';
 import { isResponsiveObject } from '../../utilities/responsive-props';
-import { componentExtension } from '../../utilities';
-import Box from '../../atoms/Box';
-import Stack from '../../atoms/Stack';
-import { CARD_CLASS, CARD_VARIANTS } from './constants';
+import { CARD_CLASS, CARD_VARIANTS, CARD_SIZES } from './constants';
 import './Card.css';
 
 /**
- * Card Component
+ * Enhanced Card Component
  * 
- * @param {Object} props - Component props
- * @param {React.ElementType} [props.as='div'] - Element to render the Card as
- * @param {React.ReactNode} props.children - Card content
- * @param {string|Object} [props.variant=CARD_VARIANTS.DEFAULT] - Card variant or responsive object
- * @param {React.ReactNode} [props.header] - Card header content
- * @param {React.ReactNode} [props.footer] - Card footer content
- * @param {boolean|Object} [props.fullWidth=false] - Whether the card should take full width or responsive object
- * @param {string|Object} [props.padding] - Padding for the card content or responsive object
- * @param {string|Object} [props.radius] - Border radius for the card or responsive object
- * @param {string|Object} [props.elevation] - Elevation (shadow) for the card or responsive object
- * @param {string} [props.className=''] - Additional CSS class names
- * @param {Object} [props.style={}] - Additional inline styles
- * @param {Array<string>} [props.extensions=[]] - Extensions to apply to the card
- * @param {Function} [props.onClick] - Click handler (for interactive cards)
- * @returns {JSX.Element} Card component
+ * A container component with improved handling of variants, shadows, and theming.
+ * This implementation resolves conflicts between styling approaches and provides
+ * a consistent API for all card variations.
  */
 const Card = ({
   as = 'div',
   children,
   variant = CARD_VARIANTS.DEFAULT,
+  size = CARD_SIZES.MD,
+  elevation,
+  backgroundColor,
+  borderColor,
+  borderRadius,
+  width,
+  height,
+  padding,
+  margin,
   header,
   footer,
-  fullWidth = false,
-  padding,
-  radius,
-  elevation,
+  isInteractive = false,
+  isHoverable = false,
+  onClick,
   className = '',
   style = {},
-  extensions = [],
-  onClick,
-  ...props
+  ...restProps
 }) => {
-  // Process responsive props
-  const responsiveProps = {
-    variant,
-    header,
-    footer,
-    fullWidth,
-    padding,
-    radius,
-    elevation,
-  };
-  
-  // Generate responsive styles if needed
-  let responsiveStyles = '';
-  const hasResponsiveProps = Object.values(responsiveProps).some(isResponsiveObject);
-  
-  if (hasResponsiveProps) {
-    // We'll handle these with classes, but we need to track if they're responsive
-    const responsiveClasses = {};
-    
-    if (isResponsiveObject(variant)) {
-      responsiveClasses.variant = variant;
-    }
-    
-    if (isResponsiveObject(fullWidth)) {
-      responsiveClasses.fullWidth = fullWidth;
-    }
-    
-    if (isResponsiveObject(padding)) {
-      responsiveClasses.padding = padding;
-    }
-    
-    if (isResponsiveObject(radius)) {
-      responsiveClasses.radius = radius;
-    }
-    
-    if (isResponsiveObject(elevation)) {
-      responsiveClasses.elevation = elevation;
-    }
-    
-    // Create a CSS string for responsive styles
-    responsiveStyles = JSON.stringify(responsiveClasses);
-  }
-  
-  // Determine base values for non-responsive props
-  const baseVariant = !isResponsiveObject(variant) ? variant : CARD_VARIANTS.DEFAULT;
-  const baseFullWidth = !isResponsiveObject(fullWidth) && fullWidth;
-  const basePadding = !isResponsiveObject(padding) ? padding : undefined;
-  const baseRadius = !isResponsiveObject(radius) ? radius : undefined;
-  const baseElevation = !isResponsiveObject(elevation) ? elevation : undefined;
-  
-  // Error handling for invalid variants
-  if (baseVariant && !Object.values(CARD_VARIANTS).includes(baseVariant)) {
-    console.warn(`Card: Invalid variant "${baseVariant}". Falling back to DEFAULT.`);
-    variant = CARD_VARIANTS.DEFAULT;
-  }
-
-  // Safe click handler with error boundary
-  const handleClick = (event) => {
-    if (onClick) {
-      try {
-        onClick(event);
-      } catch (error) {
-        console.error('Card: Error in onClick handler:', error);
-      }
-    }
-  };
-
-  // Apply extensions with error handling
-  let extendedProps;
-  try {
-    extendedProps = componentExtension.applyComponentExtensions('Card', {
-      as,
-      children,
-      variant: baseVariant,
-      header,
-      footer,
-      fullWidth: baseFullWidth,
-      padding: basePadding,
-      radius: baseRadius,
-      elevation: baseElevation,
-      className,
-      style,
-      onClick: handleClick,
-      ...props,
-    }, extensions);
-  } catch (error) {
-    console.error('Card: Error applying extensions:', error);
-    // Fallback to original props if extension application fails
-    extendedProps = {
-      as,
-      children,
-      variant: baseVariant,
-      header,
-      footer,
-      fullWidth: baseFullWidth,
-      padding: basePadding,
-      radius: baseRadius,
-      elevation: baseElevation,
-      className,
-      style,
-      onClick: handleClick,
-      ...props,
-    };
-  }
-  
-  // Extract props after extensions
-  const {
-    as: extendedAs,
-    children: extendedChildren,
-    variant: extendedVariant,
-    header: extendedHeader,
-    footer: extendedFooter,
-    fullWidth: extendedFullWidth,
-    padding: extendedPadding,
-    radius: extendedRadius,
-    elevation: extendedElevation,
-    className: extendedClassName,
-    style: extendedStyle,
-    onClick: extendedOnClick,
-    ...restProps
-  } = extendedProps;
-  
-  // Combine class names
-  const cardClasses = [
-    CARD_CLASS,
-    `${CARD_CLASS}--${extendedVariant}`,
-    extendedFullWidth ? `${CARD_CLASS}--full-width` : '',
-    extendedClassName,
-  ].filter(Boolean).join(' ');
-  
-  // Combine styles
-  const cardStyle = {
-    ...extendedStyle,
-  };
-  
-  // Add padding if specified
-  if (extendedPadding) {
-    cardStyle.padding = `var(--spacing-${extendedPadding})`;
-  }
-  
-  // Add border radius if specified
-  if (extendedRadius) {
-    cardStyle.borderRadius = `var(--border-radius-${extendedRadius})`;
-  }
-  
-  // Add elevation if specified
-  if (extendedElevation) {
-    cardStyle.boxShadow = `var(--shadow-${extendedElevation})`;
-  }
-  
-  // If we have responsive styles, add them as a data attribute
-  if (responsiveStyles) {
-    cardStyle['--responsive-styles'] = responsiveStyles;
-  }
+  // Process card variant and size
+  const processedVariant = variant || CARD_VARIANTS.DEFAULT;
+  const processedSize = size || CARD_SIZES.MD;
   
   // Determine if card is interactive
-  const isInteractive = extendedVariant === CARD_VARIANTS.INTERACTIVE || !!extendedOnClick;
+  const isCardInteractive = isInteractive || !!onClick;
   
-  // Use Stack for consistent spacing and layout
+  // Build class names
+  const cardClasses = [
+    CARD_CLASS,
+    `${CARD_CLASS}--${processedVariant}`,
+    `${CARD_CLASS}--${processedSize}`,
+    isCardInteractive ? `${CARD_CLASS}--interactive` : '',
+    isHoverable ? `${CARD_CLASS}--hoverable` : '',
+    className
+  ].filter(Boolean).join(' ');
+  
+  // Handle card click
+  const handleClick = (event) => {
+    if (onClick) {
+      onClick(event);
+    }
+  };
+  
+  // Determine box shadow from elevation or variant
+  let boxShadow;
+  if (elevation) {
+    boxShadow = elevation;
+  } else if (processedVariant === CARD_VARIANTS.ELEVATED) {
+    boxShadow = 'md';
+  } else if (processedVariant === CARD_VARIANTS.OUTLINE) {
+    boxShadow = 'none';
+  }
+  
+  // Default padding based on size
+  const defaultPadding = {
+    [CARD_SIZES.XS]: 'xs',
+    [CARD_SIZES.SM]: 'sm',
+    [CARD_SIZES.MD]: 'md',
+    [CARD_SIZES.LG]: 'lg',
+    [CARD_SIZES.XL]: 'xl',
+  }[processedSize];
+  
   return (
     <Box
-      as={extendedAs}
+      as={as}
       className={cardClasses}
-      style={cardStyle}
-      onClick={isInteractive ? extendedOnClick : undefined}
-      role={isInteractive ? 'button' : undefined}
-      tabIndex={isInteractive ? 0 : undefined}
+      backgroundColor={backgroundColor || 'background.secondary'}
+      borderColor={borderColor || (processedVariant === CARD_VARIANTS.OUTLINE ? 'border.light' : 'transparent')}
+      borderRadius={borderRadius || 'md'}
+      boxShadow={boxShadow}
+      width={width}
+      height={height}
+      padding={padding || defaultPadding}
+      margin={margin}
+      onClick={isCardInteractive ? handleClick : undefined}
+      role={isCardInteractive ? 'button' : undefined}
+      tabIndex={isCardInteractive ? 0 : undefined}
+      aria-disabled={isCardInteractive && restProps.disabled}
+      style={style}
       {...restProps}
     >
-      {extendedHeader && <div className={`${CARD_CLASS}__header`}>{extendedHeader}</div>}
-      <div className={`${CARD_CLASS}__content`}>
-        {extendedChildren || <div className={`${CARD_CLASS}__empty`}>No content</div>}
+      {header && (
+        <div className={`${CARD_CLASS}__header`}>
+          {header}
+        </div>
+      )}
+      
+      <div className={`${CARD_CLASS}__body`}>
+        {children}
       </div>
-      {extendedFooter && <div className={`${CARD_CLASS}__footer`}>{extendedFooter}</div>}
+      
+      {footer && (
+        <div className={`${CARD_CLASS}__footer`}>
+          {footer}
+        </div>
+      )}
     </Box>
   );
 };
@@ -257,52 +121,56 @@ Card.propTypes = {
   ...polymorphicPropTypes,
   /** Card content */
   children: PropTypes.node,
-  /** Card variant or responsive object */
+  /** Card variant (default, elevated, outline, filled) */
   variant: PropTypes.oneOfType([
     PropTypes.oneOf(Object.values(CARD_VARIANTS)),
-    PropTypes.object,
+    PropTypes.object, // For responsive variants
   ]),
+  /** Card size (xs, sm, md, lg, xl) */
+  size: PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(CARD_SIZES)),
+    PropTypes.object, // For responsive sizes
+  ]),
+  /** Shadow elevation (none, xs, sm, md, lg, xl) */
+  elevation: PropTypes.string,
+  /** Background color token */
+  backgroundColor: PropTypes.string,
+  /** Border color token */
+  borderColor: PropTypes.string,
+  /** Border radius token */
+  borderRadius: PropTypes.string,
+  /** Card width */
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
+  /** Card height */
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
+  /** Card padding */
+  padding: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  /** Card margin */
+  margin: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   /** Card header content */
   header: PropTypes.node,
   /** Card footer content */
   footer: PropTypes.node,
-  /** Whether the card should take full width or responsive object */
-  fullWidth: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.object,
-  ]),
-  /** Padding for the card content or responsive object */
-  padding: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-  /** Border radius for the card or responsive object */
-  radius: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-  /** Elevation (shadow) for the card or responsive object */
-  elevation: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
+  /** Whether the card is interactive */
+  isInteractive: PropTypes.bool,
+  /** Whether the card has hover effects */
+  isHoverable: PropTypes.bool,
+  /** Click handler */
+  onClick: PropTypes.func,
   /** Additional CSS class names */
   className: PropTypes.string,
   /** Additional inline styles */
   style: PropTypes.object,
-  /** Extensions to apply to the card */
-  extensions: PropTypes.arrayOf(PropTypes.string),
-  /** Click handler (for interactive cards) */
-  onClick: PropTypes.func,
 };
 
 Card.defaultProps = {
   as: 'div',
   variant: CARD_VARIANTS.DEFAULT,
-  fullWidth: false,
+  size: CARD_SIZES.MD,
+  isInteractive: false,
+  isHoverable: false,
   className: '',
   style: {},
-  extensions: [],
 };
 
 export default Card;

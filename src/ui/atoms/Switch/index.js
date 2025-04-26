@@ -1,8 +1,14 @@
 /**
- * Switch Component Exports
+ * Switch Component
  * 
- * This file exports the Switch component and its related constants.
+ * A customizable toggle switch component for binary choices.
  */
 
 export { default } from './Switch';
-export * from './constants';
+
+// Re-export constants from constants.js
+export {
+  SWITCH_CLASS,
+  SWITCH_SIZES,
+  SWITCH_VARIANTS
+} from './constants';

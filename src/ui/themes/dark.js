@@ -27,7 +27,7 @@ const darkTheme = {
     border: {
       light: 'rgba(255, 255, 255, 0.05)',
       medium: '#334155',
-      focus: colorPalette.brand[300], // Lighter brand color for better visibility
+      focus: colorPalette.wisdom[300], // Lighter wisdom color for better visibility
     },
   },
   shadows: {

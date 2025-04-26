@@ -9,14 +9,16 @@
  * 4. Supports the journey of understanding
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { UserProvider, useUser } from './contexts/UserContext';
 import { ActivityProvider } from './contexts/ActivityContext';
 import { TemplateProvider } from './contexts/TemplateContext';
+import { ThemeProvider } from './ui/themes';
 import Login from './components/Login';
 import Activities from './components/Activities';
+import ActivitiesMaster from './components/ActivitiesMaster';
 import SignIn from './components/SignIn';
 import Home from './components/Home';
 import Profile from './components/Profile';
@@ -31,8 +33,12 @@ import Appbar from './components/Appbar';
 import Articles from './components/Articles';
 import ForumList from './components/ForumList';
 import Communities from './components/community/Communities';
+import CommunitiesRefactored from './components/community/CommunitiesRefactored';
 import CreateCommunity from './components/community/CreateCommunity';
 import CircleView from './components/community/CircleView';
+import CircleViewRefactored from './components/community/CircleViewRefactored';
+import UIIntegrationDemo from './components/UIIntegrationDemo';
+import Settings from './components/Settings';
 import config from './config';
 import './App.css';
 
@@ -42,15 +48,21 @@ function App() {
   // Public routes that don't need authentication
   const publicRoutes = ['/login', '/signin', '/'];
   const showNavbar = !publicRoutes.includes(location.pathname);
+  
+  // Determine initial theme based on user preference
+  const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initialTheme = prefersDarkMode ? 'dark' : 'light';
 
   return (
-    <UserProvider>
-      <ActivityProvider>
-        <TemplateProvider>
-          <AppContent location={location} navigate={navigate} showNavbar={showNavbar} publicRoutes={publicRoutes} />
-        </TemplateProvider>
-      </ActivityProvider>
-    </UserProvider>
+    <ThemeProvider initialTheme={initialTheme}>
+      <UserProvider>
+        <ActivityProvider>
+          <TemplateProvider>
+            <AppContent location={location} navigate={navigate} showNavbar={showNavbar} publicRoutes={publicRoutes} />
+          </TemplateProvider>
+        </ActivityProvider>
+      </UserProvider>
+    </ThemeProvider>
   );
 }
 
@@ -126,12 +138,37 @@ const AppContent = ({ location, navigate, showNavbar, publicRoutes }) => {
           } />
           <Route path="/activities" element={
             <ProtectedRoute>
-              <Activities />
+              <ActivitiesMaster />
+            </ProtectedRoute>
+          } />
+          <Route path="/activities-master" element={
+            <ProtectedRoute>
+              <ActivitiesMaster />
             </ProtectedRoute>
           } />
           <Route path="/chatbot-update" element={
             <ProtectedRoute>
               <UpdateChatData />
+            </ProtectedRoute>
+          } />
+          <Route path="/ui-demo" element={
+            <ProtectedRoute>
+              <UIIntegrationDemo />
+            </ProtectedRoute>
+          } />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          } />
+          <Route path="/community-refactored" element={
+            <ProtectedRoute>
+              <CommunitiesRefactored />
+            </ProtectedRoute>
+          } />
+          <Route path="/community-refactored/:id" element={
+            <ProtectedRoute>
+              <CircleViewRefactored />
             </ProtectedRoute>
           } />
         </Routes>
